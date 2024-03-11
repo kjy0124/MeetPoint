@@ -6,8 +6,13 @@
         <h1>Meet Point</h1>
         <h3 style="color: lightgray;">이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!</h3>
         <div class="info-box">
-          <section>s</section>
-          <section>d</section>
+          <section>
+            <input placeholder="이름을 입력하세요!" type="text" v-model="name">
+            <input placeholder="위치를 입력하세요!" type="text" v-model="location">
+            <button><img src="./assets/돋보기.png"></button>
+          </section>
+          <section><button>그라디언트버튼</button></section>
+          <section>이름 위치 출력 섹션</section>
         </div>
       </div>
     </div>
