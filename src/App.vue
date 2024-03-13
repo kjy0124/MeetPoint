@@ -1,18 +1,57 @@
 <template>
   <div class="main">
-    <img class="background-image" alt="background" src="./assets/background.png">
+    <img
+      class="background-image"
+      alt="background"
+      src="./assets/background.png"
+    />
     <div class="rounded-box">
       <div class="main-box">
         <h1>Meet Point</h1>
-        <h3 style="color: lightgray;">이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!</h3>
+        <h3 style="color: lightgray">
+          이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!
+        </h3>
         <div class="info-box">
-          <section>
-            <input placeholder="이름을 입력하세요!" type="text" v-model="name">
-            <input placeholder="위치를 입력하세요!" type="text" v-model="location">
-            <button><img src="./assets/돋보기.png"></button>
+          <section style="padding: 20px;">
+            <div>
+              <input placeholder="이름을 입력하세요!" type="text" v-model="name"/>
+            </div>
+            <div>
+              <input placeholder="위치를 입력하세요!" type="text" v-model="location" @click="alert('dd')"/>
+              <button><img src="./assets/돋보기.png" /></button>
+            </div>
           </section>
-          <section><button>그라디언트버튼</button></section>
-          <section>이름 위치 출력 섹션</section>
+          <section style="padding: 20px;"><button>▶</button></section>
+          <section style="padding: 20px;">
+            <table border="1">
+              <thead>
+                <tr>
+                  <th>이름</th><th>위치</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>홍길동</td><td>부산광역시 해운대구 센텀1로 9</td>
+                </tr>
+                <tr>
+                  <td>김철수</td><td>전주시 완산구 흑석로 2</td>
+                </tr>
+                <tr>
+                  <td>박영희</td><td>속초시 논산길 5</td>
+                </tr>
+                <tr>
+                  <td></td><td></td>
+                </tr>
+                <tr>
+                  <td></td><td></td>
+                </tr>
+                <tr>
+                  <td></td><td></td>
+                </tr>
+              </tbody>
+            </table>
+            <button>중간지점 찾기</button>
+          </section>
         </div>
       </div>
     </div>
@@ -21,11 +60,9 @@
 
 <script>
 export default {
-  name: 'App',
-  components: {
-
-  }
-}
+  name: "App",
+  components: {},
+};
 </script>
 
 <style>
@@ -70,7 +107,7 @@ export default {
   z-index: 3;
 }
 
-.info-box{
+.info-box {
   width: 90%;
   height: 70%;
   background: linear-gradient(to right, #cdffd8 30%, #94b9ff);
@@ -78,5 +115,4 @@ export default {
   z-index: 4;
   display: flex;
 }
-
 </style>
