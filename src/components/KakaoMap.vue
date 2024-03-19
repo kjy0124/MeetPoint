@@ -1,7 +1,13 @@
 <template>
-  <div>
-    <div id="map">
-
+  <div style="display: flex; align-items: center;">
+    <sidebar style="width: 30%; position: relative; height: 100%;">
+        <div style="height: 20%;">Meet Point</div>
+        <info style="height: 60%;">중간지점 정보</info>
+        <div style="height: 20%;">
+            <button>일정 만들기 ></button>
+        </div>
+    </sidebar>
+    <div id="map" style="width: 70%;">
     </div>
   </div>
 </template>
@@ -19,7 +25,7 @@ export default {
         initMap() {
             const container = document.getElementById('map');
             const options = {
-              center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+              center: new window.kakao.maps.LatLng(35.9123, 128.8077),
               level: 3,
               
             };
@@ -48,6 +54,6 @@ export default {
 <style>
 #map{
     width: 100%;
-    height: 500px;
+    height: 100vh;
 }
 </style>

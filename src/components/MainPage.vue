@@ -12,17 +12,17 @@
           이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!
         </h3>
         <div class="info-box">
-          <section style="padding: 20px;">
+          <section style="padding: 20px; margin: auto;">
             <div>
               <input placeholder="이름을 입력하세요!" type="text" v-model="name"/>
             </div>
             <div>
-              <input placeholder="위치를 입력하세요!" type="text" v-model="location" @click="alert('dd')"/>
+              <input placeholder="위치를 입력하세요!" type="text" v-model="location"/>
               <button><img src="@/assets/돋보기.png" /></button>
             </div>
           </section>
-          <section style="padding: 20px;"><button>▶</button></section>
-          <section style="padding: 20px;">
+          <section style="padding: 20px; margin: auto; "><button><img src="@/assets/재생버튼.png" style="width: 30px; height: 30px;"/></button></section>
+          <section style="padding: 20px; margin: auto;">
             <table border="1">
               <thead>
                 <tr>
