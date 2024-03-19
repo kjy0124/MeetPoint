@@ -12,19 +12,19 @@
           이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!
         </h3>
         <div class="info-box">
-          <section style="padding: 20px; margin: auto;">
+          <section style="padding: 0px; margin: auto;">
             <div>
-              <input placeholder="이름을 입력하세요!" type="text" v-model="name"/>
+              <input class="input-text" placeholder="이름을 입력하세요!" type="text" v-model="name"/>
             </div>
             <div>
-              <input placeholder="위치를 입력하세요!" type="text" v-model="location"/>
-              <button><img src="@/assets/돋보기.png" /></button>
+              <input class="input-text" placeholder="위치를 입력하세요!" type="text" v-model="location"/>
+              <!-- <button><img src="@/assets/돋보기.png" /></button> -->
             </div>
           </section>
-          <section style="padding: 20px; margin: auto; "><button><img src="@/assets/재생버튼.png" style="width: 30px; height: 30px;"/></button></section>
-          <section style="padding: 20px; margin: auto;">
-            <table border="1">
-              <thead>
+          <section class="playbuttonsec"><input class="playbutton" type="button"/></section>
+          <section style="padding: 0; margin: 10px;">
+            <table class="list-table">
+              <thead >
                 <tr>
                   <th>이름</th><th>위치</th>
                 </tr>
@@ -131,5 +131,61 @@ export default {
   border-radius: 1%;
   z-index: 4;
   display: flex;
+  padding: 0;
 }
+
+.playbutton{
+  background: url("../assets/재생버튼.png") no-repeat;
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border-width: 0;
+}
+
+.input-text{
+  border-width: 0;
+  width: 100px;
+  height: 30px;
+  font-size: 20px;
+}
+
+.list-table{
+  border-bottom: 2px solid #7a97f7;
+  border-collapse: collapse;
+  height: 50%;
+  margin: 20px 0;
+
+}
+
+.list-table th,
+.list-table td{
+  text-align: center;
+}
+
+.list-table th,
+.list-table td{
+  border-top: 2px solid #7a97f7;
+  border-collapse : collapse;
+}
+
+.list-table thead th{
+  background-color: #dbe3fb;
+  color: #213f99;
+}
+
+.list-table td:empty {
+  visibility: hidden; /* 빈 셀의 내용을 숨김 */
+}
+
+.list-table td:empty::before {
+  content: "\00a0"; /* 빈 셀에 내용이 없을 때 공간 유지 */
+}
+
+.playbuttonsec{
+  padding: 0; display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 </style>
