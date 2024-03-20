@@ -12,17 +12,18 @@
           이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!
         </h3>
         <div class="info-box">
-          <section style="padding: 0px; margin: auto;">
+          <section style="padding: 0px; margin: auto; width: 30%;">
             <div>
               <input class="input-text" placeholder="이름을 입력하세요!" type="text" v-model="name"/>
             </div>
+            <div style="height: 30px;"></div>
             <div>
-              <input class="input-text" placeholder="위치를 입력하세요!" type="text" v-model="location"/>
+              <input class="input-text" placeholder="위치를 입력하세요!" type="text" v-model="location" @click="modalopen()"/>
               <!-- <button><img src="@/assets/돋보기.png" /></button> -->
             </div>
           </section>
-          <section class="playbuttonsec"><input class="playbutton" type="button"/></section>
-          <section style="padding: 0; margin: 10px;">
+          <section style="width: 25%;" class="playbuttonsec"><input class="playbutton" type="button"/></section>
+          <section style="padding: 0; margin: 10px; width: 40%;">
             <table class="list-table">
               <thead >
                 <tr>
@@ -50,7 +51,7 @@
                 </tr>
               </tbody>
             </table>
-            <button @click="move()">중간지점 찾기</button>
+            <button class="works_button" @click="move()">중간지점 찾기</button>
           </section>
         </div>
       </div>
@@ -71,8 +72,15 @@ export default {
       /* 중간지점 찾기 버튼 클릭시 두번째 페이지로 이동 */
       move(){
         this.$router.push( { name: "KakaoMap", params: {} } ); // router.push( {path : '/KakaoMap.page', query: {} });
+      },
+
+      //위치 input box 클릭 시 모달 창 열기
+      modalopen(){
+
       }
+
     },
+
     created() {
 
     },
@@ -148,14 +156,16 @@ export default {
   width: 100px;
   height: 30px;
   font-size: 20px;
+  width: 100%;
+  border-radius: 5px;
 }
 
 .list-table{
   border-bottom: 2px solid #7a97f7;
   border-collapse: collapse;
-  height: 50%;
+  width: 100%;
+  height: 60%;
   margin: 20px 0;
-
 }
 
 .list-table th,
@@ -186,6 +196,43 @@ export default {
   padding: 0; display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.works_button {
+  display: inline-block;
+  width: 100%;
+  height: 45px;
+  border: none;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  background: linear-gradient(to bottom, #6164c4, #36b2cd);
+  position: relative;
+  overflow: hidden;
+}
+
+.works_button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.works_button:hover::before {
+  transform: translateY(0);
+}
+  
+.works_button:hover {
+  background: linear-gradient(to bottom, #36b2cd, #6164c4);
 }
 
 </style>
