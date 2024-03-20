@@ -1,14 +1,13 @@
 <template>
-  <div style="display: flex; align-items: center;">
-    <sidebar style="width: 30%; position: relative; height: 100%;">
-        <div style="height: 20%;">Meet Point</div>
-        <info style="height: 60%;">중간지점 정보</info>
-        <div style="height: 20%;">
+  <div class="container" >
+    <div class="list" >
+        <div class="logo" >Meet Point</div>
+        <div class="info">중간지점 정보</div>
+        <div class="btn">
             <button>일정 만들기 ></button>
         </div>
-    </sidebar>
-    <div id="map" style="width: 70%;">
     </div>
+    <div id="map"></div>
   </div>
 </template>
 
@@ -52,8 +51,63 @@ export default {
 </script>
 
 <style>
-#map{
-    width: 100%;
+.container {
+    display: flex;
+    align-items: center;
     height: 100vh;
 }
+
+.list {
+    position: relative;
+    width: 30%;
+    height: 99.5%;
+}
+
+.list .logo {
+    height: 10%;
+    font-size: 60px;
+    text-align: center;
+    font-family: "Eczar", serif;
+    font-optical-sizing: auto;
+    font-weight: 400px;
+    font-style: normal;
+    border-bottom: 1px solid black;
+}
+
+.list .info {
+    height: 80%;
+    /* border-bottom: 1px solid black; */
+}
+
+.list .btn{
+    height: 10%;
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    
+}
+
+.btn button {
+    width: 80%;
+    height: 80%;
+    background-color: #0a0a23; /* 버튼 배경색 */
+    color: #fff; /* 버튼 텍스트 색상 */
+    border: none;
+    border-radius: 25px;
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.list button:hover {
+    background-color: #002ead; /* 마우스 호버 시 버튼 배경색 변경 */
+    transition: 0.7s;
+}
+
+#map{
+    width: 70%;
+    height: 100%;
+}
+
 </style>
