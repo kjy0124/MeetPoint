@@ -17,7 +17,7 @@
                         <div data-id="rating" class="rating clickArea">
                             <span data-id="score" class="score">
                                 <div class="rate">
-                                    <a style="width: 71%"></a> <!--width의 비율만큼 별점이 정해짐-->
+                                    <span style="width: 71%"></span> <!--width의 비율만큼 별점이 정해짐-->
                                     <a href="https://place.map.kakao.com/1012120657#comment" data-id="numberofscore"
                                     class="numberofscore" target="_blank">36건</a>
                                 </div>
