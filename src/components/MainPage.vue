@@ -81,30 +81,17 @@
 
   <!-- 모달 창-->
   <div class="rounded-box" v-if="modalOpen">
-        <div class="modal_main-box">
-          <div @click="closeModal()"><img class="backCaret" src="@/assets/caret-left-fill.svg"/></div>
-          <input class="modal_Place_Name" type="text">
-        
-          <img class="nowAddress" src="https://cdn-icons-png.flaticon.com/512/5055/5055654.png">
-          <img class="searchPlace" src="@/assets/돋보기.png">
-          <!-- <button class="nowAddress">
-            <img src="https://cdn-icons-png.flaticon.com/512/5055/5055654.png" alt="Now Address">
-          </button>
-          <button class="searchPlace">
-            <img src="@/assets/돋보기.png" alt="Search">
-          </button> -->
-          <div class="modal_info-box">
-            <table class="modal_list-table">
-                <tbody>
-                  <tr v-for="(place, index) in places" :key="index" :class="{ 'list-item': true, 'border-bottom': index !== places.length - 1 }">
-                    <td>{{ place.name }}</td>
-                    <td class="small-text">{{ place.location }}</td>
-                  </tr>
-                </tbody>
-              </table>
-          </div>
+      <div class="main-box">
+        <h1>Meet Point</h1>
+        <h3 style="color: lightgray">
+          이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!
+        </h3>
+        <div class="info-box">
+            <p>모달 테스트</p>
+            <span @click="closeModal">--------닫기---------</span>
         </div>
       </div>
+    </div>
 </template>
 
 <script>
@@ -112,20 +99,7 @@ export default {
     name: "MainPage",
     data() {
       return {
-        modalOpen: false, // 모달 상태를 저장하는 데이터
-        places: [
-            { name: "수성못", location: "대구 수성구 유니버시아드로 140" },
-            { name: "신매광장", location: "대구 수성구 신매동 567-15" },
-            { name: "수성유원지", location: "대구 수성구 무화로 78" },
-            { name: "아이니테마파크", location: "대구 수성구 유니버시아드로 140" },
-            { name: "아르떼수성랜드", location: "대구 수성구 무학로 42" },
-            { name: "내관지", location: "대구 수성구 대흥동 646-90" },
-            { name: "성암산", location: "대구 수성구 욱수동 산 178" },
-            { name: "대구어린이천문대", location: "대구 수성구 알파시티1로31길 37" },
-            { name: "생각을 담는 정원", location: "대구 수성구 매호동 280-1" },
-            { name: "모명재", location: "대구 수성구 달구벌대로525길 14-21" },
-          ],
-          newPlace: { name: "", location: "" },
+        modalOpen: false // 모달 상태를 저장하는 데이터
       }
     },
     methods :{
@@ -331,7 +305,7 @@ export default {
 .works_button:hover::before {
   transform: translateY(0);
 }
-
+  
 .works_button:hover {
   background: linear-gradient(to left, #36b2cd, #6164c4) !important;
 }
@@ -343,78 +317,4 @@ export default {
   fill: #fff;
 }
 
-/*모달 css*/
-.modal_main-box {
-    width: 98%;
-    height: 97%;
-    background: linear-gradient(to right, #cdffd8 30%, #94b9ff);
-    border-radius: 1%;
-    display: flex;
-    flex-direction: column;
-    justify-content: top;
-    align-items: center;
-    position: absolute;
-    z-index: 3;
-  }
-
-  .backCaret {
-  position: absolute;
-  top: 20px; 
-  left: 20px; 
-  width: 30px;
-  height: 30px;
-}
-.modal_Place_Name {
-  position: absolute;
-  top: 19px;
-  width: 80%;
-  height: 30px;
-  font-size: 30px;
-}
-.nowAddress {
-  position: absolute;
-  top: 20px;
-  right: 13%;
-  width: 30px;
-  height: 30px;
-}
-.searchPlace {
-  position: absolute;
-  top: 20px;
-  right: 10%;
-  width: 30px;
-  height: 30px;
-}
-.modal_info-box {
-  font-size: 25px;
-  position: relative;
-  top: calc(20px + 60px + 10px); /* modal_Place_Name 아래에 배치 */
-  width: calc(80% - 20px); /* modal_main-box와 같은 너비 설정 */
-  max-height: calc(100% - 70px); /* modal_main-box와 같은 높이 설정 */
-  overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
-  background-color: white; /* 하얀 배경으로 설정 */
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  height: 70%;
-}
-.list-item {
-  border-bottom: 1px solid #ccc;
-}
-
-/* 마지막 요소 밑줄 x*/
-.list-item:last-child {
-  border-bottom: none;
-}
-
-.small-text {
-  text-align: right;
-  font-size: 18px;
-}
-.list-item td:last-child {
-  text-align: right; /* 마지막 열을 우측으로 정렬 */
-  position: absolute; /* 절대 위치 지정 */
-  right: 0; /* 오른쪽 정렬 */
-}
 </style>
