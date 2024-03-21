@@ -2,7 +2,7 @@
     <div class="container">
         <div class="list">
             <div class="list-top">
-                <div @click="moveMainPage()">◀</div>
+                <div @click="moveMainPage()"><img class="backCaret" src="@/assets/caret-left-fill.svg"/></div>
                 <div class="logo">Meet Point</div>
             </div>
             <div class="info">
@@ -128,23 +128,33 @@ export default {
     display: flex;
     align-items: center;
     height: 100vh;
+    overflow: hidden; /*스크롤 바가 없어지고 동시에 스크롤 기능도 없어짐 */
 }
 
 .list {
     position: relative;
-    width: 30%;
-    height: 99.5%;
+    width: 25%;
+    height: 100%;
+    border-right: 1px solid black;
 }
 
 .list .logo {
     height: 10%;
     font-size: 60px;
     text-align: center;
-    font-family: "Eczar", serif;
-    font-optical-sizing: auto;
     font-weight: 400px;
     font-style: normal;
-    border-bottom: 1px solid black;
+}
+
+.logo{
+    color: white;
+    margin-left: 30px;
+}
+
+.backCaret{
+    width: 50px;
+    height: 50px;
+    margin-right: 30px;
 }
 
 .list .info {
@@ -184,13 +194,15 @@ export default {
 }
 
 #map {
-    width: 70%;
+    width: 75%;
     height: 100%;
 }
 
 .list-top {
     display: flex;
-    background-color: #0cc0df;
+    background: linear-gradient(to right, #5de0e6 30%, #004aad);
+    justify-content: center;
+    align-items: center;
 }
 
 .works_button {
