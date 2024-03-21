@@ -187,7 +187,7 @@ export default {
     align-items: center;
 }
 
-.PlaceItem .rating .backgroundStar {
+/* .PlaceItem .rating .backgroundStar {
     width: 68px;
     margin: 2px 3px 0 0;
     background-position: 0 0;
@@ -211,8 +211,8 @@ export default {
     background-attachment: initial;
     background-origin: initial;
     background-clip: initial;
-    background-color: initial; */
-}
+    background-color: initial; 
+} */
 
 .list-bttm {
     width: 100%;
