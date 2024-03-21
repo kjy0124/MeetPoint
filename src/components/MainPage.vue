@@ -20,7 +20,7 @@
             <div class="searchWrap">
               <input class="search-input-text" placeholder="위치를 입력하세요!" type="text" v-model="location" @click="modalopen()"/>
               <!-- <button class="searchBtn"></button> -->
-              <img src="../assets/돋보기.png" >
+              <img src="../assets/돋보기.png" @click="openModal"/>
             </div>
           </section>
           <section style="width: 25%;" class="playbuttonsec"><input class="playbutton" type="button"/></section>
@@ -77,6 +77,20 @@
       </div>
     </div>
   </div>
+
+  <!-- 모달 창-->
+  <div class="rounded-box" v-if="modalOpen">
+      <div class="main-box">
+        <h1>Meet Point</h1>
+        <h3 style="color: lightgray">
+          이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!
+        </h3>
+        <div class="info-box">
+            <p>모달 테스트</p>
+            <span @click="closeModal">--------닫기---------</span>
+        </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -84,7 +98,7 @@ export default {
     name: "MainPage",
     data() {
       return {
-
+        modalOpen: false // 모달 상태를 저장하는 데이터
       }
     },
     methods :{
@@ -95,8 +109,12 @@ export default {
       },
 
       //위치 input box 클릭 시 모달 창 열기
-      modalopen(){
+      openModal() {
+        this.modalOpen = true;
+      },
 
+      closeModal() {
+        this.modalOpen = false;
       },
 
       /* 삭제 버튼 */ 
