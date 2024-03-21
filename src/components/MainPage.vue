@@ -30,7 +30,7 @@
                 <tr>
                   <th>이름</th>
                   <th>위치</th>
-                  <th>삭제</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
