@@ -7,42 +7,27 @@
             </div>
             <div class="info">
                 <ul>
-                    <li>
-                        <div>
-                            <span>현대아울렛 대구점</span>
-                            <!-- <a href="#none" data-id="fav" class="fav">
-                                <span class="ico_fav">즐겨찾기</span><span class="num"></span>
-                            </a>
-                            <a href="#none" data-id="roadview" class="roadview">로드뷰</a> -->
-                            <button type="button">길찾기</button>
-                        </div>
-                        <div class="head_item clickArea">
+                    <li class="head_item">
+                        <div class="head_item">
                             <strong class="tit_name">
-                                <a href="#none" data-id="icon" class="link_order clickArea">A</a>
-                                <a href="#none" data-id="name" class="link_name" title="현대아울렛 대구점"><strong>현대아울렛
-                                        대구점</strong></a>
+                                <a href="#none" class="link_name"><strong>현대아울렛 대구점</strong></a>
                             </strong>
-                            <span data-id="subcategory" class="subcategory clickable">상설할인매장</span>
+                            <span class="subcategory">상설할인매장</span>
                         </div>
                         <div data-id="rating" class="rating clickArea">
                             <span data-id="score" class="score">
-                                <span class="screen_out">별점</span>
-                                <em data-id="scoreNum" class="num" title="3.4점">3.4</em>
-                                <span class="backgroundStar">
-                                    <span data-id="star" class="star" style="width: 46.24px;"></span>
-                                </span>
-                                <a href="https://place.map.kakao.com/1012120657#comment" data-id="numberofscore"
+                                <div class="rate">
+                                    <a style="width: 71%"></a> <!--width의 비율만큼 별점이 정해짐-->
+                                    <a href="https://place.map.kakao.com/1012120657#comment" data-id="numberofscore"
                                     class="numberofscore" target="_blank">36건</a>
+                                </div>
+                                
                             </span>
-                            <span data-id="scoreBlind" class="txt_blind HIDDEN"><span class="ico_noti"></span>후기
-                                미제공</span>
                             <span data-id="scoreGroove" class="groove"></span>
                             <a href="https://place.map.kakao.com/1012120657#review" data-id="review" class="review"
-                                target="_blank">리뷰 <em data-id="numberofreview">57</em></a>
-                            <span data-id="tvshowInfo" class="tvinfolabel HIDDEN">tv소개</span>
+                                target="_blank">리뷰 <em data-id="numberofreview">57건</em></a>
                         </div>
                         <div class="info_item">
-                            <div data-id="wrapCourseInfo" class="wrapCourseInfo HIDDEN"></div>
                             <div data-id="wrapAddress" class="addr">
                                 <p data-id="address" title="대구 동구 동대구로 454">대구 동구 동대구로 454</p>
                                 <p data-id="otherAddr" class="lot_number" title="신천동 294-5">(지번) 신천동 294-5</p>
@@ -69,7 +54,8 @@
                 </ul>
             </div>
             <div class="btn">
-                <div class="list-bttm" @click="moveListPage()">일정 만들기</div>
+                <div class="list-bttm" @click="moveListPage()">일정 만들기<img class="backCaret"
+                        src="@/assets/caret-right-fill.svg" /></div>
             </div>
         </div>
         <div id="map"></div>
@@ -186,45 +172,6 @@ export default {
     align-items: center;
 }
 
-.works_button {
-    display: inline-block;
-    width: 100%;
-    height: 55px !important;
-    border: none;
-    border-radius: 5px !important;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    background: linear-gradient(to left, #6164c4, #36b2cd) !important;
-    position: relative;
-    overflow: hidden;
-    margin-top: 50px;
-}
-
-.works_button::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to left, rgba(255, 255, 255, 0.2), transparent) !important;
-    transform: translateY(-100%);
-    transition: transform 0.3s ease;
-}
-
-.works_button:hover::before {
-    transform: translateY(0);
-}
-
-.works_button:hover {
-    background: linear-gradient(to left, #36b2cd, #6164c4) !important;
-}
-
 .PlaceItem .rating .backgroundStar {
     width: 68px;
     margin: 2px 3px 0 0;
@@ -263,5 +210,48 @@ export default {
     font-size: 30px;
     font-weight: 400px;
     cursor: pointer;
+}
+
+ul {
+    list-style: none;
+}
+
+.head_item {
+    text-align: left;
+}
+
+.tit_name {
+    text-align: left;
+}
+
+.link_name {
+    text-decoration-line: none;
+    color: inherit;
+}
+
+.numberofscore,
+.numberofreview {
+    text-decoration-line: none;
+    color: black;
+}
+
+.subcategory {
+    margin-left: 10px;
+    color: gray;
+    font-size: 13px;
+}
+
+.rate {
+    background: url(https://aldo814.github.io/jobcloud/html/images/user/star_bg02.png) no-repeat;
+    width: 121px;
+    height: 20px;
+    position: relative;
+}
+
+.rate span {
+    position: absolute;
+    background: url(https://aldo814.github.io/jobcloud/html/images/user/star02.png);
+    width: auto;
+    height: 20px;
 }
 </style>
