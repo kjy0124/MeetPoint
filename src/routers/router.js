@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainPage from "@/components/MainPage.vue";
 import KakaoMap from "@/components/KakaoMap.vue";
+import ListPage from "@/components/ListPage.vue";
 
 const routes = [
     {
@@ -12,6 +13,11 @@ const routes = [
         path: "/KakaoMap.page",
         name: "KakaoMap",
         component: KakaoMap,
+    },
+    {
+        path: "/ListPage.page",
+        name: "ListPage",
+        component: ListPage,
     },
 ];
 
