@@ -12,19 +12,19 @@
           이름과 위치를 입력하고 원하는 방식으로 중간지점을 검색하세요!
         </h3>
         <div class="info-box">
-          <section style="padding: 0px; margin: auto; width: 30%;">
+          <section style="padding: 0px; margin: auto; width: 30%; padding-left: 50px;">
             <div>
               <input class="input-text" placeholder="이름을 입력하세요!" type="text" v-model="name"/>
             </div>
             <div style="height: 30px;"></div>
             <div class="searchWrap">
-              <input class="search-input-text" placeholder="위치를 입력하세요!" type="text" v-model="location" @click="modalopen()"/>
+              <input class="search-input-text" placeholder="위치를 입력하세요!" type="text" v-model="location" @click="openModal()"/>
               <!-- <button class="searchBtn"></button> -->
               <img src="../assets/돋보기.png" @click="openModal"/>
             </div>
           </section>
           <section style="width: 25%;" class="playbuttonsec"><input class="playbutton" type="button"/></section>
-          <section style="padding: 0; margin: 10px; width: 40%;">
+          <section style="padding-right: 20px; margin: 10px; width: 40%;">
             <table class="list-table">
               <thead >
                 <tr>
@@ -238,6 +238,7 @@ export default {
   width: 100%;
   height: 60%;
   margin: 20px 0;
+
 }
 
 .list-table th,
@@ -296,7 +297,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.2), transparent) p !important;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.2), transparent) !important;
   transform: translateY(-100%);
   transition: transform 0.3s ease;
 }

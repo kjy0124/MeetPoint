@@ -2,8 +2,8 @@
     <div class="container">
         <div class="list">
             <div class="list-top">
-                <div @click="moveMainPage()"><img class="backCaret" src="@/assets/caret-left-fill.svg"/></div>
-                <div class="logo">Meet Point</div>
+                <div @click="moveMainPage()"><img class="backCaret" src="@/assets/caret-left-fill.svg" /></div>
+                <div class="logo">Meet &nbsp;Point</div>
             </div>
             <div class="info">
                 <ul>
@@ -69,7 +69,7 @@
                 </ul>
             </div>
             <div class="btn">
-                <button class="works_button" @click="moveListPage()">일정 만들기 ></button>
+                <div class="list-bttm" @click="moveListPage()">일정 만들기</div>
             </div>
         </div>
         <div id="map"></div>
@@ -128,7 +128,8 @@ export default {
     display: flex;
     align-items: center;
     height: 100vh;
-    overflow: hidden; /*스크롤 바가 없어지고 동시에 스크롤 기능도 없어짐 */
+    overflow: hidden;
+    /*스크롤 바가 없어지고 동시에 스크롤 기능도 없어짐 */
 }
 
 .list {
@@ -138,59 +139,39 @@ export default {
     border-right: 1px solid black;
 }
 
-.list .logo {
+.logo {
     height: 10%;
     font-size: 60px;
-    text-align: center;
     font-weight: 400px;
     font-style: normal;
-}
-
-.logo{
     color: white;
-    margin-left: 30px;
+    margin-left: 10px;
+    /* text-align: center; */
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    width: 80%;
 }
 
-.backCaret{
+.backCaret {
     width: 50px;
     height: 50px;
-    margin-right: 30px;
+    margin-left: 15px;
+    cursor: pointer;
 }
 
-.list .info {
+.info {
     height: 80%;
     /* border-bottom: 1px solid black; */
 }
 
-.list .btn {
-    height: 10%;
+.btn {
+    height: 11%;
     display: flex;
     justify-content: center;
     /* 수평 가운데 정렬 */
     align-items: center;
     /* 수직 가운데 정렬 */
 
-}
-
-.btn button {
-    width: 80%;
-    height: 80%;
-    background-color: #0a0a23;
-    /* 버튼 배경색 */
-    color: #fff;
-    /* 버튼 텍스트 색상 */
-    border: none;
-    border-radius: 25px;
-    font-size: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.list button:hover {
-    background-color: #002ead;
-    /* 마우스 호버 시 버튼 배경색 변경 */
-    transition: 0.7s;
 }
 
 #map {
@@ -208,8 +189,9 @@ export default {
 .works_button {
     display: inline-block;
     width: 100%;
-    height: 45px;
+    height: 55px !important;
     border: none;
+    border-radius: 5px !important;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
     color: white;
     font-size: 18px;
@@ -217,9 +199,10 @@ export default {
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    background: linear-gradient(to bottom, #6164c4, #36b2cd);
+    background: linear-gradient(to left, #6164c4, #36b2cd) !important;
     position: relative;
     overflow: hidden;
+    margin-top: 50px;
 }
 
 .works_button::before {
@@ -229,7 +212,7 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.2), transparent) !important;
     transform: translateY(-100%);
     transition: transform 0.3s ease;
 }
@@ -239,7 +222,7 @@ export default {
 }
 
 .works_button:hover {
-    background: linear-gradient(to bottom, #36b2cd, #6164c4);
+    background: linear-gradient(to left, #36b2cd, #6164c4) !important;
 }
 
 .PlaceItem .rating .backgroundStar {
@@ -252,7 +235,8 @@ export default {
     background-position: 0 -20px;
 }
 
-.PlaceItem .rating .backgroundStar, .PlaceItem .rating .star {
+.PlaceItem .rating .backgroundStar,
+.PlaceItem .rating .star {
     overflow: hidden;
     float: left;
     height: 12px;
@@ -266,5 +250,18 @@ export default {
     background-origin: initial;
     background-clip: initial;
     background-color: initial; */
+}
+
+.list-bttm {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to left, #5de0e6 30%, #004aad);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+    font-weight: 400px;
+    cursor: pointer;
 }
 </style>
