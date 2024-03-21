@@ -60,18 +60,16 @@
         </div>
         <div class="map_wrap">
             <div id="map"></div>
-            <div id="category">
-                <div class="category_container">
-                    <div id="CT1" data-order="0">영화관</div>
-                    <div id="CE7" data-order="1">카페</div>
-                    <div id="FD6" data-order="2">음식점</div>
-                    <div id="PK6" data-order="3">주차장</div>
-                    <div id="CS2" data-order="4">편의점</div>
-                    <div id="AT4" data-order="5">관광명소</div>
-                    <div id="SW8" data-order="6">지하철</div>
-                    <div id="BK9" data-order="7">은행</div>
-                    <div id="OL7" data-order="8">주유소</div>
-                </div>
+            <div class="category">
+                <div id="CT1" data-order="0">영화관</div>
+                <div id="CE7" data-order="1">카페</div>
+                <div id="FD6" data-order="2">음식점</div>
+                <div id="PK6" data-order="3">주차장</div>
+                <div id="CS2" data-order="4">편의점</div>
+                <div id="AT4" data-order="5">관광명소</div>
+                <div id="SW8" data-order="6">지하철</div>
+                <div id="BK9" data-order="7">은행</div>
+                <div id="OL7" data-order="8">주유소</div>
             </div>
         </div>
     </div>
@@ -286,32 +284,29 @@ ul {
 
 
 /* 카테고리 */
-#category{
-    width: 100%;
+.category{
+    margin-left: 10%;
+    width: 80%;
+    height: 7%;
     position: absolute;
     border: 1px solid black;
     border-radius: 5px;
-    top: 10px;
+    top: 15px;
     z-index: 1;
     display: flex;
     justify-content: center;
+    background: linear-gradient(to right, #5de0e6 30%, #004aad);
 
     
 }
-.category_container {
-    width: 50%;
-    height: 40px;
 
-    cursor: pointer;
-    background: linear-gradient(to left, #6164c4, #36b2cd) !important;
-}
-.category_container div {
-    /* border: 1px solid red; */
+.category div {
+    border: 1px solid red;
     text-align: center;
     display: inline-flex;
     width: 10%;
     height: 100%;
-    line-height: 40px;
+    line-height: 60px;
     color: #fff;
 }
 </style>
