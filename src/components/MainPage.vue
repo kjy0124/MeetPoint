@@ -37,8 +37,8 @@
                 <tr>
                   <td>홍길동</td>
                   <td>부산광역시 해운대구 센텀1로 9</td>
-                  <td class="btn">
-                    <svg @click="Delete()" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                  <td >
+                    <svg @mouseover="changeColor(true)" @mouseleave="changeColor(false)" @click="Delete()" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
                     </svg>
                   </td>
@@ -46,8 +46,8 @@
                 <tr>
                   <td>김철수</td>
                   <td>전주시 완산구 흑석로 2</td>
-                  <td class="btn">
-                    <svg @click="Delete()" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                  <td >
+                    <svg @mouseover="changeColor(true)" @mouseleave="changeColor(false)" @click="Delete()" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
                     </svg>
                   </td>
@@ -55,8 +55,8 @@
                 <tr>
                   <td>박영희</td>
                   <td>속초시 논산길 5</td>
-                  <td class="btn">
-                    <svg @click="Delete()" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                  <td >
+                    <svg @mouseover="changeColor(true)" @mouseleave="changeColor(false)" @click="Delete()" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
                     </svg>
                   </td>
@@ -99,7 +99,9 @@ export default {
     name: "MainPage",
     data() {
       return {
-        modalOpen: false // 모달 상태를 저장하는 데이터
+        modalOpen: false, // 모달 상태를 저장하는 데이터
+        fillColor: 'currentColor' // 초기 fill 색상 설정
+
       }
     },
     methods :{
@@ -122,6 +124,16 @@ export default {
       Delete() {
         alert("삭제");
       },
+
+      /* x버튼에 마우스 올려두면 색상 변경 */
+      changeColor(isHovered) {
+        if (isHovered) {
+          this.fillColor = '#fff'; // 마우스 오버 시 색상 변경
+        } else {
+          this.fillColor = 'currentColor'; // 마우스 떠날 시 원래 색상으로 변경
+        }
+      }
+
 
     },
 
@@ -310,9 +322,8 @@ export default {
   background: linear-gradient(to left, #36b2cd, #6164c4) !important;
 }
 
-
 /* x버튼 svg */
-.btn svg:hover {
+svg:hover {
   transition: background-color 0.5s ease;
   fill: #fff;
 }
