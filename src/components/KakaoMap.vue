@@ -62,13 +62,21 @@
             <div id="map"></div>
             <div class="category">
                 <div id="CT1" data-order="0">영화관</div>
+                <div class="separator"></div>
                 <div id="CE7" data-order="1">카페</div>
+                <div class="separator"></div>
                 <div id="FD6" data-order="2">음식점</div>
+                <div class="separator"></div>
                 <div id="PK6" data-order="3">주차장</div>
+                <div class="separator"></div>
                 <div id="CS2" data-order="4">편의점</div>
+                <div class="separator"></div>
                 <div id="AT4" data-order="5">관광명소</div>
+                <div class="separator"></div>
                 <div id="SW8" data-order="6">지하철</div>
+                <div class="separator"></div>
                 <div id="BK9" data-order="7">은행</div>
+                <div class="separator"></div>
                 <div id="OL7" data-order="8">주유소</div>
             </div>
         </div>
@@ -285,6 +293,9 @@ ul {
 
 /* 카테고리 */
 .category{
+    display: flex;
+    color: white;
+    align-items: center;
     margin-left: 10%;
     width: 80%;
     height: 7%;
@@ -294,13 +305,23 @@ ul {
     top: 15px;
     z-index: 1;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     background: linear-gradient(to right, #5de0e6 30%, #004aad);
 
     
 }
+.separator {
+    width: 2px; /* 선의 너비 설정 */
+    height: 20px; /* 선의 높이 설정 */
+    background-color: white; /* 선의 색상 설정 */
+    margin: 0 10px; /* 선과 요소 사이의 간격 설정 */
+}
 
 .category div {
+    margin: 0, 5px;
+}
+
+/* .category div {
     border: 1px solid red;
     text-align: center;
     display: inline-flex;
@@ -308,5 +329,5 @@ ul {
     height: 100%;
     line-height: 60px;
     color: #fff;
-}
+} */
 </style>
