@@ -83,52 +83,28 @@
       <div class="rounded-box" v-if="modalOpen">
           <div class="modal_main-box">
               <div @click="closeModal()"><img class="modal_backCaret" src="@/assets/caret-modal-fill.svg"/></div>
-              <input class="modal_Place_Name" type="text"><!--장소 입력-->
-              <img class="nowAddress" src="https://cdn-icons-png.flaticon.com/512/5055/5055654.png">
-              <img class="searchPlace" src="@/assets/돋보기.png">
+              
+              <!--내 현재 위치 버튼-->
+              <button @click="getCurrentLocation">
+                <img class="nowAddress" src="https://cdn-icons-png.flaticon.com/512/5055/5055654.png" alt="현재 위치">
+              </button>
+
+              <!--현재 위치 버튼 클릭 시 텍스트 상에 표시-->
+              <input class="modal_Place_Name" type="text" v-model="currentLocation" placeholder="장소 검색"><!--장소 입력-->
+
+              <!--검색 이미지 버튼-->
+              <button @click="searchPlaces">
+                <img class="searchPlace" src="@/assets/돋보기.png" alt="검색">
+              </button>
           
               <div class="modal_info-box">
                   <div class="modal_list">
-                      <div>
-                          <div class="modal_location">수성못</div>
-                          <div class="modal_address">대구 수성구 유니버시아드로 140</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">신매광장</div>
-                          <div class="modal_address">대구 수성구 신매동 567-15</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">수성유원지</div>
-                          <div class="modal_address">대구 수성구 무화로 78</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">아이니테마파크</div>
-                          <div class="modal_address">대구 수성구 유니버시아드로 140</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">아르떼수성랜드</div>
-                          <div class="modal_address">대구 수성구 무학로 42</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">내관지</div>
-                          <div class="modal_address">대구 수성구 대흥동 646-90</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">성암산</div>
-                          <div class="modal_address">대구 수성구 욱수동 산 178</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">대구어린이천문대</div>
-                          <div class="modal_address">대구 수성구 알파시티1로31길 37</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">생각을 담는 정원</div>
-                          <div class="modal_address">대구 수성구 매호동 280-1</div>
-                      </div>
-                      <div>
-                          <div class="modal_location">모명재</div>
-                          <div class="modal_address">대구 수성구 달구벌대로525길 14-21</div>
-                      </div>
+                    <ul>
+                        <li v-for="(place, index) in places" :key="index">
+                            <div class="modal_location">{{ place.place_name }}</div>
+                            <div class="modal_address">{{ place.address_name }}</div>
+                        </li>
+                    </ul>
                   </div>
               </div>
           </div>
@@ -141,9 +117,11 @@
       data() {
           return {
           modalOpen: false, // 모달 상태를 저장하는 데이터
-          fillColor: 'currentColor' // 초기 fill 색상 설정
-  
-          }
+          fillColor: 'currentColor', // 초기 fill 색상 설정
+          currentLocation: '', //현재 위치 텍스트
+          query: '', //검색어
+          places: [] //검색 결과 리스트
+         };
       },
       methods :{
   
@@ -173,18 +151,60 @@
           } else {
               this.fillColor = 'currentColor'; // 마우스 떠날 시 원래 색상으로 변경
           }
+          },
+          //현재 위치 가져오기
+          getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    //Kakao 지도 api 사용해서 현재 위치 주소 가져오기
+                    const geocoder = new window.kakao.maps.services.Geocoder();
+                    geocoder.coord2Address(longitude, latitude, (result, status) => {
+                        if (status === window.kakao.maps.services.Status.OK) {
+                            this.currentLocation = result[0].address.address_name;
+                        } else {
+                            console.error('Failed to get current location:', status);
+                        }
+                    });
+                }, error => {
+                    console.error('Error getting current position:', error);
+                });
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+          },
+          //장소 검색 실행
+          searchPlaces() {
+            //Kakao 지도 API 사용해서 검색
+            const placesSearch = new window.kakao.maps.services.Places();
+            placesSearch.keywordSearch('대구 동구', (result, status) => {
+                if (status === window.kakao.maps.services.Status.OK) {
+                    this.places = result;
+                } else {
+                    console.error('Failed to search places:', status);
+                }
+            });
           }
-  
-  
+
       },
   
       created() {
   
       },
       mounted() {
-  
+        //kakao 지도 api 스크립트 로드
+        const script = document.createElement('script');
+        script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing';
+        script.onload = () => {
+            window.kakao.maps.load(() => {
+                console.log('Kakao Maps SDK loaded');
+            });
+        };
+        document.head.appendChild(script);
       }
-  }
+  };
   </script>
   
   <style>
