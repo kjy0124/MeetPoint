@@ -60,7 +60,7 @@
         </div>
         <div class="map_wrap">
             <div id="map"></div>
-            <div class="category">
+            <!-- <div class="category">
                 <div id="CT1" data-order="0">영화관</div>
                 <div class="separator"></div>
                 <div id="CE7" data-order="1">카페</div>
@@ -78,6 +78,35 @@
                 <div id="BK9" data-order="7">은행</div>
                 <div class="separator"></div>
                 <div id="OL7" data-order="8">주유소</div>
+            </div> -->
+
+            <!-- 네이버 지도 css를 참고하여 작성한 부분 -->
+            <div class="category_ex">
+                <ul class="list_bubble_filter">
+                    <li>
+                        <button @click="btnClick('food')" class="epehmC" :class="{ clicked: category_click.food }">음식점</button>
+                    </li>
+                    <li class="separator"></li>
+                    <li>
+                        <button @click="btnClick('cafe')" class="epehmC" :class="{ clicked: category_click.cafe }">카페</button>
+                    </li>
+                    <li class="separator"></li>
+                    <li>
+                        <button @click="btnClick('pension')" class="epehmC" :class="{ clicked: category_click.pension }">펜션</button>
+                    </li>
+                    <li class="separator"></li>
+                    <li>
+                        <button @click="btnClick('paking')" class="epehmC" :class="{ clicked: category_click.paking }">주차장</button>
+                    </li>
+                    <li class="separator"></li>
+                    <li>
+                        <button @click="btnClick('coupon')" class="epehmC" :class=" { clicked: category_click.coupon }">쿠폰</button>
+                    </li>
+                    <li class="separator"></li>
+                    <li>
+                        <button @click="btnClick('order')" class="epehmC" :class="{ clicked: category_click.order }">주문</button>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -90,6 +119,16 @@ export default {
     data() {
         return {
             map: null,
+
+            // 카테고리 선택시 색변경을 하기위한 변수
+            category_click: {
+                food:false,
+                cafe:false,
+                pension: false,
+                paking: false,
+                coupon: false,
+                order: false,
+            }
         }
     },
     methods: {
@@ -111,6 +150,20 @@ export default {
         moveMainPage() {
             this.$router.push({ name: "MainPage", params: {} });
         },
+        /* 카테고리 클릭시 */
+        btnClick(menu) {
+            console.log('btnClick')
+            const vm = this;
+            vm.category_click={
+                food:false,
+                cafe:false,
+                pension: false,
+                paking: false,
+                coupon: false,
+                order: false,
+            }
+            vm.category_click[menu] = true;
+        }
     },
     created() {
 
@@ -313,7 +366,7 @@ ul {
 .separator {
     width: 2px; /* 선의 너비 설정 */
     height: 20px; /* 선의 높이 설정 */
-    background-color: white; /* 선의 색상 설정 */
+    background-color: rgb(36, 36, 36); /* 선의 색상 설정 */
     margin: 0 10px; /* 선과 요소 사이의 간격 설정 */
 }
 
@@ -330,4 +383,56 @@ ul {
     line-height: 60px;
     color: #fff;
 } */
+
+/* 카테고리 - 네이버 지도 css를 참고하여 작성한 부분 */
+.category_ex {
+    position: absolute;
+    left: 22px;
+    top: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    background: padding-box padding-box rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 4px 0px;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.category_ex .list_bubble_filter {
+    padding: 0px 11px;
+}
+
+.category_ex .list_bubble_filter li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+li {
+
+    list-style: none;
+    text-align: -webkit-match-parent;
+}
+li button {
+    cursor: pointer;
+    border: 0px;
+    border-radius: 0px;
+    background-color: transparent;
+
+}
+
+.epehmC {
+    position: relative;
+    padding: 0px 11px 0px;
+    line-height: 9.5px;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgb(36, 36, 36);
+}
+.clicked{
+    color: #1a73e8;
+    /* border-bottom: 3px solid #1a73e8; */ /* 글자 클릭시 글자 아래부분 밑줄 생성 */
+    /* padding-bottom: 8px; */
+    /* border-right: 3px solid #1a73e8; */
+    
+}
+/**********************************************/
 </style>
