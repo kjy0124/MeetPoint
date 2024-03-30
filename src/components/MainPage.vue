@@ -37,7 +37,7 @@
             </div>
           </section>
           <section style="width: 25%" class="playbuttonsec">
-            <input class="playbutton" type="button" />
+            <input class="playbutton" type="button" @click="saveData()" />
           </section>
           <section style="padding-right: 20px; margin: 10px; width: 40%">
             <table class="list-table">
@@ -49,14 +49,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>홍길동</td>
-                  <td>부산광역시 해운대구 센텀1로 9</td>
+                <tr v-for="(item, index) in items" :key="index">
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.location }}</td>
                   <td>
                     <svg
                       @mouseover="changeColor(true)"
                       @mouseleave="changeColor(false)"
-                      @click="Delete()"
+                      @click="Delete(index)"
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
                       height="16"
@@ -64,68 +64,11 @@
                       class="bi bi-x-circle-fill"
                       viewBox="0 0 16 16"
                     >
-                      <path
+                    <path
                         d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
                       />
                     </svg>
                   </td>
-                </tr>
-                <tr>
-                  <td>김철수</td>
-                  <td>전주시 완산구 흑석로 2</td>
-                  <td>
-                    <svg
-                      @mouseover="changeColor(true)"
-                      @mouseleave="changeColor(false)"
-                      @click="Delete()"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-x-circle-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
-                      />
-                    </svg>
-                  </td>
-                </tr>
-                <tr>
-                  <td>박영희</td>
-                  <td>속초시 논산길 5</td>
-                  <td>
-                    <svg
-                      @mouseover="changeColor(true)"
-                      @mouseleave="changeColor(false)"
-                      @click="Delete()"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      class="bi bi-x-circle-fill"
-                      viewBox="0 0 16 16"
-                    >
-                      <path
-                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
-                      />
-                    </svg>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
                 </tr>
               </tbody>
             </table>
@@ -143,18 +86,15 @@
 
         <!--내 현재 위치 버튼-->
         <button @click="getCurrentLocation">
-          <img
-            class="nowAddress"
-            src="https://cdn-icons-png.flaticon.com/512/5055/5055654.png"
-            alt="현재 위치"
-          />
+          <img class="nowAddress" src="@/assets/mylocation.svg" alt="현재 위치" />
         </button>
 
         <!--현재 위치 버튼 클릭 시 텍스트 상에 표시-->
         <input
           class="modal_Place_Name"
           type="text"
-          v-model="currentLocation"
+          v-model="query"
+          @input="handLeInput"
           placeholder="장소 검색"
         /><!--장소 입력-->
 
@@ -166,7 +106,7 @@
         <div class="modal_info-box">
           <div class="modal_list">
             <ul>
-              <li v-for="(place, index) in places" :key="index">
+              <li v-for="(place, index) in places" :key="index" @click="selectPlace(place)">
                 <div class="modal_location">{{ place.place_name }}</div>
                 <div class="modal_address">{{ place.address_name }}</div>
               </li>
@@ -175,7 +115,6 @@
         </div>
       </div>
     </div>
-    F
   </div>
 </template>
   
@@ -189,6 +128,11 @@ export default {
       currentLocation: "", //현재 위치 텍스트
       query: "", //검색어
       places: [], //검색 결과 리스트
+      nearbyPlaces: [],
+      items: [],
+      name: '', // 사용자 이름 저장하는 변수
+      location: '', // 모달 창에서 선택한 위치를 저장하는 변수
+      dataList: [], // 저장된 리스트
     };
   },
   methods: {
@@ -205,6 +149,28 @@ export default {
     closeModal() {
       this.modalOpen = false;
     },
+    selectPlace(place) {
+      this.location = place.place_name; // 선택된 장소 이름으로 위치 입력창 값을 설정
+      this.modalOpen = false; // 모달 닫기
+    },
+
+    //모달 창에서 위치 선택 후 모달 닫기 및 위치 정보 저장
+    closeModalAndSaveLocation(selectedLocation) {
+      this.location = selectedLocation;
+      this.closeModal();
+    },
+    // playbuttoon 클릭 시 데이터 저장
+    saveData() {
+      if (this.name && this.location) {
+        this.dataList.push({ name: this.name, location: this.location });
+        this.items.push({ name: this.name, location: this.location });
+        this.name = '';
+        this.location = '';
+      } else {
+        alert('이름과 위치를 모두 입력해주세요.');
+      }
+    },
+
 
     /* 삭제 버튼 */
     Delete() {
@@ -219,6 +185,9 @@ export default {
         this.fillColor = "currentColor"; // 마우스 떠날 시 원래 색상으로 변경
       }
     },
+    handLeInput() {
+      this.query = event.target.value;
+    },
     //현재 위치 가져오기
     getCurrentLocation() {
       if (navigator.geolocation) {
@@ -231,7 +200,7 @@ export default {
             const geocoder = new window.kakao.maps.services.Geocoder();
             geocoder.coord2Address(longitude, latitude, (result, status) => {
               if (status === window.kakao.maps.services.Status.OK) {
-                this.currentLocation = result[0].address.address_name;
+                this.query = result[0].address.address_name;
               } else {
                 console.error("Failed to get current location:", status);
               }
@@ -249,13 +218,27 @@ export default {
     searchPlaces() {
       //Kakao 지도 API 사용해서 검색
       const placesSearch = new window.kakao.maps.services.Places();
-      placesSearch.keywordSearch("대구 동구", (result, status) => {
+      placesSearch.keywordSearch(this.query, (result, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
           this.places = result;
+          // 검색된 장소 주변의 건물들을 가져옴
+          this.getNearbyPlaces(result[0].x, result[0].y);
         } else {
           console.error("Failed to search places:", status);
+
+          this.places = [];
         }
       });
+    },
+    getNearbyPlaces(x, y) {
+      const placesSearch = new window.kakao.maps.services.Places();
+      placesSearch.keywordSearch("주변", (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          this.nearbyPlaces = result;
+        } else {
+          console.error("Failed to search nearby places:", status);
+        }
+      }, { x, y });
     },
   },
 
@@ -494,18 +477,19 @@ svg:hover {
 /* 현재 위치 입력*/
 .nowAddress {
   position: absolute;
-  top: 20px;
-  right: 15%;
-  width: 40px;
-  height: 40px;
+  top: 25px;
+  right: 13%;
+  width: 25px;
+  height: 25px;
+  z-index: 1;
 }
 /* 장소 검색*/
 .searchPlace {
   position: absolute;
-  top: 20px;
+  top: 23px;
   right: 10%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 /*Modal List*/
 .modal_info-box {
