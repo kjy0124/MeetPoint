@@ -10,7 +10,8 @@
                 <div class="warper-mid">
                     <div class="warper-mid-top">
                         <ul>
-                            <li v-for="(friend, index) in friendList" :key="index" :class="{ 'with-border': index !== friendList.length }">
+                            <li v-for="(friend, index) in friendList" :key="index"
+                                :class="{ 'with-border': index !== friendList.length }">
                                 <div class="element-left">{{ friend.name + index }}</div>
                                 <div class="element-mid">{{ friend.address }}</div>
                                 <button class="element-right delete" @click="removeFriend(index)"></button>
@@ -18,7 +19,7 @@
                         </ul>
                     </div>
                     <div class="warper-mid-btm">
-                        <button class="add-button" @click="addFriend()">친구 추가하기</button>
+                        <button class="add-button" @click="openModal()">친구 추가하기</button>
                     </div>
 
                 </div>
@@ -36,10 +37,18 @@
             </div>
         </div>
     </div>
-    <!--모달 창-->
-    <div class="modal-warper">
+    <!-- 모달 창-->
+    <div class="modal-warper" v-if="modalOpen">
         <div class="modal-content">
-            
+            <div>
+                <img src="@/assets/caret-modal-fill.svg" @click="closeModal()" />
+                <input class="input-name" placeholder="이름을 입력하세요!" type="text" v-model="name" />
+                <img src="@/assets/mylocation.svg" alt="현재 위치" />
+            </div>
+            <div>
+                <input class="input-location" placeholder="어디에서 출발하나요?" type="text" v-model="location" />
+                <img class="search-img" src="../assets/돋보기.png"/>
+            </div>
         </div>
     </div>
 </template>
@@ -47,13 +56,19 @@
 export default {
     data() {
         return {
-            friendList: [] // 친구 목록을 관리할 배열
+            friendList: [], // 친구 목록을 관리할 배열
+            modalOpen: false,
         };
     },
     methods: {
-        addFriend() {
-            this.friendList.push({ name: '새로운 친구', address: '새로운 주소' });
+        openModal() {
+            this.modalOpen = true;
         },
+
+        closeModal() {
+            this.modalOpen = false;
+        },
+
         removeFriend(index) {
             this.friendList.splice(index, 1);
         }
