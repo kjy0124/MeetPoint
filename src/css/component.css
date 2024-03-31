@@ -31,7 +31,7 @@
 
 .warper-mid {
     width: 85%;
-    height: 60%;
+    height: 65%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -40,18 +40,25 @@
 
 .warper-btm {
     width: 100%;
-    height: 20%;
+    height: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.warper-btm label{
+    font-size: 1.5em;
 }
 
 .warper-top h1 {
     font-size: 4em;
-    margin-bottom: 10px;
+    margin-top: 0.5em;
 }
 
 .warper-top h3 {
+    margin-top: 1em;
     font-size: 2em;
     color: #dcdcdcdc;
-
     @media screen and (max-width: 1000px) {
         display: none;
     }
@@ -62,12 +69,14 @@
     height: 80%;
     font-size: 2rem;
     overflow-y: auto;
+    border: rgba(82, 113, 255, 0.4) 2px solid;
+    border-radius: 1em;
+    padding: 1em;
 }
 
 .with-border {
     display: flex;
-    border-bottom: 1px solid #dcdcdc;
-    /* 선의 스타일은 필요에 따라 조정 가능합니다. */
+    padding: 0.3em;
 }
 
 .warper-mid-top li {
@@ -76,21 +85,22 @@
 
 .element-left {
     width: 20%;
-    background-color: #5271ff;
+    background-color: rgba(82, 113, 255, 0.9);
     border-radius: 1em;
     color: #fefefe;
     margin-right: 10%;
 }
 
 .element-mid {
-    width: 33%;
-    border: #5271ff 1px solid;
+    width: 50%;
+    border: rgba(82, 113, 255, 0.4) 2px solid;
     border-radius: 1em;
     color: #5271ff;
 }
 
 .element-right {
-    width: 33%;
+    margin-left: 4em;
+    width: 3%;
 }
 
 .warper-mid-btm {
@@ -98,16 +108,10 @@
     height: 20%;
 }
 
-.delete {
-    display: inline-block;
-}
-
-.delete:after {
-    display: inline-block;
-    content: "\00d7";
-    font-size: 20px;
-    background-color: gray;
-    border-radius: 50%;
+.warper-mid-btm h3 {
+    margin-top: 1em;
+    font-size: 2em;
+    color: #dcdcdcdc;
 }
 
 .add-button {
@@ -158,7 +162,7 @@
     background-color: #fefefe;
     border-radius: 10px;
     width: 30%;
-    height: 20%;
+    height: 70%;
     padding: 1.5em;
     box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
 }
