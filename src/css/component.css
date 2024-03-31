@@ -75,11 +75,18 @@
 }
 
 .element-left {
-    width: 33%;
+    width: 20%;
+    background-color: #5271ff;
+    border-radius: 1em;
+    color: #fefefe;
+    margin-right: 10%;
 }
 
 .element-mid {
     width: 33%;
+    border: #5271ff 1px solid;
+    border-radius: 1em;
+    color: #5271ff;
 }
 
 .element-right {
@@ -151,15 +158,26 @@
     background-color: #fefefe;
     border-radius: 10px;
     width: 30%;
-    height: 10%;
-    padding: 1%;
+    height: 20%;
+    padding: 1.5em;
+    box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
 }
 
-.input-name{
-    border: 1px solid #5271ff;
+.input-name, .input-location{
+    font-size: 1.7em !important;
+    margin-left: 0.5em !important;
+    margin-right: 0.7em;
 }
 
 .search-img{
     width: 2.5em;
     height: 2.5em;
+}
+
+.modal-content-top{
+    margin-bottom: 1.5em;
+}
+
+.modal-content-btm{
+    margin-left: 3em;
 }

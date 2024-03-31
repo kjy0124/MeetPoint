@@ -12,9 +12,9 @@
                         <ul>
                             <li v-for="(friend, index) in friendList" :key="index"
                                 :class="{ 'with-border': index !== friendList.length }">
-                                <div class="element-left">{{ friend.name + index }}</div>
+                                <div class="element-left">{{ friend.name.trim() !== '' ? friend.name : "친구"+(index+1) }}</div>
                                 <div class="element-mid">{{ friend.address }}</div>
-                                <button class="element-right delete" @click="removeFriend(index)"></button>
+                                <button class="element-right delete" @click="removeFriend(friend)"></button>
                             </li>
                         </ul>
                     </div>
@@ -40,14 +40,14 @@
     <!-- 모달 창-->
     <div class="modal-warper" v-if="modalOpen">
         <div class="modal-content">
-            <div>
-                <img src="@/assets/caret-modal-fill.svg" @click="closeModal()" />
-                <input class="input-name" placeholder="이름을 입력하세요!" type="text" v-model="name" />
+            <div class="modal-content-top">
+                <img src="@/assets/caret-modal-fill.svg" alt="뒤로가기" @click="closeModal()" />
+                <input class="input-name" placeholder="이름을 입력하세요!" type="text" id="name" v-model="name" />
                 <img src="@/assets/mylocation.svg" alt="현재 위치" />
             </div>
-            <div>
-                <input class="input-location" placeholder="어디에서 출발하나요?" type="text" v-model="location" />
-                <img class="search-img" src="../assets/돋보기.png"/>
+            <div class="modal-content-btm">
+                <input class="input-location" placeholder="어디에서 출발하나요?" type="text" id="location" v-model="location" />
+                <img class="search-img" src="../assets/돋보기.png" @click="addFriend()" />
             </div>
         </div>
     </div>
@@ -58,6 +58,8 @@ export default {
         return {
             friendList: [], // 친구 목록을 관리할 배열
             modalOpen: false,
+            name: '', // 사용자 이름 저장하는 변수
+            location: '', // 모달 창에서 선택한 위치를 저장하는 변수
         };
     },
     methods: {
@@ -67,6 +69,17 @@ export default {
 
         closeModal() {
             this.modalOpen = false;
+            this.name = '';
+            this.location = '';
+        },
+
+        addFriend(){
+            if(this.location.trim() ===''){
+                alert("주소를 입력하세요!");
+                return;
+            }
+            this.friendList.push({ name: this.name, address: this.location});
+            // this.closeModal();
         },
 
         removeFriend(index) {
