@@ -10,7 +10,7 @@
 .warper {
     width: 60%;
     height: 80%;
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, .9);
     z-index: 20;
     display: flex;
     flex-direction: column;
@@ -58,7 +58,7 @@
 .warper-top h3 {
     margin-top: 1em;
     font-size: 2em;
-    color: #dcdcdcdc;
+    color: #a1a1a1a1;
     @media screen and (max-width: 1000px) {
         display: none;
     }
@@ -111,7 +111,7 @@
 .warper-mid-btm h3 {
     margin-top: 1em;
     font-size: 2em;
-    color: #dcdcdcdc;
+    color: #a1a1a1a1;
 }
 
 .add-button {
@@ -180,8 +180,18 @@
 
 .modal-content-top{
     margin-bottom: 1.5em;
+    height: 5%;
+}
+
+.modal-content-mid{
+    margin-left: 3em;
+    height: 5%;
 }
 
 .modal-content-btm{
-    margin-left: 3em;
+    /* margin-left: 4em; */
+    /* width: 90%; */
+    margin-top: 5%;
+    height: 80%;
+    background-color: #5271ff;
 }

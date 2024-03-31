@@ -14,7 +14,7 @@
                                 :class="{ 'with-border': index !== friendList.length }">
                                 <div class="element-left">{{ friend.name.trim() !== '' ? friend.name : "친구"+(index+1) }}</div>
                                 <div class="element-mid">{{ friend.address }}</div>
-                                <img src="@/assets/x-circle.svg" class="element-right" @click="removeFriend(friend)">
+                                <img src="@/assets/x-circle.svg" class="element-right" @click="removeFriend(index)">
                             </li>
                         </ul>
                     </div>
@@ -43,12 +43,13 @@
             <div class="modal-content-top">
                 <img src="@/assets/caret-modal-fill.svg" alt="뒤로가기" @click="closeModal()" />
                 <input class="input-name" placeholder="이름을 입력하세요!" type="text" id="name" v-model="name" maxlength="17"/>
-                <img src="@/assets/mylocation.svg" alt="현재 위치" />
+                <img src="@/assets/mylocation.svg" alt="현재 위치" @click="현재위치()"/>
             </div>
-            <div class="modal-content-btm">
+            <div class="modal-content-mid">
                 <input class="input-location" placeholder="어디에서 출발하나요?" type="text" id="location" v-model="location" maxlength="36"/>
                 <img class="search-img" src="../assets/돋보기.png" @click="addFriend()"/>
             </div>
+            <div class="modal-content-btm"></div>
         </div>
     </div>
 </template>
@@ -88,6 +89,10 @@ export default {
         /* 튜플 삭제 함수 */
         removeFriend(index) {
             this.friendList.splice(index, 1);
+        },
+
+        현재위치(){
+            alert("현재위치 기능");
         }
     }
 }
