@@ -12,7 +12,8 @@
                         <ul>
                             <li v-for="(friend, index) in friendList" :key="index"
                                 :class="{ 'with-border': index !== friendList.length }">
-                                <div class="element-left">{{ friend.name.trim() !== '' ? friend.name : "친구"+(index+1) }}</div>
+                                <div class="element-left">{{ friend.name.trim() !== '' ? friend.name : "친구" + (index + 1) }}
+                                </div>
                                 <div class="element-mid">{{ friend.address }}</div>
                                 <img src="@/assets/x-circle.svg" class="element-right" @click="removeFriend(index)">
                             </li>
@@ -20,7 +21,8 @@
                     </div>
                     <div class="warper-mid-btm">
                         <h3>친구는 최대 20명까지 추가할 수 있습니다!</h3>
-                        <button class="add-button" @click="openModal()" :disabled="friendList.length >= 20">친구 추가하기</button>
+                        <button class="add-button" @click="openModal()" :disabled="friendList.length >= 20">친구
+                            추가하기</button>
                     </div>
                 </div>
                 <div class="warper-btm">
@@ -42,20 +44,15 @@
         <div class="modal-content">
             <div class="modal-content-top">
                 <img src="@/assets/caret-modal-fill.svg" alt="뒤로가기" @click="closeModal()" />
-                <input class="input-name" placeholder="이름을 입력하세요!" type="text" id="name" v-model="name" maxlength="17"/>
+                <input class="input-name" placeholder="이름을 입력하세요!" type="text" id="name" v-model="name"
+                    maxlength="17" />
                 <button @click="getCurrentLocation">
                     <img src="@/assets/mylocation.svg" alt="현재 위치" />
                 </button>
             </div>
             <div class="modal-content-btm">
-                <input 
-                    class="input-location" 
-                    @input="handLeInput"
-                    placeholder="어디에서 출발하나요?" 
-                    type="text" 
-                    id="location" 
-                    v-model="location" 
-                    maxlength="36"/>
+                <input class="input-location" @input="handLeInput" placeholder="어디에서 출발하나요?" type="text" id="location"
+                    v-model="location" maxlength="36" />
                 <!-- 장소 검색-->
                 <button @click="searchLocations">
                     <img class="search-img" src="../assets/돋보기.png" />
@@ -75,6 +72,7 @@
 </template>
 <script>
 export default {
+    name: 'InputPage',
     data() {
         return {
             friendList: [], // 친구 목록을 관리할 배열
@@ -109,23 +107,23 @@ export default {
         getCurrentLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
 
-                    //Kakao 지도 api 사용해서 현재 위치 주소 가져오기
-                    const geocoder = new window.kakao.maps.services.Geocoder();
-                    geocoder.coord2Address(longitude, latitude, (result, status) => {
-                    if (status === window.kakao.maps.services.Status.OK) {
-                        this.location = result[0].address.address_name;
-                    } else {
-                        console.error("Failed to get current location:", status);
+                        //Kakao 지도 api 사용해서 현재 위치 주소 가져오기
+                        const geocoder = new window.kakao.maps.services.Geocoder();
+                        geocoder.coord2Address(longitude, latitude, (result, status) => {
+                            if (status === window.kakao.maps.services.Status.OK) {
+                                this.location = result[0].address.address_name;
+                            } else {
+                                console.error("Failed to get current location:", status);
+                            }
+                        });
+                    },
+                    (error) => {
+                        console.error("Error getting current position:", error);
                     }
-                    });
-                },
-                (error) => {
-                    console.error("Error getting current position:", error);
-                }
                 );
             } else {
                 console.error("Geolocation is not supported by this browser.");
@@ -140,7 +138,7 @@ export default {
                     this.getNearbyPlaces(result[0].x, result[0].y);
                 } else {
                     console.error("Failed to search places:", status);
-                
+
                     this.places = [];
                 }
             });
@@ -161,9 +159,9 @@ export default {
             const placesSearch = new window.kakao.maps.services.Places();
             placesSearch.keywordSearch("주변", (result, status) => {
                 if (status === window.kakao.maps.services.Status.OK) {
-                this.nearbyPlaces = result;
+                    this.nearbyPlaces = result;
                 } else {
-                console.error("Failed to search nearby places:", status);
+                    console.error("Failed to search nearby places:", status);
                 }
             }, { x, y });
         },
@@ -171,18 +169,233 @@ export default {
     mounted() {
         //kakao 지도 api 스크립트 로드
         const script = document.createElement("script");
-            script.src =
+        script.src =
             "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing";
-            script.onload = () => {
+        script.onload = () => {
             window.kakao.maps.load(() => {
                 console.log("Kakao Maps SDK loaded");
             });
-            };
-            document.head.appendChild(script);
+        };
+        window.onload = function(){document.head.appendChild(script);}
     }
 }
 </script>
 
 <style>
-@import "/src/css/InputPage.css";
+.background {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    position: absolute;
+}
+
+.warper {
+    width: 60%;
+    height: 80%;
+    background-color: rgba(255, 255, 255, .9);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    top: 10%;
+    left: 20%;
+    box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
+}
+
+.warper-top {
+    width: 100%;
+    height: 20%;
+    padding-top: 10px;
+}
+
+.warper-mid {
+    width: 85%;
+    height: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.warper-btm {
+    width: 100%;
+    height: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.warper-btm label{
+    font-size: 1.5em;
+}
+
+.warper-top h1 {
+    font-size: 4em;
+    margin-top: 0.5em;
+}
+
+.warper-top h3 {
+    margin-top: 1em;
+    font-size: 2em;
+    color: #a1a1a1a1;
+    @media screen and (max-width: 1000px) {
+        display: none;
+    }
+}
+
+.warper-mid-top {
+    width: 100%;
+    height: 80%;
+    font-size: 2rem;
+    overflow-y: auto;
+    border: rgba(82, 113, 255, 0.4) 2px solid;
+    border-radius: 1em;
+    padding: 1em;
+}
+
+.with-border {
+    display: flex;
+    padding: 0.3em;
+}
+
+.warper-mid-top li {
+    width: 100%;
+}
+
+.element-left {
+    width: 20%;
+    background-color: rgba(82, 113, 255, 0.9);
+    border-radius: 1em;
+    color: #fefefe;
+    margin-right: 10%;
+}
+
+.element-mid {
+    width: 50%;
+    border: rgba(82, 113, 255, 0.4) 2px solid;
+    border-radius: 1em;
+    color: #5271ff;
+}
+
+.element-right {
+    margin-left: 4em;
+    width: 3%;
+}
+
+.warper-mid-btm {
+    width: 100%;
+    height: 20%;
+}
+
+.warper-mid-btm h3 {
+    margin-top: 1em;
+    font-size: 2em;
+    color: #a1a1a1a1;
+}
+
+.add-button {
+    border: 1px solid #5271ff;
+    color: #5271ff;
+    font-size: 2em;
+    border-radius: 10px;
+    padding: 0.3em;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.add-button:hover {
+    background-color: rgb(82, 113, 255, .1);
+}
+
+.submit-button {
+    border: none;
+    background-color: transparent;
+    font-size: 1.3rem;
+    margin-left: 5px;
+    cursor: pointer;
+    border: 1px solid #5271ff;
+    color: #5271ff;
+    font-size: 2em;
+    border-radius: 10px;
+    padding: 0.3em;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.submit-button:hover {
+    background-color: rgb(82, 113, 255, .1);
+}
+
+.modal-warper {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 30;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    border-radius: 10px;
+    width: 30%;
+    height: 70%;
+    padding: 1.5em;
+    box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
+}
+
+.input-name{
+    font-size: 1.7em !important;
+    margin-left: 0.5em !important;
+    margin-right: 0.5em;
+}
+
+.input-location{
+    font-size: 1.7em !important;
+    margin-left: 2.3em !important;
+    margin-right: 0.5em;
+}
+
+.search-img{
+    width: 2em;
+    height: 2em;
+}
+
+.modal-content-top{
+    margin-bottom: 1.5em;
+    height: 5%;
+}
+
+.modal-content-mid{
+    margin-left: 3em;
+    height: 5%;
+}
+
+.modal-content-btm{
+    /* margin-left: 4em; */
+    /* width: 90%; */
+    height: 80%;
+}
+
+.modal-content-btm-iner{
+    padding-left: 2.5em;
+    margin-top: 1em;
+    font-size: 1.7rem;
+    /* border: 1px solid blue; */
+}
+
+.location-name{
+    margin-bottom: 0.5em;
+    /* border-bottom: 1px solid #1c1c1c; */
+    cursor: pointer;
+}
 </style>

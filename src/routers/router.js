@@ -6,9 +6,9 @@ import KakaoMap from "@/components/KakaoMap.vue";
 import ListPage from "@/components/ListPage.vue";
 
 const routes = [
-    { path: "/InputPage", name: "InputPage", component: InputPage,},
+    { path: "/", name: "InputPage", component: InputPage,},
     { path: "/MiddleMap.page", name: "MiddleMap", component: MiddleMap,},
-    { path: "/", name: "MainPage", component: MainPage,},
+    { path: "/MainPage.page", name: "MainPage", component: MainPage,},
     { path: "/KakaoMap.page", name: "KakaoMap", component: KakaoMap,},
     { path: "/ListPage.page", name: "ListPage", component: ListPage,},
 ];

@@ -195,8 +195,6 @@
 }
 
 .modal-content-btm{
-    /* margin-left: 4em; */
-    /* width: 90%; */
     height: 80%;
 }
 
@@ -204,12 +202,10 @@
     padding-left: 2.5em;
     margin-top: 1em;
     font-size: 1.7rem;
-    /* border: 1px solid blue; */
 }
 
 .location-name{
     margin-bottom: 0.5em;
-    /* border-bottom: 1px solid #1c1c1c; */
     cursor: pointer;
 }
 
