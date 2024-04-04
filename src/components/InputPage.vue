@@ -54,7 +54,7 @@
                     placeholder="어디에서 출발하나요?" 
                     type="text" 
                     id="location" 
-                    v-model="query" 
+                    v-model="location" 
                     maxlength="36"/>
                 <!-- 장소 검색-->
                 <button @click="searchLocations">
@@ -69,7 +69,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="modal-content-btm"></div>
+            <!-- <div class="modal-content-btm"></div> -->
         </div>
     </div>
 </template>
@@ -83,7 +83,6 @@ export default {
             location: '', // 모달 창에서 선택한 위치를 저장하는 변수
             places: [], //검색 결과 리스트
             nearbyPlaces: [], //주변 건물 
-            query: "",
         };
     },
     methods: {
@@ -97,6 +96,7 @@ export default {
             this.modalOpen = false;
             this.name = '';
             this.location = '';
+            this.places = [];
         },
 
         /* 튜플 추가 함수 */
@@ -127,7 +127,7 @@ export default {
                     const geocoder = new window.kakao.maps.services.Geocoder();
                     geocoder.coord2Address(longitude, latitude, (result, status) => {
                     if (status === window.kakao.maps.services.Status.OK) {
-                        this.query = result[0].address.address_name;
+                        this.location = result[0].address.address_name;
                     } else {
                         console.error("Failed to get current location:", status);
                     }
@@ -143,7 +143,7 @@ export default {
         },
         searchLocations() {
             const placesSearch = new window.kakao.maps.services.Places();
-            placesSearch.keywordSearch(this.query, (result, status) => {
+            placesSearch.keywordSearch(this.location, (result, status) => {
                 if (status === window.kakao.maps.services.Status.OK) {
                     this.places = result;
                     //검색된 장소 주변 건물 가져옴 
