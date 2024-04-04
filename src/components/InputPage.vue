@@ -14,7 +14,7 @@
                                 :class="{ 'with-border': index !== friendList.length }">
                                 <div class="element-left">{{ friend.name.trim() !== '' ? friend.name : "친구"+(index+1) }}</div>
                                 <div class="element-mid">{{ friend.address }}</div>
-                                <img src="@/assets/x-circle.svg" class="element-right" @click="removeFriend(friend)">
+                                <img src="@/assets/x-circle.svg" class="element-right" @click="removeFriend(index)">
                             </li>
                         </ul>
                     </div>
