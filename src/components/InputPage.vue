@@ -43,11 +43,31 @@
             <div class="modal-content-top">
                 <img src="@/assets/caret-modal-fill.svg" alt="뒤로가기" @click="closeModal()" />
                 <input class="input-name" placeholder="이름을 입력하세요!" type="text" id="name" v-model="name" maxlength="17"/>
-                <img src="@/assets/mylocation.svg" alt="현재 위치" @click="현재위치()"/>
+                <button @click="getCurrentLocation">
+                    <img src="@/assets/mylocation.svg" alt="현재 위치" />
+                </button>
             </div>
-            <div class="modal-content-mid">
-                <input class="input-location" placeholder="어디에서 출발하나요?" type="text" id="location" v-model="location" maxlength="36"/>
-                <img class="search-img" src="../assets/돋보기.png" @click="addFriend()"/>
+            <div class="modal-content-btm">
+                <input 
+                    class="input-location" 
+                    @input="handLeInput"
+                    placeholder="어디에서 출발하나요?" 
+                    type="text" 
+                    id="location" 
+                    v-model="query" 
+                    maxlength="36"/>
+                <!-- 장소 검색-->
+                <button @click="searchLocations">
+                    <img class="search-img" src="../assets/돋보기.png" />
+                </button>
+                <div class="placelist">
+                    <ul>
+                        <li v-for="(place, index) in places" :key="index" @click="selectLocation(place)">
+                            <div class="location_name">{{ place.place_name }}</div>
+                            <div class="location_address">{{ place.place_address }}</div>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="modal-content-btm"></div>
         </div>
@@ -61,6 +81,9 @@ export default {
             modalOpen: false, //모달의 상태 여부
             name: '', // 사용자 이름 저장하는 변수
             location: '', // 모달 창에서 선택한 위치를 저장하는 변수
+            places: [], //검색 결과 리스트
+            nearbyPlaces: [], //주변 건물 
+            query: "",
         };
     },
     methods: {
@@ -90,10 +113,82 @@ export default {
         removeFriend(index) {
             this.friendList.splice(index, 1);
         },
+        handLeInput() {
+            this.location = event.target.value;
+        },
+        getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
 
-        현재위치(){
-            alert("현재위치 기능");
-        }
+                    //Kakao 지도 api 사용해서 현재 위치 주소 가져오기
+                    const geocoder = new window.kakao.maps.services.Geocoder();
+                    geocoder.coord2Address(longitude, latitude, (result, status) => {
+                    if (status === window.kakao.maps.services.Status.OK) {
+                        this.query = result[0].address.address_name;
+                    } else {
+                        console.error("Failed to get current location:", status);
+                    }
+                    });
+                },
+                (error) => {
+                    console.error("Error getting current position:", error);
+                }
+                );
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+            }
+        },
+        searchLocations() {
+            const placesSearch = new window.kakao.maps.services.Places();
+            placesSearch.keywordSearch(this.query, (result, status) => {
+                if (status === window.kakao.maps.services.Status.OK) {
+                    this.places = result;
+                    //검색된 장소 주변 건물 가져옴 
+                    this.getNearbyPlaces(result[0].x, result[0].y);
+                } else {
+                    console.error("Failed to search places:", status);
+                
+                    this.places = [];
+                }
+            });
+        },
+        selectLocation(place) {
+            const name = this.name.trim() !== '' ? this.name : "친구" + (this.friendList.length + 1);
+            this.friendList.push({ name: name, address: place.place_name });
+            this.closeModal();
+        },
+
+        //모달 창에서 위치 선택 후 모달 닫기 및 위치 정보 저장
+        closeModalAndSaveLocation(selectedLocation) {
+            this.location = selectedLocation;
+            this.closeModal();
+        },
+
+        getNearbyPlaces(x, y) {
+            const placesSearch = new window.kakao.maps.services.Places();
+            placesSearch.keywordSearch("주변", (result, status) => {
+                if (status === window.kakao.maps.services.Status.OK) {
+                this.nearbyPlaces = result;
+                } else {
+                console.error("Failed to search nearby places:", status);
+                }
+            }, { x, y });
+        },
+    },
+    mounted() {
+        //kakao 지도 api 스크립트 로드
+        const script = document.createElement("script");
+            script.src =
+            "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing";
+            script.onload = () => {
+            window.kakao.maps.load(() => {
+                console.log("Kakao Maps SDK loaded");
+            });
+            };
+            document.head.appendChild(script);
     }
 }
 </script>
