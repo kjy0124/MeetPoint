@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="warper-btm">
-                    <form action="/KakaoMap.page">
+                    <form action="/MiddleMap.page">
                         <label>중간지점 계산 방식</label>
                         <select>
                             <option>무게중심</option>
@@ -97,16 +97,6 @@ export default {
             this.name = '';
             this.location = '';
             this.places = [];
-        },
-
-        /* 튜플 추가 함수 */
-        addFriend(){
-            if(this.location.trim() ===''){
-                alert("주소를 입력하세요!");
-                return; //주소가 공백이면 알람창을 띄우고 돌아감
-            }
-            this.friendList.push({ name: this.name, address: this.location}); //입력한 값을 배열에 추가
-            this.closeModal();
         },
 
         /* 튜플 삭제 함수 */
@@ -192,3 +182,7 @@ export default {
     }
 }
 </script>
+
+<style>
+@import "/src/css/InputPage.css";
+</style>
