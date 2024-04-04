@@ -38,7 +38,7 @@
         </div>
     </div>
     <!-- 모달 창-->
-    <div class="modal-warper" v-if="modalOpen" @click.self="closeModal()">
+    <div class="modal-warper" v-if="modalOpen">
         <div class="modal-content">
             <div class="modal-content-top">
                 <img src="@/assets/caret-modal-fill.svg" alt="뒤로가기" @click="closeModal()" />
@@ -60,11 +60,11 @@
                 <button @click="searchLocations">
                     <img class="search-img" src="../assets/돋보기.png" />
                 </button>
-                <div class="placelist">
+                <div class="modal-content-btm-iner">
                     <ul>
                         <li v-for="(place, index) in places" :key="index" @click="selectLocation(place)">
-                            <div class="location_name">{{ place.place_name }}</div>
-                            <div class="location_address">{{ place.place_address }}</div>
+                            <div class="location-name">{{ place.place_name }}</div>
+                            <div class="location-address">{{ place.place_address }}</div>
                         </li>
                     </ul>
                 </div>
