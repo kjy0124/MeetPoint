@@ -57,8 +57,9 @@ export default {
             /* global kakao */
             script.onload = () => kakao.maps.load(this.initMap);
             script.src =
-                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
+                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8";
             document.head.appendChild(script);
+            console.log("kakao mounted");
         }
     },
 
@@ -67,9 +68,10 @@ export default {
 
 <style scoped>
 #map {
-    z-index: 3;
+    z-index: 0;
     width: 100%;
     height: 100%;
+    /* background-color: #011a41; */
 }
 
 body {
@@ -78,10 +80,6 @@ body {
 
 .container {
     display: flex;
-}
-
-#map{
-    z-index: 0;
 }
 
 .mapArea {
