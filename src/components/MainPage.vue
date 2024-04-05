@@ -119,6 +119,7 @@
 </template>
   
   <script>
+import axios from "axios";
 export default {
   name: "MainPage",
   data() {
@@ -138,6 +139,36 @@ export default {
   methods: {
     /* 중간지점 찾기 버튼 클릭시 두번째 페이지로 이동 */
     move() {
+      const xy = {
+        lat : [ 37.5665359320790,
+              35.1795545633088,
+              36.3506213307841,
+              37.5666100905964,
+              35.9077579623924],
+        lon : [
+            126.9779691999999,  // 위도: 37.5665359320790
+            129.0756416000000,  // 위도: 35.1795545633088
+            127.3845935999999,  // 위도: 36.3506213307841
+            126.9783880999999,  // 위도: 37.5666100905964
+            127.7669220000000   // 위도: 35.9077579623924
+        ]
+        
+
+      };
+      axios({
+        method: 'post',
+        header: { 'Content-Type': 'application/json; charset=UTF-8' },
+        url: "/map/mainPage",
+        data: xy,
+      })
+        .then(function(response){
+          console.log('response-mainpage',response.data);
+          alert("중심 좌표 \n\n" + '위도 :' + response.data.latitude + '\n\n경도 : ' + response.data.longitude);
+        })
+        .catch(function(error){
+          console.log('error',error);
+          alert("좌표를 불러오는데 실패하였습니다.");
+        });
       this.$router.push({ name: "KakaoMap", params: {} }); // router.push( {path : '/KakaoMap.page', query: {} });
     },
 
