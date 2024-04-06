@@ -394,7 +394,6 @@ export default {
     /* margin-left: 4em; */
     /* width: 90%; */
     height: 90%;
-    overflow-y: auto; /*스크롤 추가 */
     position: relative;
 }
 
@@ -437,6 +436,7 @@ export default {
 }
 .modal-address-list {
     margin-top: 0.5em;
+    overflow-y: auto; /*스크롤 추가 */
 }
 
 .modal-address-list li {
