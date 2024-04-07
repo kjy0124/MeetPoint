@@ -1,4 +1,7 @@
 <template>
+    <header class="header">
+        
+    </header>
     <label class="container">
         <div id="map"></div>
         <input class="hamburger" type="checkbox">
@@ -8,7 +11,7 @@
             <span class="bottom_line common"></span>
         </div>
         <div class="slide">
-            <h1>MENU</h1>
+            <h1>Meet Point</h1>
             <ul>
                 <li><a href="#"><input type="checkbox"><i class="fas fa-tv"></i>dashboard</a></li>
                 <li><a href="#"><input type="checkbox"><i class="far fa-user"></i>profile</a></li>
@@ -19,7 +22,7 @@
                 <li><a href="#"><input type="checkbox"><i class="far fa-heart"></i>saved</a></li>
                 <li><a href="#"><input type="checkbox"><i class="fas fa-cogs"></i>settings</a></li>
             </ul>
-            <div class="toggle_btm">
+            <div class="toggle_btm" @click="moveListPage()">
                 일정만들기
             </div>
         </div>
@@ -52,6 +55,10 @@ export default {
                 hamburger.checked = !hamburger.checked;
             });
         },
+
+        moveListPage() {
+            this.$router.push({ name: "ListPage", params: {} });
+        },
     },
     created() {
 
@@ -80,12 +87,19 @@ export default {
     height: 100%;
 }
 
+.header{
+    z-index: 10;
+    background-color: #5271ff;
+    height: 7.5%;
+}
+
 .container {
     display: flex;
+    height: 92.5%;
 }
 
 .slide {
-    height: 100%;
+    height: 92.5%;
     width: 400px;
     position: absolute;
     background-color: #fff;
@@ -128,8 +142,10 @@ ul li a i {
     position: absolute;
     height: 30px;
     width: 30px;
-    top: 20px; /* 원하는 위치로 조정 */
-    left: 15px; /* 원하는 위치로 조정 */
+    top: 20px;
+    /* 원하는 위치로 조정 */
+    left: 15px;
+    /* 원하는 위치로 조정 */
     /* display: flex; */
     /* visibility: hidden; */
     /* -webkit-appearance: none; */
@@ -152,14 +168,22 @@ ul li a i {
 .toggle_btm {
     position: absolute;
     height: 60px;
-    width: 20%;
-    top: 85%;
-    left: 15px;
+    width: 350px;
+    top: 90%;
+    left: 22.5px;
     z-index: 1;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 10px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    line-height: 60px;
+    font-size: 2em;
+    color: #5271ff;
+}
+
+.toggle_btm:hover{
+    background-color: rgb(82, 113, 255, .1);
 }
 
 .toggle .common {

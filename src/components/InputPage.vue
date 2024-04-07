@@ -191,6 +191,11 @@ export default {
 </script>
 
 <style>
+#app {
+    width: 100%;
+    height: 100%;
+}
+
 .background {
     width: 100%;
     height: 100%;
@@ -360,7 +365,7 @@ export default {
 .modal-content {
     background-color: #fefefe;
     border-radius: 10px;
-    width: 30%;
+    width: 50%;
     height: 70%;
     padding: 1.5em;
     box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
@@ -377,6 +382,7 @@ export default {
     font-size: 1.7em !important;
     margin-left: 2.3em !important;
     margin-right: 0.5em;
+    width: 50%;
 }
 
 .search-img{
@@ -413,6 +419,7 @@ export default {
 /* ===================240407 css 추가======================= */
 
 .location-name{
+    margin-left: 1em;
     margin-bottom: 0.3em;
     /* border-bottom: 1px solid #1c1c1c; */
     cursor: pointer;
@@ -433,13 +440,19 @@ export default {
     white-space: nowrap; /* 상세주소 줄변경 없이 한줄로 고정 */
     text-overflow: ellipsis;
     cursor: pointer;
-    padding-right: 1em;
+    padding-right: 2.5em;
 }
 
 .location-info {
     display: flex;
     justify-content: space-between; /* 장소이름과 상세주소 같은 열&좌우 간격 */
 }
+
+.location-info:hover {
+    background-color: rgba(232, 240, 254, 0.9);
+    border-radius: 0.5em;
+}
+
 .modal-address-list {
     margin-top: 0.5em;
     overflow-y: auto; /*스크롤 추가 */

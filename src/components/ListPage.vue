@@ -26,11 +26,11 @@ export default {
     },
     methods: {
         moveMainPage() {
-            this.$router.push({ name: "MainPage", params: {} });
+            this.$router.push({ name: "InputPage", params: {} });
         },
 
         moveKakaoMap() {
-            this.$router.push({ name: "KakaoMap", params: {} });
+            this.$router.push({ name: "MiddleMap", params: {} });
         },
 
     },
