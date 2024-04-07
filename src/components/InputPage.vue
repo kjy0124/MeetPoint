@@ -51,19 +51,25 @@
                 </button>
             </div>
             <div class="modal-content-btm">
-                <input class="input-location" @input="handLeInput" placeholder="어디에서 출발하나요?" type="text" id="location"
+                <div class="input-wrapper">
+                    <input class="input-location" @input="handLeInput" placeholder="어디에서 출발하나요?" type="text" id="location"
                     v-model="location" maxlength="36" />
-                <!-- 장소 검색-->
-                <button @click="searchLocations">
-                    <img class="search-img" src="../assets/돋보기.png" />
-                </button>
+                    <!-- 장소 검색-->
+                    <button @click="searchLocations">
+                        <img class="search-img" src="../assets/돋보기.png" />
+                    </button>
+                </div>
                 <div class="modal-content-btm-iner">
-                    <ul>
-                        <li v-for="(place, index) in places" :key="index" @click="selectLocation(place)">
-                            <div class="location-name">{{ place.place_name }}</div>
-                            <div class="location-address">{{ place.place_address }}</div>
-                        </li>
-                    </ul>
+                    <div class="modal-address-list"> <!--장소 검색 구간과 겹쳐서 div 추가 생성하여 분리-->
+                        <ul>
+                            <li v-for="(place, index) in places" :key="index" @click="selectLocation(place)">
+                                <div class="location-info">
+                                    <div class="location-name">{{ place.place_name }}</div>
+                                    <div class="location-detail-address">{{ place.address_name }}</div>
+                                </div>
+                            </li>
+                        </ul>    
+                    </div>
                 </div>
             </div>
             <!-- <div class="modal-content-btm"></div> -->
@@ -134,11 +140,14 @@ export default {
             placesSearch.keywordSearch(this.location, (result, status) => {
                 if (status === window.kakao.maps.services.Status.OK) {
                     this.places = result;
-                    //검색된 장소 주변 건물 가져옴 
-                    this.getNearbyPlaces(result[0].x, result[0].y);
+                    if (result.length > 0){ //장소 결과 길이가 0이상만 주변 장소 나옴
+                        //검색된 장소 주변 건물 가져옴 
+                        this.getNearbyPlaces(result[0].x, result[0].y);    
+                    } else {
+                        console.error("No places found for the given query.");
+                    }
                 } else {
                     console.error("Failed to search places:", status);
-
                     this.places = [];
                 }
             });
@@ -360,6 +369,7 @@ export default {
     font-size: 1.7em !important;
     margin-left: 0.5em !important;
     margin-right: 0.5em;
+    flex: 1;
 }
 
 .input-location{
@@ -386,19 +396,62 @@ export default {
 .modal-content-btm{
     /* margin-left: 4em; */
     /* width: 90%; */
-    height: 80%;
+    height: 90%;
+    position: relative;
 }
 
 .modal-content-btm-iner{
     padding-left: 2.5em;
     margin-top: 1em;
     font-size: 1.7rem;
+    overflow-y: auto;
+    height: calc(100% - 40px);/* 입력 필드와 버튼 높이만큼 빼기 */
     /* border: 1px solid blue; */
 }
 
+/* ===================240407 css 추가======================= */
+
 .location-name{
-    margin-bottom: 0.5em;
+    margin-bottom: 0.3em;
     /* border-bottom: 1px solid #1c1c1c; */
     cursor: pointer;
+    font-weight: bold;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 최대 두 줄까지 표시 */
+    -webkit-box-orient: vertical;
+    width: 100%;
+    white-space: pre-line; /* 장소 이름 길면 2줄로 표시 */
+    text-overflow: ellipsis;
+    word-wrap: break-word; /* 장소 이름 길면 2줄로 표시 */
+}
+
+.location-detail-address {
+    font-size: 1.4rem;
+    color: #888;
+    white-space: nowrap; /* 상세주소 줄변경 없이 한줄로 고정 */
+    text-overflow: ellipsis;
+}
+
+.location-info {
+    display: flex;
+    justify-content: space-between; /* 장소이름과 상세주소 같은 열&좌우 간격 */
+}
+.modal-address-list {
+    margin-top: 0.5em;
+    overflow-y: auto; /*스크롤 추가 */
+}
+
+.modal-address-list li {
+    margin-bottom: 1em; /* 리스트 상하 줄 간격 */
+}
+
+.input-wrapper {
+    position: sticky; /* 장소 검색 버튼 있는 곳 스크롤 되지 않도록 고정 */
+    top: 0;
+    background-color: #fefefe;
+    z-index: 50;
+    display: flex;
+    align-items: center;
 }
 </style>
