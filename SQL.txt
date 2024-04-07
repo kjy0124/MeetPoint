@@ -1,0 +1,25 @@
+CREATE TABLE transport.BUS_STOP (
+	ID SERIAL NOT NULL PRIMARY KEY,
+	NODE_ID VARCHAR(30),
+	NODE_NM VARCHAR(100),
+	GPS_LATI NUMERIC(20,13),
+	GPS_LONG NUMERIC(20,13),
+	COLLECTD_TIME VARCHAR(10),
+	NODE_MOBIL_ID VARCHAR(10) ,
+	CITY_CD VARCHAR(5),
+	CITY_NAME VARCHAR(15),
+	ADMIN_NM VARCHAR(10)
+);
+
+-----------------------설명----------------------------------- 
+항목명	              항목명(영문)	            항목설명
+정류장번호	           NODE_ID	                정류장 ID
+정류장명	           NODE_NM	                정류장 명칭
+위도	               GPS_LATI	                GPS 위도(WGS84 위경도)
+경도	               GPS_LONG	                GPS 경도(WGS84 위경도)
+정보수집일	            COLLECTD_TIME	        정보수집일
+모바일단축번호	        NODE_MOBILE_ID	        모바일(ARS)/단축 ID
+도시코드	            CITY_CD	                도시코드
+도시명	                CITY_NAME	            도시명
+관리도시명	            ADMIN_NM	            관리도시명
+--------------------------------------------------------------
