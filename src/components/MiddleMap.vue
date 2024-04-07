@@ -19,10 +19,11 @@
                 <li><a href="#"><input type="checkbox"><i class="far fa-heart"></i>saved</a></li>
                 <li><a href="#"><input type="checkbox"><i class="fas fa-cogs"></i>settings</a></li>
             </ul>
+            <div class="toggle_btm">
+                일정만들기
+            </div>
         </div>
-        <div class="toggle_btm">
-            일정만들기
-        </div>
+
     </label>
 </template>
 <script>
@@ -71,7 +72,6 @@ export default {
     z-index: 0;
     width: 100%;
     height: 100%;
-    /* background-color: #011a41; */
 }
 
 body {
@@ -152,7 +152,7 @@ ul li a i {
 .toggle_btm {
     position: absolute;
     height: 60px;
-    width: 90px;
+    width: 20%;
     top: 85%;
     left: 15px;
     z-index: 1;

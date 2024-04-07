@@ -31,7 +31,7 @@
                         <select>
                             <option>무게중심</option>
                             <option>직선거리순</option>
-                            <option>교통점수순</option>
+                            <option >교통점수순</option>
                         </select>
                         <input class="submit-button" type="submit" value="중간지점 찾기">
                     </form>
@@ -204,7 +204,7 @@ export default {
     border-radius: 10px;
     top: 10%;
     left: 20%;
-    box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
+    box-shadow: 0px 0px 20px rgb(0, 0, 0, .3);
 }
 
 .warper-top {
@@ -253,9 +253,11 @@ export default {
     height: 80%;
     font-size: 2rem;
     overflow-y: auto;
-    border: rgba(82, 113, 255, 0.4) 2px solid;
+    /* border: rgba(82, 113, 255, 0.4) 2px solid; */
     border-radius: 1em;
     padding: 1em;
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
+    
 }
 
 .with-border {
@@ -299,7 +301,6 @@ export default {
 }
 
 .add-button {
-    border: 1px solid #5271ff;
     color: #5271ff;
     font-size: 2em;
     border-radius: 10px;
@@ -316,19 +317,21 @@ export default {
     border: none;
     background-color: transparent;
     font-size: 1.3rem;
-    margin-left: 5px;
+    margin-left: 20px;
     cursor: pointer;
-    border: 1px solid #5271ff;
     color: #5271ff;
     font-size: 2em;
     border-radius: 10px;
     padding: 0.3em;
     margin-top: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)
+
+
 }
 
 .submit-button:hover {
     background-color: rgb(82, 113, 255, .1);
+    ;
 }
 
 .modal-warper {
