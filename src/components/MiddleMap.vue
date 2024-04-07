@@ -45,6 +45,12 @@ export default {
             //지도 객체를 등록합니다.
             //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
             this.map = new kakao.maps.Map(container, options);
+
+            container.addEventListener('click', () => {
+                // hamburger 체크박스의 상태 변경
+                const hamburger = document.querySelector('.hamburger');
+                hamburger.checked = !hamburger.checked;
+            });
         },
     },
     created() {
@@ -74,20 +80,8 @@ export default {
     height: 100%;
 }
 
-body {
-    background-color: #f2f2f2;
-}
-
 .container {
     display: flex;
-}
-
-.mapArea {
-    height: 100%;
-    width: 100%;
-    background-color: #fff;
-    font-size: 100px;
-    /* 지도 에러 해결되면 삭제 */
 }
 
 .slide {
@@ -131,9 +125,15 @@ ul li a i {
 }
 
 .hamburger {
-    display: none;
-    visibility: hidden;
-    -webkit-appearance: none;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    top: 20px; /* 원하는 위치로 조정 */
+    left: 15px; /* 원하는 위치로 조정 */
+    /* display: flex; */
+    /* visibility: hidden; */
+    /* -webkit-appearance: none; */
+    z-index: 0;
 }
 
 .toggle {

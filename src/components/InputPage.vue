@@ -296,6 +296,7 @@ export default {
 .element-right {
     margin-left: 4em;
     width: 3%;
+    cursor: pointer;
 }
 
 .warper-mid-btm {
@@ -431,6 +432,8 @@ export default {
     color: #888;
     white-space: nowrap; /* 상세주소 줄변경 없이 한줄로 고정 */
     text-overflow: ellipsis;
+    cursor: pointer;
+    padding-right: 1em;
 }
 
 .location-info {
