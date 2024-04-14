@@ -12,7 +12,8 @@
                         <ul>
                             <li v-for="(friend, index) in friendList" :key="index"
                                 :class="{ 'with-border': index !== friendList.length }">
-                                <div class="element-left">{{ friend.name.trim() !== '' ? friend.name : "친구" + (index + 1) }}
+                                <div class="element-left">{{ friend.name.trim() !== '' ? friend.name : "친구" + (index +
+                                    1) }}
                                 </div>
                                 <div class="element-mid">{{ friend.address }}</div>
                                 <img src="@/assets/x-circle.svg" class="element-right" @click="removeFriend(index)">
@@ -31,7 +32,7 @@
                         <select>
                             <option>무게중심</option>
                             <option>직선거리순</option>
-                            <option >교통점수순</option>
+                            <option>교통점수순</option>
                         </select>
                         <input class="submit-button" type="submit" value="중간지점 찾기">
                     </form>
@@ -52,8 +53,8 @@
             </div>
             <div class="modal-content-btm">
                 <div class="input-wrapper">
-                    <input class="input-location" @input="handLeInput" placeholder="어디에서 출발하나요?" type="text" id="location"
-                    v-model="location" maxlength="36" />
+                    <input class="input-location" @input="handLeInput" placeholder="어디에서 출발하나요?" type="text"
+                        id="location" v-model="location" maxlength="36" />
                     <!-- 장소 검색-->
                     <button @click="searchLocations">
                         <img class="search-img" src="../assets/돋보기.png" />
@@ -68,7 +69,7 @@
                                     <div class="location-detail-address">{{ place.address_name }}</div>
                                 </div>
                             </li>
-                        </ul>    
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -87,6 +88,7 @@ export default {
             location: '', // 모달 창에서 선택한 위치를 저장하는 변수
             places: [], //검색 결과 리스트
             nearbyPlaces: [], //주변 건물 
+            reLoad: 0, //새로고침 관련 변수
         };
     },
     methods: {
@@ -140,9 +142,9 @@ export default {
             placesSearch.keywordSearch(this.location, (result, status) => {
                 if (status === window.kakao.maps.services.Status.OK) {
                     this.places = result;
-                    if (result.length > 0){ //장소 결과 길이가 0이상만 주변 장소 나옴
+                    if (result.length > 0) { //장소 결과 길이가 0이상만 주변 장소 나옴
                         //검색된 장소 주변 건물 가져옴 
-                        this.getNearbyPlaces(result[0].x, result[0].y);    
+                        this.getNearbyPlaces(result[0].x, result[0].y);
                     } else {
                         console.error("No places found for the given query.");
                     }
@@ -185,7 +187,10 @@ export default {
                 console.log("Kakao Maps SDK loaded");
             });
         };
-        window.onload = function(){document.head.appendChild(script);}
+        window.onload = function () { document.head.appendChild(script); }
+    },
+    watch(){
+
     }
 }
 </script>
@@ -194,6 +199,13 @@ export default {
 #app {
     width: 100%;
     height: 100%;
+}
+
+.container {
+    display: flex;
+    text-align: center;
+    align-items: center;
+
 }
 
 .background {
@@ -244,7 +256,7 @@ export default {
     align-items: center;
 }
 
-.warper-btm label{
+.warper-btm label {
     font-size: 1.5em;
 }
 
@@ -257,6 +269,7 @@ export default {
     margin-top: 1em;
     font-size: 2em;
     color: #a1a1a1a1;
+
     @media screen and (max-width: 1000px) {
         display: none;
     }
@@ -271,7 +284,7 @@ export default {
     border-radius: 1em;
     padding: 1em;
     /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
-    
+
 }
 
 .with-border {
@@ -340,8 +353,6 @@ export default {
     padding: 0.3em;
     margin-top: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)
-
-
 }
 
 .submit-button:hover {
@@ -371,54 +382,55 @@ export default {
     box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
 }
 
-.input-name{
+.input-name {
     font-size: 1.7em !important;
     margin-left: 0.5em !important;
     margin-right: 0.5em;
     flex: 1;
 }
 
-.input-location{
+.input-location {
     font-size: 1.7em !important;
     margin-left: 2.3em !important;
     margin-right: 0.5em;
     width: 50%;
 }
 
-.search-img{
+.search-img {
     width: 2em;
     height: 2em;
 }
 
-.modal-content-top{
+.modal-content-top {
     margin-bottom: 1.5em;
     height: 5%;
 }
 
-.modal-content-mid{
+.modal-content-mid {
     margin-left: 3em;
     height: 5%;
 }
 
-.modal-content-btm{
+.modal-content-btm {
     /* margin-left: 4em; */
     /* width: 90%; */
     height: 90%;
     position: relative;
 }
 
-.modal-content-btm-iner{
+.modal-content-btm-iner {
     padding-left: 2.5em;
     margin-top: 1em;
     font-size: 1.7rem;
     overflow-y: auto;
-    height: calc(100% - 40px);/* 입력 필드와 버튼 높이만큼 빼기 */
+    height: calc(100% - 40px);
+    /* 입력 필드와 버튼 높이만큼 빼기 */
     /* border: 1px solid blue; */
 }
 
 /* ===================240407 css 추가======================= */
 
-.location-name{
+.location-name {
     margin-left: 1em;
     margin-bottom: 0.3em;
     /* border-bottom: 1px solid #1c1c1c; */
@@ -426,18 +438,22 @@ export default {
     font-weight: bold;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* 최대 두 줄까지 표시 */
+    -webkit-line-clamp: 2;
+    /* 최대 두 줄까지 표시 */
     -webkit-box-orient: vertical;
     width: 100%;
-    white-space: pre-line; /* 장소 이름 길면 2줄로 표시 */
+    white-space: pre-line;
+    /* 장소 이름 길면 2줄로 표시 */
     text-overflow: ellipsis;
-    word-wrap: break-word; /* 장소 이름 길면 2줄로 표시 */
+    word-wrap: break-word;
+    /* 장소 이름 길면 2줄로 표시 */
 }
 
 .location-detail-address {
     font-size: 1.4rem;
     color: #888;
-    white-space: nowrap; /* 상세주소 줄변경 없이 한줄로 고정 */
+    white-space: nowrap;
+    /* 상세주소 줄변경 없이 한줄로 고정 */
     text-overflow: ellipsis;
     cursor: pointer;
     padding-right: 2.5em;
@@ -445,7 +461,8 @@ export default {
 
 .location-info {
     display: flex;
-    justify-content: space-between; /* 장소이름과 상세주소 같은 열&좌우 간격 */
+    justify-content: space-between;
+    /* 장소이름과 상세주소 같은 열&좌우 간격 */
 }
 
 .location-info:hover {
@@ -455,15 +472,18 @@ export default {
 
 .modal-address-list {
     margin-top: 0.5em;
-    overflow-y: auto; /*스크롤 추가 */
+    overflow-y: auto;
+    /*스크롤 추가 */
 }
 
 .modal-address-list li {
-    margin-bottom: 1em; /* 리스트 상하 줄 간격 */
+    margin-bottom: 1em;
+    /* 리스트 상하 줄 간격 */
 }
 
 .input-wrapper {
-    position: sticky; /* 장소 검색 버튼 있는 곳 스크롤 되지 않도록 고정 */
+    position: sticky;
+    /* 장소 검색 버튼 있는 곳 스크롤 되지 않도록 고정 */
     top: 0;
     background-color: #fefefe;
     z-index: 50;

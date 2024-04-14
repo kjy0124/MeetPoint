@@ -1,9 +1,13 @@
 <template>
     <header class="header">
-        
+        <div><img src="@/assets/caret-modal-fill.svg" alt="뒤로가기" @click="moveBack()"/></div>
+        <span class="top-title">중간지점 결과</span>
     </header>
     <label class="container">
-        <div id="map"></div>
+        <div class="map-wrap">
+            <div id="map"></div>
+            <div id="reSearch"></div>
+        </div>
         <input class="hamburger" type="checkbox">
         <div class="toggle">
             <span class="top_line common"></span>
@@ -26,7 +30,6 @@
                 일정만들기
             </div>
         </div>
-
     </label>
 </template>
 <script>
@@ -40,6 +43,7 @@ export default {
     methods: {
         initMap() {
             const container = document.getElementById("map");
+            const containerr = document.getElementById("reSearch")
             const options = {
                 center: new kakao.maps.LatLng(33.450701, 126.570667),
                 level: 5,
@@ -50,7 +54,12 @@ export default {
             this.map = new kakao.maps.Map(container, options);
 
             container.addEventListener('click', () => {
-                // hamburger 체크박스의 상태 변경
+                // 지도 클릭해도 slide bar 나오지 않게 하는 코드
+                const hamburger = document.querySelector('.hamburger');
+                hamburger.checked = !hamburger.checked;
+            });
+            containerr.addEventListener('click', () => {
+                // 재탐색 버튼 클릭해도 slide bar 나오지 않게 하는 코드
                 const hamburger = document.querySelector('.hamburger');
                 hamburger.checked = !hamburger.checked;
             });
@@ -59,7 +68,13 @@ export default {
         moveListPage() {
             this.$router.push({ name: "ListPage", params: {} });
         },
+
+        moveBack() {
+            this.$router.push({ path: "/", query: {} });
+            this.$router.go(-1);
+        },
     },
+
     created() {
 
     },
@@ -81,25 +96,73 @@ export default {
 </script>
 
 <style scoped>
-#map {
-    z-index: 0;
+#app {
     width: 100%;
     height: 100%;
 }
 
+.map-wrap{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#map {
+    z-index: 0;
+    width: 100vw;
+    height: 100%;
+    position: relative;
+}
+
+#reSearch {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 20px; /* 버튼과 맵 사이의 간격 조절 */
+        padding: 10px; /* 버튼의 내부 여백 */
+        background-image: url('/src/assets/research.png');
+        background-size: 100% 100%;
+        color: white; /* 버튼 텍스트 색상 */
+        border-radius: 50%; /* 버튼 모서리 둥글게 */
+        cursor: pointer; /* 포인터로 마우스를 올렸을 때 커서 모양 변경 */
+        width: 40px;
+        height: 40px;
+        border: 1px solid black;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
 .header{
     z-index: 10;
-    background-color: #5271ff;
-    height: 7.5%;
+    background-color: #7788ff;
+    height: 5%;
+    display: flex;
+    /* justify-content: flex-start; */
+    align-items: center;
+    width: 100vw;
+}
+
+.header > div{
+    margin-left: 1rem;
+    margin-right: 0;
+    cursor: pointer;
+}
+
+.top-title{
+    color: #fff;
+    font-size: 2em;
+    font-weight: 800;
+    margin: 0 auto;
 }
 
 .container {
+    position: inherit;
     display: flex;
-    height: 92.5%;
+    width: 100vw;
+    height: 95%;
 }
 
 .slide {
-    height: 92.5%;
+    height: 95%;
     width: 400px;
     position: absolute;
     background-color: #fff;
@@ -107,6 +170,7 @@ export default {
     transform: translateX(-400px);
     text-align: left;
     padding-left: 2em;
+    border-radius:0px 10px 10px 0px;
 }
 
 h1 {
@@ -142,21 +206,21 @@ ul li a i {
     position: absolute;
     height: 30px;
     width: 30px;
-    top: 20px;
-    /* 원하는 위치로 조정 */
+    top: 60px;
+    /* 원하는 위치로 조정(체크박스) */
     left: 15px;
     /* 원하는 위치로 조정 */
     /* display: flex; */
-    /* visibility: hidden; */
+    visibility: hidden;
     /* -webkit-appearance: none; */
-    z-index: 0;
+    /* z-index: 0;*/
 }
 
 .toggle {
     position: absolute;
     height: 30px;
     width: 30px;
-    top: 20px;
+    top: 60px;
     left: 15px;
     z-index: 1;
     cursor: pointer;
