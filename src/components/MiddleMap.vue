@@ -37,7 +37,8 @@ export default {
     name: "MiddleMap",
     data() {
         return {
-
+            mpLatitude: "", // 중간좌표 위도
+            mpLongitude: "" // 중간좌표 경도
         }
     },
     methods: {
@@ -45,7 +46,7 @@ export default {
             const container = document.getElementById("map");
             const containerr = document.getElementById("reSearch")
             const options = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                center: new kakao.maps.LatLng(this.mpLatitude, this.mpLongitude), //33.450701, 126.570667
                 level: 5,
             };
 
@@ -79,6 +80,8 @@ export default {
 
     },
     mounted() {
+        this.mpLatitude = this.$route.query.mpLatitude; // 첫 번째페이지에서 라우터로 전달해준 위도값
+        this.mpLongitude = this.$route.query.mpLongitude; // 첫 번째 페이지에서 라우터로 전달해준 경도값
         if (window.kakao && window.kakao.maps) {
             this.initMap();
         } else {

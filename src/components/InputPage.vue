@@ -27,14 +27,15 @@
                     </div>
                 </div>
                 <div class="warper-btm">
-                    <form action="/MiddleMap.page">
+                    <form>
                         <label>중간지점 계산 방식</label>
-                        <select>
-                            <option>무게중심</option>
-                            <option>직선거리순</option>
-                            <option>교통점수순</option>
+                        <select v-model="calMode">
+                            <option :value="0">선택</option>
+                            <option :value="2">무게중심</option>
+                            <option :value="1">직선거리순</option>
+                            <option :value="3">교통점수순</option>
                         </select>
-                        <input class="submit-button" type="submit" value="중간지점 찾기">
+                        <input class="submit-button" type="button" value="중간지점 찾기" @click="moveListPage()">
                     </form>
                 </div>
             </div>
@@ -78,6 +79,7 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
     name: 'InputPage',
     data() {
@@ -89,6 +91,7 @@ export default {
             places: [], //검색 결과 리스트
             nearbyPlaces: [], //주변 건물 
             reLoad: 0, //새로고침 관련 변수
+            calMode: 0 // 중간지점 계산 옵션 선택 (1)거리순 (2)무게중심 (3)교통점수
         };
     },
     methods: {
@@ -156,7 +159,7 @@ export default {
         },
         selectLocation(place) {
             const name = this.name.trim() !== '' ? this.name : "친구" + (this.friendList.length + 1);
-            this.friendList.push({ name: name, address: place.place_name });
+            this.friendList.push({ name: name, address: place.place_name, position: place });
             this.closeModal();
         },
 
@@ -175,6 +178,36 @@ export default {
                     console.error("Failed to search nearby places:", status);
                 }
             }, { x, y });
+        },
+
+        // ListPage로 이동
+        moveListPage() {
+            const vm = this;
+            if(vm.friendList.length == 0) {
+                alert("친구 추가하기를 통해 위치를 등록 해주세요.");
+                return;
+            }
+            if(vm.calMode == 0){
+                alert("중간지점 계산 방식을 선택해주세요.");
+                return;
+            }
+            const dt = [vm.calMode, vm.friendList];
+            console.log("dt ", dt);
+            axios({
+                method: 'post',
+                header: { 'Content-Type': 'application/json; charset=UTF-8' },
+                url: "/map/mainPage",
+                data: dt,
+            })
+                .then(function(response){
+                    console.log('response-inputPage',response.data);
+                    // alert("중심 좌표 \n\n" + '위도 :' + response.data.latitude + '\n\n경도 : ' + response.data.longitude);
+                    vm.$router.push({path: '/MiddleMap.page', query:{"mpLatitude": response.data.latitude, "mpLongitude": response.data.longitude }},)
+                })
+                .catch(function(error){
+                    console.log('error',error);
+                    alert("좌표를 불러오는데 실패하였습니다.");
+                });
         },
     },
     mounted() {
