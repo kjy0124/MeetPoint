@@ -82,7 +82,7 @@
 
             <!-- 네이버 지도 css를 참고하여 작성한 부분 -->
             <div class="category_ex">
-                <ul class="list_bubble_filter">
+                <!-- <ul class="list_bubble_filter">
                     <li>
                         <button @click="btnClick('food')" class="epehmC" :class="{ clicked: category_click.food }">음식점</button>
                     </li>
@@ -106,6 +106,14 @@
                     <li>
                         <button @click="btnClick('order')" class="epehmC" :class="{ clicked: category_click.order }">주문</button>
                     </li>
+                </ul> -->
+                <ul class="list_bubble_filter">
+                    <li v-for="(category, index) in categories" :key="index">
+                    <button @click="btnClick(category)" class="epehmc" :class="{ clicked: category_click[category.id] }">
+                        <span :class="`category_click.bg ${category.id}`"></span>
+                        {{ category.name }}
+                    </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -119,7 +127,6 @@ export default {
     data() {
         return {
             map: null,
-
             // 카테고리 선택시 색변경을 하기위한 변수
             category_click: {
                 food:false,
@@ -128,8 +135,23 @@ export default {
                 paking: false,
                 coupon: false,
                 order: false,
-            }
-        }
+            },
+            categories: [
+                { id: "BK9", name: "은행" },
+                { id: "MT1", name: "마트" },
+                { id: "SC4", name: "학교"},
+                { id: "CS2", name: "편의점" },
+                { id: "FD6", name: "음식점"},
+                { id: "CE7", name: "카페" },
+                // { id: "CT1", name: "영화관" },
+                { id: "AD5", name: "숙박" },
+                { id: "OL7", name: "주유소" },
+                // { id: "HP8", name: "병원"},
+                // { id: "PM9", name: "약국" },
+                // { id: "SW8", name: "지하철역"},
+            ],
+            markers: [] // 마커 배열
+        };
     },
     methods: {
         initMap() {
@@ -150,34 +172,114 @@ export default {
         moveMainPage() {
             this.$router.push({ name: "MainPage", params: {} });
         },
-        /* 카테고리 클릭시 */
-        btnClick(menu) {
-            console.log('btnClick')
-            const vm = this;
-            vm.category_click={
-                food:false,
-                cafe:false,
-                pension: false,
-                paking: false,
-                coupon: false,
-                order: false,
+        
+        btnClick(category) {
+            //기존에 떠있는 마커들 모두 제거
+            this.markers.forEach(marker => marker.setMap(null));
+            //저장된 마커 제거
+            this.markers.splice(0, this.markers.length);
+
+            //클릭한 카테고리 버튼만 활성화
+            for (let key in this.category_click) {
+                this.category_click[key] = false;
             }
-            vm.category_click[menu] = true;
+            this.category_click[category.id] = true;
+
+            //해당하는 카테고리의 마커를 지도에 표시
+            this.fetchNearbyPlaces(category);
+        },
+
+        // 자동으로 주변 장소 가져와서 마커 생성하는 함수
+        fetchNearbyPlaces(target_category) {
+            //먼저 현재 위치로 이동
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const locPosition = new window.kakao.maps.LatLng(lat, lng);
+                    this.map.setCenter(locPosition);
+
+                    //카카오맵 장소 검색 서비스 생성
+                    const placesService = new window.kakao.maps.services.Places();
+                    
+                    // 검색결과 반환받을 함수
+                    var callback = function(result, status) {
+                        if (status === window.kakao.maps.services.Status.OK) {
+                            this.saveMarkersByCategory(result, target_category);
+                        } else {
+                            console.error('장소 검색에 실패했습니다:', status);
+                        }
+                    }.bind(this);
+
+                    // 주변 장소 검색 요청
+                    placesService.categorySearch(target_category.id, callback, {
+                        location: locPosition,
+                        radius: 10000,
+                        useMapCenter: false
+                    });
+                });
+            } else {
+                console.error('Geolocation이 지원되지 않습니다.');
+            }
+        },
+        saveMarkersByCategory(result, target_category) {
+            //마커 정보 추출
+            result.forEach(place => {
+                const mapCategory = place.category_group_code;
+                const marker = new window.kakao.maps.Marker({
+                    map: this.map,
+                    position: new window.kakao.maps.LatLng(place.y, place.x),
+                    title: place.place_name, //마커에 표시될 타이틀 설정
+                    category: mapCategory //카테고리 정보 저장
+                });
+                //마커 클릭 이벤트 등록(24.04.29 수정)
+                window.kakao.maps.event.addListener(marker,'click',() => {
+                    //현재 열려있는 정보 창이 있다면 닫기
+                    if(this.infowindow) {
+                        this.infowindow.close();
+                    }
+
+                    //새로운 정보 창 열기
+                    this.infowindow = new window.kakao.maps.InfoWindow({
+                        content: `
+                            <div style="padding:5px;font-size:12px;">
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>${place.place_name}</strong></div>
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">(지번: ${place.road_address_name || place.address_name})</div>
+                                <div style="margin-top: 5px;color: #5271ff;">${place.phone}</div>
+                                <div style="margin-top: 5px;"><a href="${place.place_url}" target="_blank">상세보기</a></div>
+                            </div>`
+                    });
+                    this.infowindow.open(this.map, marker);
+                })//24.04.29 추가완료
+
+                //생성한 마커를 markers 배열에 추가
+                this.markers.push(marker);
+            });
+            //마커 띄우기
+            this.showMarkersByCategory(target_category.id);
+        },
+        showMarkersByCategory(category) {
+            //선택한 카테고리에 해당하는 마커만 지도에 표시
+            const markers = this.markers.filter(marker => {marker.category == category});
+            markers.forEach(marker => marker.setMap(this.map));
         }
     },
     created() {
-
+        //category_click 객체 초기화
+        for(let key in this.category_click) {
+            this.category_click[key] = false;
+        }
     },
     mounted() {
-        if (window.kakao && window.kakao.maps) {
-            this.initMap();
-        } else {
-            const script = document.createElement('script');
-
-            script.onload = () => window.kakao.maps.load(this.initMap);
-            script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8';
-            document.head.appendChild(script);
-        }
+        const script = document.createElement("script");
+        script.src =
+            "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing";
+        script.onload = () => {
+            window.kakao.maps.load(() => {
+                this.initMap();
+            });
+        };
+        document.head.appendChild(script);
     },
 
 }
