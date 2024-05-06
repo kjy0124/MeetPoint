@@ -223,7 +223,7 @@ export default {
             }
         },
         saveMarkersByCategory(result, target_category) {
-            //마커 정보 추출
+            //마커 정보 추출 place에 다량의 정보 함축되어있음
             result.forEach(place => {
                 const mapCategory = place.category_group_code;
                 const marker = new window.kakao.maps.Marker({
