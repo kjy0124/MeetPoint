@@ -8,11 +8,14 @@
                     <div class="top-text">*일정은 <b>최대 7일</b>까지 선택 가능합니다*</div>
                 </div>
                 <div class="modal-mid">
-                    <span>일정 시작</span>
+                    <div class="modal-mid-text">
+                        <div class="planStart">일정 시작</div>
+                        <div class="planEnd">일정 종료</div>
+                    </div>
                     <input type="date" name="" class="square-date" :class="{ 'date-placeholder': selectedStartDate }"
                         @change="handleDateChange('start')">
-                    <span>~</span>
-                    <span>일정 종료</span>
+                    <span class="mulgeul">~</span>
+
                     <input type="date" name="" id="search-date" class="square-date"
                         :class="{ 'date-placeholder': selectedEndDate }" @change="handleDateChange('end')">
                 </div>
@@ -29,18 +32,26 @@
                 <div class="step3">STEP 3 <br>숙소 설정</div>
             </div>
             <div class="side-middle">
-                <div @click="modalOpen = true" class="selectDate">
-                    <h2 class="meetPoint">{{ meetPoint }}</h2>
-                    <p v-if="!selectedEndDate || !selectedStartDate">일정을 입력해주세요!</p>
-                    <p v-if="selectedStartDate && selectedEndDate">{{ selectedStartDate + '(' + this.selectedStartDay +
-                        ')' }}
-                        ~ {{ selectedEndDate + '(' + this.selectedEndDay + ')' }}</p>
+                <div class="notScrollArea">
+                    <div @click="modalOpen = true" class="selectDate">
+                        <h2 class="meetPoint">{{ meetPoint }}</h2>
+                        <p v-if="!selectedEndDate || !selectedStartDate">일정을 입력해주세요!</p>
+                        <p v-if="selectedStartDate && selectedEndDate">{{ selectedStartDate + '(' +
+                            this.selectedStartDay +
+                            ')' }}
+                            ~ {{ selectedEndDate + '(' + this.selectedEndDay + ')' }}</p>
+                    </div>
                 </div>
-                <div class="selectInfo" v-for="(info, i) in selectInfo" :key="i">
-                    <input class="checkBox" type="checkbox" @change="addCheckInfo(i)">
-                    <h3>{{ info.placeName }}</h3>
-                    <h3>{{ info.placeAddress }}</h3>
-                    <h3>{{ info.placeCallNum }}</h3>
+                <div class="scrollArea">
+                    <div class="selectInfo" v-for="(info, i) in selectInfo" :key="i">
+                        <input class="checkBox" type="checkbox" @change="addCheckInfo(i)">
+                        <div class="infoWarper">
+                            <h2>{{ info.placeName }}</h2>
+                            <h3>{{ info.placeAddress }}</h3>
+                            <h3>{{ info.placeCallNum }}</h3>
+                            <a href="">상세보기</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- <div v-for="(DiffDate, i) in selectedDiffDate+1" :key="i" :class="[`side-right${i+1}`]" ></div> -->
@@ -66,7 +77,7 @@ export default {
     name: "ListPage",
     data() {
         return {
-            modalOpen: true, //모달의 상태 여부
+            modalOpen: false, //모달의 상태 여부
             selectedStartDate: null, //일정 시작 날짜
             selectedStartDay: null, //일정 시작 날짜 요일
             selectedEndDate: null, //일정 종료 날짜
@@ -100,9 +111,35 @@ export default {
                     placeAddress: '대구 중구 달구벌대로 2033',
                     placeCallNum: '053-235-7711'
                 },
+                {
+                    placeName: '서문시장',
+                    placeAddress: '대구 중구 큰장로26길 45',
+                    placeCallNum: '053-356-6944'
+                },
+                {
+                    placeName: '스파크 랜드',
+                    placeAddress: '대구 중구 동성로6길 61',
+                    placeCallNum: '053-230-2010'
+                },
+                {
+                    placeName: 'CGV 대구한일',
+                    placeAddress: '대구 중구 동성로 39 씨네시티한일 7층',
+                    placeCallNum: '1544-1122'
+                },
+                {
+                    placeName: '전원돈까스',
+                    placeAddress: '대구 중구 동성로6길 2-23',
+                    placeCallNum: '053-424-8220'
+                },
+                {
+                    placeName: '엘디스리젠트호텔',
+                    placeAddress: '대구 중구 달구벌대로 2033',
+                    placeCallNum: '053-235-7711'
+                },
             ],
             addCheckInfoList: [], // 체크한 장소 정보를 담을 배열 추가
-            markers:[],
+            markers: [],
+            infowindows: [],
         }
     },
     methods: {
@@ -146,52 +183,23 @@ export default {
             //지도 객체를 등록합니다.
             //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
             this.map = new kakao.maps.Map(container, options);
-            // for (let i = 0; i < this.selectInfo.length; i++) {
-            //     this.searchAddressAndShowMarker(this.selectInfo[i].placeAddress, i);
-            // }
-
         },
-
-        // searchAddressAndShowMarker(address, i) {
-        //     // 카카오맵의 Geocoder 서비스를 이용하여 주소를 좌표로 변환
-        //     const geocoder = new window.kakao.maps.services.Geocoder();
-        //     geocoder.addressSearch(address, (result, status) => {
-        //         console.log('asdfasdfasdf', result)
-        //         if (status === kakao.maps.services.Status.OK) {
-        //             // 좌표를 생성합니다.
-        //             const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-        //             // 결과값으로 받은 위치를 마커로 표시합니다.
-        //             const marker = new kakao.maps.Marker({
-        //                 map: this.map, // Vue 컴포넌트 내에서 map 객체에 접근할 수 있도록 변경
-        //                 position: coords
-        //             });
-
-        //             // 인포윈도우로 장소에 대한 설명을 표시합니다.
-        //             const infowindow = new kakao.maps.InfoWindow({
-        //                 content: `<div style="width:150px;text-align:center;padding:6px 0;">${this.selectInfo[i].placeName}</div>`
-        //             });
-        //             infowindow.open(this.map, marker);
-
-        //             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다.
-        //             this.map.setCenter(coords);
-        //             marker.setMap(this.map);
-        //             console.log(coords);
-        //         }
-        //     });
-        // },
 
         addCheckInfo(index) {
             if (this.addCheckInfoList.includes(this.selectInfo[index])) {
                 //이미 선택된 정보인 경우 배열에서 제거
                 const addCheckIndex = this.addCheckInfoList.indexOf(this.selectInfo[index]);
                 this.addCheckInfoList.splice(addCheckIndex, 1);
-                this.removeMarker(index);
+                this.removeMarker(index); // 마커 제거
+                this.removeInfowindow(index); // 인포윈도우 제거
+
             } else {
                 //선택되지 않은 정보인 경우 배열에 추가
                 this.addCheckInfoList.push(this.selectInfo[index]);
                 this.addMarker(index);
+
             }
+            console.log("마커배열", this.markers);
         },
 
         addMarker(index) {
@@ -201,7 +209,6 @@ export default {
             // 카카오맵의 Geocoder 서비스를 이용하여 주소를 좌표로 변환
             const geocoder = new window.kakao.maps.services.Geocoder();
             geocoder.addressSearch(address, (result, status) => {
-                console.log('asdfasdfasdf', result)
                 if (status === kakao.maps.services.Status.OK) {
                     // 좌표를 생성합니다.
                     const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -220,10 +227,11 @@ export default {
 
                     // 마커 객체를 배열에 저장하여 추후 제거할 수 있도록 함
                     this.markers.push(marker);
+                    this.infowindows.push(infowindow)
 
                     // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다.
                     this.map.setCenter(coords);
-                    marker.setMap(this.map);
+                    // marker.setMap(this.map);
                     console.log(coords);
                 }
             });
@@ -231,9 +239,16 @@ export default {
 
         removeMarker(index) {
             // 선택 해제된 장소의 마커 제거
-            if (this.markers.length > 0) {
+            if (this.markers.length > index && this.markers[index]) {
                 this.markers[index].setMap(null);
                 this.markers.splice(index, 1);
+            }
+        },
+        removeInfowindow(index) {
+            // 선택 해제된 장소의 마커 제거
+            if (this.infowindows.length > index && this.infowindows[index]) {
+                this.infowindows[index].setMap(null);
+                this.infowindows.splice(index, 1);
             }
         },
 
@@ -258,9 +273,6 @@ export default {
     },
 
 }
-
-
-
 </script>
 
 <style scoped>
@@ -280,6 +292,31 @@ export default {
     height: 35%;
     padding: 1.5em;
     box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
+}
+
+.modal-mid-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.mulgeul {
+    margin: 1.5em;
+    font-size: 1.5em;
+}
+
+.planStart {
+    margin-left: 5em;
+    width: 100%;
+}
+
+.planEnd {
+    width: 100%;
+    margin-right: 5em;
 }
 
 .top-title {
@@ -310,6 +347,7 @@ export default {
 .select-bttn {
     height: 60px;
     width: 100px;
+    margin-top: 1em;
     cursor: pointer;
     border-radius: 10px;
     background-color: #fff;
@@ -325,7 +363,7 @@ export default {
 
 .map-wrap {
     display: flex;
-    width: 60%;
+    width: 40%;
     height: 100%;
     margin-left: auto;
 }
@@ -340,7 +378,7 @@ export default {
 .sidebar {
     display: flex;
     height: 100%;
-    width: 40%;
+    width: 60%;
     background-color: transparent;
 
     /* text-align: center;
@@ -350,7 +388,7 @@ export default {
 .side-left {
     display: flex;
     height: 100%;
-    width: 14%;
+    width: 10%;
     background-color: #7788ff;
     color: #fff;
     font-size: 1.5em;
@@ -362,22 +400,35 @@ export default {
 
 .side-middle {
     height: 100%;
-    width: 43%;
+    width: 45%;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 5;
+    display: flex;
+    flex-direction: column;
+}
+
+.selectDate>p {
+    color: #35353575;
+    font-size: 1em;
+    /* position: fixed; */
+}
+.notScrollArea{
+    flex: none;
+}
+.scrollArea{
+    overflow: auto;
 }
 
 .side-rightMain {
     height: 100%;
-    width: 43%;
+    width: 45%;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     z-index: 1;
     border-radius: 0px 10px 10px 0px;
     position: relative;
     display: flex;
-    /* 추가 */
     flex-direction: column;
 }
 
@@ -436,9 +487,30 @@ export default {
 
 .selectInfo {
     margin-bottom: 5%;
-    /* display: flex;
+    display: flex;
     text-align: center;
-    align-items: center; */
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    height: 10%;
+    padding: 1em;
+    margin-left: 5%;
+}
+
+.infoWarper {
+    width: 100%;
+}
+
+.infoWarper>h2,
+h3,
+a {
+    margin-left: 1em;
+    text-align: left;
+}
+
+.infoWarper>h3 {
+    color: #666666;
 }
 
 .checkBox {
