@@ -190,8 +190,8 @@ export default {
                 //이미 선택된 정보인 경우 배열에서 제거
                 const addCheckIndex = this.addCheckInfoList.indexOf(this.selectInfo[index]);
                 this.addCheckInfoList.splice(addCheckIndex, 1);
-                this.removeMarker(index); // 마커 제거
-                this.removeInfowindow(index); // 인포윈도우 제거
+                this.removeMarker(addCheckIndex); // 마커 제거
+                this.removeInfowindow(addCheckIndex); // 인포윈도우 제거
 
             } else {
                 //선택되지 않은 정보인 경우 배열에 추가
@@ -239,17 +239,22 @@ export default {
 
         removeMarker(index) {
             // 선택 해제된 장소의 마커 제거
-            if (this.markers.length > index && this.markers[index]) {
-                this.markers[index].setMap(null);
-                this.markers.splice(index, 1);
-            }
+            // if (this.markers.length > index && this.markers[index]) {
+            //     this.markers[index].setMap(null);
+            //     this.markers.splice(index, 1);
+            // }
+            this.markers[index].setMap(null);
+            this.markers.splice(index, 1);
+
         },
         removeInfowindow(index) {
             // 선택 해제된 장소의 마커 제거
-            if (this.infowindows.length > index && this.infowindows[index]) {
-                this.infowindows[index].setMap(null);
-                this.infowindows.splice(index, 1);
-            }
+            // if (this.infowindows.length > index && this.infowindows[index]) {
+            //     this.infowindows[index].setMap(null);
+            //     this.infowindows.splice(index, 1);
+            // }
+            this.infowindows[index].close();
+            this.infowindows.splice(index, 1);
         },
 
 

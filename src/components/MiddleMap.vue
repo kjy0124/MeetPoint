@@ -588,6 +588,15 @@ export default {
     border: 1px solid black;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+/* 재탐색 버튼 마우스오버시 회전*/
+#reSearch:hover {
+    animation: rotate_image 1.8s linear infinite;transform-origin: 50% 50%;
+}  
+@keyframes rotate_image{
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 .header {
     z-index: 10;
