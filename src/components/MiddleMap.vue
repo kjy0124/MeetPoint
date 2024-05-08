@@ -52,21 +52,37 @@
             <span class="bottom_line common"></span>
         </label>
         <div class="slide">
-            <h1>Meet Point</h1>
-            <ul>
-                <li><a href="#"><input type="checkbox"><i class="fas fa-tv"></i>dashboard</a></li>
-                <li><a href="#"><input type="checkbox"><i class="far fa-user"></i>profile</a></li>
-                <li><a href="#"><input type="checkbox"><i class="fab fa-gripfire"></i>trending</a></li>
-                <li><a href="#"><input type="checkbox"><i class="far fa-comments"></i>messages</a></li>
-                <li><a href="#"><input type="checkbox"><i class="far fa-folder"></i>file manager</a></li>
-                <li><a href="#"><input type="checkbox"><i class="far fa-address-book"></i>protfolio</a></li>
-                <li><a href="#"><input type="checkbox"><i class="far fa-heart"></i>saved</a></li>
-                <li><a href="#"><input type="checkbox"><i class="fas fa-cogs"></i>settings</a></li>
-            </ul>
-            <div class="toggle_btm" @click="moveListPage()">
-                일정만들기
+            <div class="slide-top">
+                <h1>Meet Point</h1>
+            </div>
+            <div class="slide-mid">
+                
+                            <div class="pl" v-for="(space, index) in check_space" :key="index"><!-- check_space 배열에서 리스트 가져오기 -->>
+                                <!-- 리스트 안 체크박스 클릭시 리스트에서 삭제-->
+                                <input type="checkbox" @click="checkboxClear(space)" checked>  
+                                <div class="place-info">
+                                    <!-- 마커의 추가하기 버튼 클릭시 리스트에 추가 -->
+                                    <div class="place-name">{{ space.name }}</div>
+                                    <div class="place-location">{{ space.location }}</div>
+                                    <div class="place-phone">{{ space.phone }}</div>
+                                </div>
+                            </div>
+                    
+            </div>
+            <div class="slide-btm">
+                <p class="toggle_btm" @click="moveListPage()">일정만들기</p>
             </div>
         </div>
+    </div>
+    <div class="category_list">
+        <ul class="list_bubble_filter">
+            <li v-for="(category, index) in categories" :key="index">
+            <button @click="btnClick(category)" class="epehmC" :class="{ clicked: category_click[category.id] }">
+                <span :class="`category_click.bg ${category.id}`"></span>
+                {{ category.name }}
+            </button>
+            </li>
+        </ul>
     </div>
 </template>
 <script>
@@ -87,7 +103,31 @@ export default {
             },
             options: [], // 관광지 등 어떤 장소를 기준으로 새로운 중간지점을 선택할지 카테고리를 저장
             address_options: [], // 시도, 시군구를 선택했을 경우 저장할 배열
-        }
+
+            category_click: {
+                food:false,
+                cafe:false,
+                pension: false,
+                paking: false,
+                coupon: false,
+                order: false,
+            },
+            categories: [
+                { id: "BK9", name: "은행" },
+                { id: "MT1", name: "마트" },
+                { id: "SC4", name: "학교"},
+                { id: "CS2", name: "편의점" },
+                { id: "FD6", name: "음식점"},
+                { id: "CE7", name: "카페" },
+                { id: "AD5", name: "숙박" },
+                { id: "OL7", name: "주유소" },
+                // { id: "HP8", name: "병원"},
+                // { id: "PM9", name: "약국" },
+                // { id: "CT1", name: "영화관" },
+                // { id: "SW8", name: "지하철역"},
+            ],
+            check_space: [], //체크된 장소
+        };
     },
     methods: {
         initMap() {
@@ -106,6 +146,21 @@ export default {
 
             // 좌표를 주소로 반환
             this.addressInfo();
+
+            const imageSrc = require('@/assets/중간지점.png');
+            const imageSize = new kakao.maps.Size(50, 50);
+            const imageOption =  { offset: new kakao.maps.Point(27, 69) };
+            const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+            //중간 지점 마커 생성
+            const markerPosition = new window.kakao.maps.LatLng(this.mpLatitude, this.mpLongitude);
+            const marker = new window.kakao.maps.Marker({
+                position: markerPosition,
+                image: markerImage,
+            });
+
+            //마커 지도에 띄우기
+            marker.setMap(this.map);
         },
 
         moveListPage() {
@@ -309,10 +364,170 @@ export default {
                 }
             })
         },
+
+        btnClick(category) {
+            // //기존에 떠있는 마커들 모두 제거
+            // this.markers.forEach(marker => marker.setMap(null));
+            // //저장된 마커 제거
+            // this.markers.splice(0, this.markers.length);
+
+            //클릭한 카테고리 버튼만 활성화
+            for (let key in this.category_click) {
+                this.category_click[key] = false;
+            }
+            this.category_click[category.id] = true;
+
+            //해당하는 카테고리의 마커를 지도에 표시
+            this.fetchNearbyPlaces(category);
+        },
+
+        // 자동으로 주변 장소 가져와서 마커 생성하는 함수
+        fetchNearbyPlaces(target_category) {
+            this.clearMarkers();
+
+            //중간 위치로 지도 이동
+            const locPosition = new window.kakao.maps.LatLng(this.mpLatitude, this.mpLongitude);
+
+            // kakao.maps 객체가 존재하는지 확인
+            if (window.kakao.maps && window.kakao.maps.services) {
+                // kakao.maps.services.Places()가 존재하는지 확인
+                if (window.kakao.maps.services.Places) {
+                    const placesService = new window.kakao.maps.services.Places();
+                    
+                    // 검색 결과 반환받을 함수
+                    var callback = function(result, status) {
+                        if (status === window.kakao.maps.services.Status.OK) {
+                            this.saveMarkersByCategory(result, target_category);
+                        } else {
+                            console.error('장소 검색에 실패했습니다:', status);
+                        }
+                    }.bind(this);
+
+                    // 주변 장소 검색 요청
+                    placesService.categorySearch(target_category.id, callback, {
+                        location: locPosition,
+                        radius: 5000,
+                        useMapCenter: false
+                    });
+                } else {
+                    console.error('Places 서비스를 찾을 수 없습니다.');
+                }
+            } else {
+                console.error('kakao.maps 또는 kakao.maps.services를 찾을 수 없습니다.');
+            }
+        },
+        saveMarkersByCategory(result, target_category) {
+            //새로운 카테고리의 마커를 추가하기 전에 이전 카테고리 마커 모두 삭제
+            this.clearMarkers();
+
+            //사용자 위치 마커 유지
+            this.showUsersPosition();
+
+            //마커 정보 추출
+            result.forEach(place => {
+                const mapCategory = place.category_group_code;
+                const marker = new window.kakao.maps.Marker({
+                    map: this.map,
+                    position: new window.kakao.maps.LatLng(place.y, place.x),
+                    title: place.place_name, //마커에 표시될 타이틀 설정
+                    category: mapCategory //카테고리 정보 저장
+                });
+
+                //마커 클릭 이벤트 등록(24.04.29 수정)
+                window.kakao.maps.event.addListener(marker,'click',() => {
+                    //현재 열려있는 정보 창이 있다면 닫기
+                    if(this.infowindow) {
+                        this.infowindow.close();
+                    }
+                    //새로운 정보 창 열기
+                    this.infowindow = new window.kakao.maps.InfoWindow({
+                        content: `
+                            <div style="padding:5px;font-size:12px;">
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>${place.place_name}</strong></div>
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">(지번: ${place.address_name})</div>
+                                <div style="margin-top: 5px;color: #5271ff;">${place.phone}</div>
+                                <div style="margin-top: 5px;"><a href="${place.place_url}" target="_blank">상세보기</a></div>
+                                <div style="margin-top: 5px;">
+                                    <label>
+                                        <button type="button" class="placeCheckbox" 
+                                            data-name="${place.place_name}"
+                                            data-location="${place.address_name}"
+                                            data-phone="${place.phone}">
+                                            추가하기
+                                    </label>
+                                </div>
+                            </div>`
+                    });
+                    marker.infowindow = this.infowindow; //마커와 인포윈도우를 하나로 묶음
+
+                    this.infowindow.open(this.map, marker);
+
+                    //button 감지 이벤트
+                    const button = document.querySelector('.placeCheckbox'); //.placeChaeckbox 값 찾아서 반환
+
+                    if (button) button.addEventListener('click', this.handleCheckboxChange); //버튼 클릭시 HandleCheckboxChange 함수 호출
+                    // handleCheckboxChange 호출하며 동시에 event.target 이벤트 활성화, --> 위의 data-name, data-location, data-phone 데이터 값 참조
+                })
+                //생성한 마커를 markers 배열에 추가
+                this.markers.push(marker);
+            });
+            //마커 띄우기
+            this.showMarkersByCategory(target_category.id);
+        },
+
+        clearMarkers() {
+            //이전 카테고리의 마커 삭제
+            this.markers.forEach(marker => {
+                marker.setMap(null);
+                if (marker.infowindow) {
+                    marker.infowindow.close(); // 연결된 정보 창 닫기
+                }
+            });
+            this.markers = [];
+        },
+
+        showMarkersByCategory(category) {
+            //선택한 카테고리에 해당하는 마커만 지도에 표시
+            const markers = this.markers.filter(marker => {
+                return marker.category == category
+            });
+            markers.forEach(marker => marker.setMap(this.map));
+        },
+        handleCheckboxChange(event) {
+            //추가하기 클릭 시 리스트에 추가
+            const placeName = event.target.dataset.name;
+            const placeLocation = event.target.dataset.location;
+            const placePhone = event.target.dataset.phone;
+
+            //이미 선택된 장소인지 확인(중복 장소 검사)
+            const isAlreadyAdded = this.check_space.some(space => { //밑의 조건과 같이 check_space에 데이터 값들의 중복 검사하는 변수
+                //space에 저장된 장소 이름, 상세 주소, 장소 번호 중복 검사
+                return space.name === placeName && space.location === placeLocation && space.phone === placePhone
+            });
+            
+            //중복 장소가 아니면 추가
+            if (!isAlreadyAdded) {
+                //새로운 장소를 check_space 배열에 추가
+                this.check_space.push({ name: placeName, location: placeLocation, phone: placePhone });
+            }
+        },
+        checkboxClear(space) {
+            //체크박스 클릭시 배열에서 삭제
+            const index = this.check_space.indexOf(space);
+            console.log(index);
+            if (index !== -1) {
+                this.check_space.splice(index, 1);
+                console.log("checkpoint : ", this.check_space);
+            }
+            // this.check_space.pop(space);
+        }
     },
 
     created() {
-
+        //category_click 객체 초기화
+        for(let key in this.category_click) {
+                    this.category_click[key] = false;
+        }
     },
     mounted() {
         this.mpLatitude = this.$route.query.mpLatitude; // 첫 번째페이지에서 라우터로 전달해준 위도값
@@ -324,7 +539,7 @@ export default {
             /* global kakao */
             script.onload = () => kakao.maps.load(this.initMap);
             script.src =
-                "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services";
+            "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing";
             document.head.appendChild(script);
             console.log("kakao mounted");
         }
@@ -414,6 +629,8 @@ export default {
     text-align: left;
     padding-left: 2em;
     border-radius: 0px 10px 10px 0px;
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {
@@ -472,9 +689,21 @@ ul li a i {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.slide-top{
+    height: 10%;
+    flex: none;
+}
+.slide-mid{
+    height: 70%;
+    overflow: auto;
+}
+.slide-btm{
+    height: 20%;
+    flex: none;
+}
 .toggle_btm {
     position: absolute;
-    height: 60px;
+    height: 65px;
     width: 350px;
     top: 90%;
     left: 22.5px;
@@ -636,4 +865,61 @@ ul li a i {
     background-color: transparent; /* 배경색 투명하게 */
     color: #5271ff; /* 글자색 */
 }
+
+.category_list {
+    position: absolute;
+    left: 40%;
+    top: 10%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    background: padding-box padding-box rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 4px 0px;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.category_list .list_bubble_filter {
+    padding: 0px 11px;
+}
+
+.category_list .list_bubble_filter li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.epehmC {
+    position: relative;
+    padding: 0px 11px 0px;
+    line-height: 9.5px;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgb(36, 36, 36);
+}
+
+.pl {
+    margin-bottom: 5%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    height: 10%;
+    padding: 1em;
+    margin-left: 5%;
+}
+
+.place-name {
+    font-weight: bold;
+    font-size: 13px;
+}
+.place-phone {
+    margin-top: 5px;
+    color: #5271ff;
+}
+.place-info {
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
 </style>
