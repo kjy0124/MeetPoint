@@ -449,6 +449,7 @@ export default {
                     var callback = function(result, status) {
                         if (status === window.kakao.maps.services.Status.OK) {
                             this.saveMarkersByCategory(result, target_category);
+                            this.showCircle(locPosition, 5000);//반경을 원으로 표시
                         } else {
                             console.error('장소 검색에 실패했습니다:', status);
                         }
@@ -467,6 +468,21 @@ export default {
                 console.error('kakao.maps 또는 kakao.maps.services를 찾을 수 없습니다.');
             }
         },
+
+        showCircle(centerPosition, radius) {
+            const circle = new window.kakao.maps.Circle({
+                center: centerPosition,  // 중심 좌표
+                radius: radius,          // 원의 반지름(미터단위)
+                strokeWeight: 2,         // 두께
+                strokeColor: '#5271ff',  // 색
+                strokeOpacity: 0.8,      // 선의 불투명도
+                strokeStyle: 'solid',    // 종류('solid', 'shortdash', 'shortdot', 'shortdashdot', 'shortdashdotdot', 'dot', 'dash', 'longdash', 'longdashdot', 'longdashdotdot')
+            });
+
+            // 원을 지도에 표시합니다
+            circle.setMap(this.map);
+        },
+
         saveMarkersByCategory(result, target_category) {
             //새로운 카테고리의 마커를 추가하기 전에 이전 카테고리 마커 모두 삭제
             this.clearMarkers();
