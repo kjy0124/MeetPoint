@@ -1,3 +1,4 @@
+----- 교통점수순에 사용되는 버스정류장 데이터 -----
 CREATE TABLE transport.BUS_STOP (
 	ID SERIAL NOT NULL PRIMARY KEY,
 	NODE_ID VARCHAR(30),
@@ -22,4 +23,66 @@ CREATE TABLE transport.BUS_STOP (
 도시코드	            CITY_CD	                도시코드
 도시명	                CITY_NAME	            도시명
 관리도시명	            ADMIN_NM	            관리도시명
+--------------------------------------------------------------
+
+----- 재탐색에 사용되는 전국 관광지명 -----
+CREATE TABLE tour.a_tourist_spot (
+	ID VARCHAR(20) PRIMARY KEY,
+	LCLAS_NM VARCHAR(1000),
+	MLSFC_NM VARCHAR(20),
+	POI_ID VARCHAR(30),
+	POI_NM VARCHAR(100),
+	BHF_NM VARCHAR(100),
+	ASSTN_NM VARCHAR(100),
+	CL_CD VARCHAR(30),
+	CL_NM VARCHAR(200),
+	PNU VARCHAR(30),
+	CTPRVN_NM VARCHAR(100),
+	SIGNGU_NM VARCHAR(100),
+	LEGALDONG_NM VARCHAR(100),
+	LI_NM VARCHAR(100),
+	LNBR_NO VARCHAR(30),
+	LEGALDONG_CD VARCHAR(30),
+	ADSTRD_CD VARCHAR(30),
+	RDNMADR_CD VARCHAR(30),
+	RDNMADR_NM VARCHAR(100),
+	BULD_NO VARCHAR(30),
+	LC_LO NUMERIC(20,13),
+	LC_LA NUMERIC(20,13),
+	GID_CD VARCHAR(30),
+	LAST_CHG_DE VARCHAR(20),
+	ORIGIN_NM VARCHAR(1000),
+	FILE_NM VARCHAR(200),
+	BASE_DE VARCHAR(8)
+);
+
+-----------------------설명----------------------------------- 
+컬럼영문명	 	컬럼한글명
+ID	ID
+LCLAS_NM		대분류명
+MLSFC_NM		중분류명
+POI_ID			POI_ID
+POI_NM			POI명
+BHF_NM			지점명
+ASSTN_NM		보조명
+CL_CD			분류코드
+CL_NM			분류명
+PNU				지번고유코드
+CTPRVN_NM		시도명
+SIGNGU_NM		시군구명
+LEGALDONG_NM	법정동명
+LI_NM			리명
+LNBR_NO			번지번호
+LEGALDONG_CD	법정동코드
+ADSTRD_CD		행정동코드
+RDNMADR_CD		도로명주소코드
+RDNMADR_NM		도로명주소명
+BULD_NO			건물번호
+LC_LO			위치경도
+LC_LA			위치위도
+GID_CD			격자코드
+LAST_CHG_DE		최종변경일자
+ORIGIN_NM		출처명
+FILE_NM			파일명
+BASE_DE			기준일자
 --------------------------------------------------------------

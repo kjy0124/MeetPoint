@@ -56,11 +56,17 @@
             </div>
             <!-- <div v-for="(DiffDate, i) in selectedDiffDate+1" :key="i" :class="[`side-right${i+1}`]" ></div> -->
             <div class="side-rightMain">
-                <p>{{ '/ ' + selectedDiffHour + '시간 0분' }}</p>
+                <p>{{ selectedStayTime.hour + '시간 ' + selectedStayTime.minute + '분 / ' + selectedDiffHour + '시간 0분' }}</p>
                 <div v-for="(info, i) in addCheckInfoList" :key="i" class="addCheckInfoList">
-                    <p>{{ i + 1 }}</p>
-                    <h3>{{ info.placeName }}</h3>
-                    <button>dd</button>
+                    <p :class="'timeSet' + i" >{{ i + 1 }}</p>
+                    <h3 :class="'timeSet' + i" >{{ info.placeName }}</h3>
+                    <button @click="timeSet(i)" :class="'timeSet' + i" >{{ time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
+                    <p :class="'timeSetClose' + i" style="display: none;">머무는 시간 설정</p>
+                    <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;" type="number" min='0' max='24' v-model="time_store[i].hour">
+                    <p :class="'timeSetClose' + i" style="display: none;">시</p> 
+                    <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;" type="number" min='0' max='59' v-model="time_store[i].minute">
+                    <p :class="'timeSetClose' + i" style="display: none;">분</p>
+                    <button :class="'timeSetClose' + i" style="display: none;" @click="timeClose(i)">완료</button>
                 </div>
             </div>
         </div>
@@ -140,9 +146,77 @@ export default {
             addCheckInfoList: [], // 체크한 장소 정보를 담을 배열 추가
             markers: [],
             infowindows: [],
+
+            // 시간 저장
+            time_store: [],
+            // 머무른 시간 저장
+            selectedStayTime: {
+                hour: 0, // 시
+                minute: 0, // 분
+            },
+            // 중복방지를 위해 이전 시간 저장
+            beforeTime: [],
+            
         }
     },
     methods: {
+        // 머무는 시간 설정
+        timeSet(index){
+            var classNames = document.querySelectorAll(".timeSet" + index);
+            classNames.forEach(function(className) {
+                className.style.display = "none";
+            })
+            
+            classNames = document.querySelectorAll(".timeSetClose" + index);
+            classNames.forEach(function(className) {
+                className.style.display = "inline";
+            })
+            
+            // 중복방지를 위해 머무르는 시간에 변경전 해당 장소에 머무르는 시간을 저장
+            if(this.beforeTime[index]){ // 이미 존재하는 장소의 머무는 시간을 다시 지정할 경우
+                this.beforeTime[index].hour = this.time_store[index].hour;
+                this.beforeTime[index].minute = this.time_store[index].minute;
+            } else {
+                const time = {
+                    hour:0,
+                    minute: 0
+                };
+                this.beforeTime.push(time);
+            }
+        },
+        // 머무는 시간 설정 닫기
+        timeClose(index){
+            var classNames = document.querySelectorAll(".timeSetClose" + index);
+            classNames.forEach(function(className) {
+                className.style.display = "none";
+            })
+            classNames = document.querySelectorAll(".timeSet" + index);
+            classNames.forEach(function(className) {
+                className.style.display = "inline";
+            })
+
+            if(this.beforeTime[index]){
+                if(this.selectedStayTime.minute - this.beforeTime[index].minute < 0){
+                    this.selectedStayTime.hour = (this.selectedStayTime.hour - 1) - this.beforeTime[index].hour;
+                    this.selectedStayTime.minute = this.selectedStayTime.minute + 60 - this.beforeTime[index].minute;
+                } else {
+                    this.selectedStayTime.hour -= this.beforeTime[index].hour;
+                    this.selectedStayTime.minute -= this.beforeTime[index].minute;
+                }
+
+            }
+            var sumTime = this.selectedStayTime.minute + this.time_store[index].minute // 총머무르는 분(minute) 더하기 + 새로등록한 머무르는 분(minute)
+            this.selectedStayTime.hour += this.time_store[index].hour; // 총머무르는 시간(hour) 더하기 + 새로등록한 머무르는 시간(hour)
+            // 완료(추가)시 총 머무르는 시간에 해당 장소에 머무르는 시간을 더하기
+            if(sumTime > 59){
+                    this.selectedStayTime.hour += Math.floor(sumTime / 60);
+                    this.selectedStayTime.minute = sumTime%60;
+            } else {
+                this.selectedStayTime.minute += this.time_store[index].minute;
+            }
+            
+        },
+
         handleDateChange(type) {
             const startDateInput = document.querySelector(".square-date:nth-of-type(1)");
             const endDateInput = document.querySelector(".square-date:nth-of-type(2)");
@@ -190,13 +264,15 @@ export default {
                 //이미 선택된 정보인 경우 배열에서 제거
                 const addCheckIndex = this.addCheckInfoList.indexOf(this.selectInfo[index]);
                 this.addCheckInfoList.splice(addCheckIndex, 1);
-                this.removeMarker(index); // 마커 제거
-                this.removeInfowindow(index); // 인포윈도우 제거
+                this.removeMarker(addCheckIndex); // 마커 제거
+                this.removeInfowindow(addCheckIndex); // 인포윈도우 제거
+                this.removeTime(addCheckIndex); // 머무르는 시간 제거
 
             } else {
                 //선택되지 않은 정보인 경우 배열에 추가
                 this.addCheckInfoList.push(this.selectInfo[index]);
                 this.addMarker(index);
+                this.addTime(); // 머무르는 시간 (0시0분) 생성
 
             }
             console.log("마커배열", this.markers);
@@ -237,22 +313,48 @@ export default {
             });
         },
 
+        // 머무르는 시간 0시0분 생성
+        addTime(){
+            // 머무는 시간을 설정할 시 분 초기값
+            const time = {
+                hour: 0,
+                minute: 0,
+            }
+            this.time_store.push(time);
+        },
+
         removeMarker(index) {
             // 선택 해제된 장소의 마커 제거
-            if (this.markers.length > index && this.markers[index]) {
-                this.markers[index].setMap(null);
-                this.markers.splice(index, 1);
-            }
+            // if (this.markers.length > index && this.markers[index]) {
+            //     this.markers[index].setMap(null);
+            //     this.markers.splice(index, 1);
+            // }
+            this.markers[index].setMap(null);
+            this.markers.splice(index, 1);
+
         },
         removeInfowindow(index) {
             // 선택 해제된 장소의 마커 제거
-            if (this.infowindows.length > index && this.infowindows[index]) {
-                this.infowindows[index].setMap(null);
-                this.infowindows.splice(index, 1);
-            }
+            // if (this.infowindows.length > index && this.infowindows[index]) {
+            //     this.infowindows[index].setMap(null);
+            //     this.infowindows.splice(index, 1);
+            // }
+            this.infowindows[index].close();
+            this.infowindows.splice(index, 1);
         },
 
-
+        // 머무르는 시간이 저장된 시간 제거
+        removeTime(index) {
+            // 삭제시 총 머무르는 시간에 해당 장소에 머무르는 시간을 빼기
+            if(this.selectedStayTime.minute - this.time_store[index].minute < 0){
+                this.selectedStayTime.hour = (this.selectedStayTime.hour - 1) - this.time_store[index].hour;
+                this.selectedStayTime.minute = this.selectedStayTime.minute + 60 - this.time_store[index].minute;
+            } else {
+                this.selectedStayTime.hour -= this.time_store[index].hour;
+                this.selectedStayTime.minute -= this.time_store[index].minute;
+            }
+            this.time_store.splice(index, 1);
+        }
     },
 
     created() {
