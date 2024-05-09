@@ -922,10 +922,6 @@ ul li a i {
     position: relative;
 }
 
-.slide-mid  ul  li{
-    height: 20%;
-}
-
 .place-name {
     font-weight: bold;
     font-size: 13px;
