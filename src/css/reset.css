@@ -133,4 +133,10 @@ textarea{
     border-radius: 10px;
 }
 
+input[type="checkbox"]{
+    width: 2em;
+    height: 2em;
+    accent-color: #7755ff;
+}
+
 

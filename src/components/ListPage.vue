@@ -413,11 +413,15 @@ export default {
     font-size: 1em;
     /* position: fixed; */
 }
-.notScrollArea{
+
+.notScrollArea {
     flex: none;
+    margin-bottom: 5%;
 }
-.scrollArea{
+
+.scrollArea {
     overflow: auto;
+    padding-top: 2%;
 }
 
 .side-rightMain {
@@ -513,10 +517,6 @@ a {
     color: #666666;
 }
 
-.checkBox {
-    display: flex;
-}
-
 .side-rightMain>div>span {
     font-size: 2em;
     margin: 1em;
@@ -528,6 +528,47 @@ a {
     align-items: center;
     font-size: 1.5em;
     justify-content: center;
-
 }
+
+input[type="checkbox"] {
+    cursor: pointer;
+    z-index: 10;
+    /* appearance: none;
+    -webkit-appearance: none; */
+    background-color: #666666;
+}
+
+/* .on {
+    width: 20px;
+    height: 20px;
+    background: #ddd;
+    position: absolute;
+}
+
+.checkBox:checked+.on {
+    background: #7788ff;
+}
+
+.on:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkBox:checked+.on:after {
+    display: block;
+}
+
+.on:after {
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    left: 6px;
+    top: 2px;
+} */
 </style>
