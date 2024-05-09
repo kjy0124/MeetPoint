@@ -162,17 +162,50 @@ export default {
                 position: markerPosition,
                 image: markerImage,
             });
-            kakao.maps.event.addListener(marker, 'click', () => {
-                const infowindowContent = `
-                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>${this.place_name}</strong></div>
-                <div style="white-space: nowrap; overflow: hidden; text-overflow; ellipsis;">장소 이름: ${this.placeAddress}</div>`;
 
-                const infowindow = new window.kakao.maps.InfoWindow({
-                    content: infowindowContent,
-                });
-                infowindow.open(this.map, marker);
-            })
+            //인포윈도우 열림 여부 확인 변수
+            let infowindowOpened = false;
 
+            // Geocoder 객체 생성
+            const geocoder = new kakao.maps.services.Geocoder();
+
+            // 중간 지점의 좌표를 주소로 변환하여 가져오기
+            geocoder.coord2Address(this.mpLongitude, this.mpLatitude, (result, status) => {
+                if (status === kakao.maps.services.Status.OK) {
+                    // 주소를 가져오는데 성공했을 때
+                    const address = result[0].address.address_name;
+                    const roadAddress = result[0].road_address;
+                    let name = "";
+                    if (roadAddress) {
+                        name = roadAddress.building_name || ""; // road_address가 존재하면 building_name을 할당, 아니면 빈 문자열 할당
+                    } else {
+                        name = ""; //건물 없을 시 공백처리
+                    }
+
+
+                    console.log(result[0]);
+                    // 마커 클릭 시 인포윈도우에 주소 정보 표시
+                    const infowindowContent = `
+                        <div style="padding:5px;font-size:12px;">
+                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>중간 지점</strong></div>
+                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</div>
+                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">(지번: ${address})</div>
+                        </div>`;
+                    const infowindow = new window.kakao.maps.InfoWindow({
+                        content: infowindowContent,
+                    });
+
+                    kakao.maps.event.addListener(marker, 'click', () => {
+                        if (infowindowOpened) { // 인포윈도우가 열려있다면
+                            infowindow.close(); // 인포윈도우 닫기
+                            infowindowOpened = false; // 열림 여부 변수 업데이트
+                        } else {
+                            infowindow.open(this.map, marker);
+                            infowindowOpened = true; // 열림 여부 변수 업데이트
+                        }
+                    });
+                }
+            });
             //마커 지도에 띄우기
             marker.setMap(this.map);
         },
@@ -297,6 +330,10 @@ export default {
 
         // 모달창의 재탐색 버튼
         modalReSearchClick(){
+            if(this.options == "" && this.address_options == "" ){
+                this.modalOpen = false;
+                return false;
+            }
             const region = ["경기도", "경상남도", "경상북도", "광주광역시", "대구광역시", "대전광역시", "부산광역시", "서울특별시", "울산광역시", "인천광역시", "전라남도", "전라북도", "충청남도", "충청북도"];
             let reSearch_data = { // 재탐색에 필요한 데이터를 보낼 데이터 저장
                 num : 0, // 0이면 시도,시군구 중 하나만 선택하거나, 둘 다 선택한 경우. 1이면 시군구만 선택한 경우
@@ -447,15 +484,24 @@ export default {
                     category: mapCategory //카테고리 정보 저장
                 });
 
-                //마커 클릭 이벤트 등록(24.04.29 수정)
+                //마커 클릭이벤트 (마커 삭제 추가)
                 window.kakao.maps.event.addListener(marker,'click',() => {
-                    //현재 열려있는 정보 창이 있다면 닫기
-                    if(this.infowindow) {
-                        this.infowindow.close();
-                    }
-                    //새로운 정보 창 열기
-                    this.infowindow = new window.kakao.maps.InfoWindow({
-                        content: `
+                    //현재 열려있는 인포윈도우가 있다면 닫기
+                    if (marker.infowindow) {
+                        //마커의 인포윈도우가 열려 있으면 닫기
+                        marker.infowindow.close();
+                        marker.infowindow = null;
+                    } else {
+                        // 모든 마커의 인포윈도우 닫기
+                        this.markers.forEach(otherMarker => {
+                            if (otherMarker.infowindow) {
+                                otherMarker.infowindow.close();
+                                otherMarker.infowindow = null
+                            }
+                        });
+                        //새로운 인포윈도우 열기
+                        marker.infowindow = new window.kakao.maps.InfoWindow({
+                            content: `
                             <div style="padding:5px;font-size:12px;">
                                 <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>${place.place_name}</strong></div>
                                 <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">(지번: ${place.address_name})</div>
@@ -470,18 +516,17 @@ export default {
                                             추가하기
                                     </label>
                                 </div>
-                            </div>`
-                    });
-                    marker.infowindow = this.infowindow; //마커와 인포윈도우를 하나로 묶음
-
-                    this.infowindow.open(this.map, marker);
+                            </div>`    
+                        });
+                    marker.infowindow.open(this.map, marker);
 
                     //button 감지 이벤트
                     const button = document.querySelector('.placeCheckbox'); //.placeChaeckbox 값 찾아서 반환
 
                     if (button) button.addEventListener('click', this.handleCheckboxChange); //버튼 클릭시 HandleCheckboxChange 함수 호출
                     // handleCheckboxChange 호출하며 동시에 event.target 이벤트 활성화, --> 위의 data-name, data-location, data-phone 데이터 값 참조
-                })
+                    }
+                });
                 //생성한 마커를 markers 배열에 추가
                 this.markers.push(marker);
             });
@@ -495,6 +540,7 @@ export default {
                 marker.setMap(null);
                 if (marker.infowindow) {
                     marker.infowindow.close(); // 연결된 정보 창 닫기
+                    marker.infowindow = null; //인포윈도우 객체 초기화
                 }
             });
             this.markers = [];
