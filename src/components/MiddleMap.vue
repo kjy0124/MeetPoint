@@ -83,7 +83,7 @@
         <ul class="list_bubble_filter">
             <li v-for="(category, index) in categories" :key="index">
             <button @click="btnClick(category)" class="epehmC" :class="{ clicked: category_click[category.id] }">
-                <span :class="`category_click.bg ${category.id}`"></span>
+                <span :class="`category_click.bg${category.id}`"></span>
                 {{ category.name }}
             </button>
             </li>
@@ -714,19 +714,23 @@ ul li a i {
     height: 10%;
     flex: none;
 }
+.slide-top h1{
+    font-size: 3em;
+}
 .slide-mid{
-    height: 70%;
+    height: 80%;
     overflow: auto;
 }
 .slide-btm{
-    height: 20%;
+    height: 10%;
     flex: none;
+    margin-top: 1em;
 }
 .toggle_btm {
     position: absolute;
     height: 65px;
     width: 350px;
-    top: 90%;
+    top: 91%;
     left: 22.5px;
     z-index: 1;
     cursor: pointer;
@@ -887,63 +891,56 @@ ul li a i {
     color: #5271ff; /* 글자색 */
 }
 
-.category_list {
+.category_list{
+    width: 45%;
+    height: 4%;
     position: absolute;
-    left: 40%;
+    left: 30%;
     top: 10%;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 4px;
-    background: padding-box padding-box rgb(255, 255, 255);
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 4px 0px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
     white-space: nowrap;
     z-index: 1;
-}
-
-.category_list .list_bubble_filter {
-    padding: 0px 11px;
+    display: flex;
 }
 
 .category_list .list_bubble_filter li {
     display: inline-block;
-    vertical-align: top;
-}
-
-.epehmC {
-    position: relative;
-    padding: 0px 11px 0px;
-    line-height: 9.5px;
-    font-size: 15px;
-    font-weight: 600;
-    color: rgb(36, 36, 36);
 }
 
 .pl {
-    margin-bottom: 5%;
+    margin: 3%;
     display: flex;
     text-align: center;
     align-items: center;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     width: 90%;
-    height: 10%;
+    height: 20%;
     padding: 1em;
-    margin-left: 3%;
-    margin-right: 3%;
-    
     position: relative;
+}
+
+.slide-mid  ul  li{
+    height: 20%;
 }
 
 .place-name {
     font-weight: bold;
     font-size: 13px;
+    text-align: left;
+}
+.place-location{
+    text-align: left;
 }
 .place-phone {
-    margin-top: 5px;
     color: #5271ff;
+    text-align: left;
 }
+
 .place-info {
-    margin-top: 5px;
-    margin-left: 5px;
+    padding-left: 1em;
 }
 
 .delete_img{

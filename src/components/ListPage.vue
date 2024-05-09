@@ -30,6 +30,7 @@
                 <div class="step1">STEP 1 <br>날짜 확인</div>
                 <div class="step2">STEP 2 <br>장소 선택</div>
                 <div class="step3">STEP 3 <br>숙소 설정</div>
+                <div class="step3">STEP 4 <br>카카오톡 URL<br>공유하기</div>
             </div>
             <div class="side-middle">
                 <div class="notScrollArea">
@@ -630,6 +631,12 @@ a {
     align-items: center;
     font-size: 1.5em;
     justify-content: center;
+    width: 90%;
+    height: 8%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    margin-top: 5%;
+    margin-left: 5%;
 }
 
 input[type="checkbox"] {
