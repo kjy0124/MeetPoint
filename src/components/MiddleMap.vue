@@ -56,18 +56,23 @@
                 <h1>Meet Point</h1>
             </div>
             <div class="slide-mid">
-                
-                            <div class="pl" v-for="(space, index) in check_space" :key="index"><!-- check_space 배열에서 리스트 가져오기 -->>
-                                <!-- 리스트 안 체크박스 클릭시 리스트에서 삭제-->
-                                <input type="checkbox" @click="checkboxClear(space)" checked>  
-                                <div class="place-info">
-                                    <!-- 마커의 추가하기 버튼 클릭시 리스트에 추가 -->
-                                    <div class="place-name">{{ space.name }}</div>
-                                    <div class="place-location">{{ space.location }}</div>
-                                    <div class="place-phone">{{ space.phone }}</div>
-                                </div>
+                <ul>
+                    <li v-for="(space, index) in check_space" :key="index">
+                        <!-- check_space 배열에서 리스트 가져오기 -->
+                        <div class="pl">
+                                <!-- 리스트 안 삭제버튼 클릭시 리스트에서 삭제-->
+                            <button class="delete_Btn" @click="checkboxClear(space)" checked>
+                                <img class="delete_img" src="@/assets/삭제버튼.png" alt="삭제">
+                            </button>
+                            <div class="place-info">
+                                <!-- 마커의 추가하기 버튼 클릭시 리스트에 추가 -->
+                                <div class="place-name">{{ space.name }}</div>
+                                <div class="place-location">{{ space.location }}</div>
+                                <div class="place-phone">{{ space.phone }}</div>
                             </div>
-                    
+                        </div>
+                    </li>
+                </ul>               
             </div>
             <div class="slide-btm">
                 <p class="toggle_btm" @click="moveListPage()">일정만들기</p>
@@ -113,18 +118,17 @@ export default {
                 order: false,
             },
             categories: [
-                { id: "BK9", name: "은행" },
-                { id: "MT1", name: "마트" },
-                { id: "SC4", name: "학교"},
                 { id: "CS2", name: "편의점" },
+                { id: "MT1", name: "마트" },
                 { id: "FD6", name: "음식점"},
                 { id: "CE7", name: "카페" },
+                { id: "BK9", name: "은행" },
                 { id: "AD5", name: "숙박" },
+                { id: "CT1", name: "문화시설" },
+                { id: "AT4", name: "관광명소" },
+                { id: "PK6", name: "주차장" },
                 { id: "OL7", name: "주유소" },
-                // { id: "HP8", name: "병원"},
-                // { id: "PM9", name: "약국" },
-                // { id: "CT1", name: "영화관" },
-                // { id: "SW8", name: "지하철역"},
+                { id: "SW8", name: "지하철역"},
             ],
             check_space: [], //체크된 장소
         };
@@ -158,6 +162,16 @@ export default {
                 position: markerPosition,
                 image: markerImage,
             });
+            kakao.maps.event.addListener(marker, 'click', () => {
+                const infowindowContent = `
+                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>${this.place_name}</strong></div>
+                <div style="white-space: nowrap; overflow: hidden; text-overflow; ellipsis;">장소 이름: ${this.placeAddress}</div>`;
+
+                const infowindow = new window.kakao.maps.InfoWindow({
+                    content: infowindowContent,
+                });
+                infowindow.open(this.map, marker);
+            })
 
             //마커 지도에 띄우기
             marker.setMap(this.map);
@@ -514,10 +528,8 @@ export default {
         checkboxClear(space) {
             //체크박스 클릭시 배열에서 삭제
             const index = this.check_space.indexOf(space);
-            console.log(index);
             if (index !== -1) {
                 this.check_space.splice(index, 1);
-                console.log("checkpoint : ", this.check_space);
             }
             // this.check_space.pop(space);
         }
@@ -915,7 +927,10 @@ ul li a i {
     width: 90%;
     height: 10%;
     padding: 1em;
-    margin-left: 5%;
+    margin-left: 3%;
+    margin-right: 3%;
+    
+    position: relative;
 }
 
 .place-name {
@@ -929,6 +944,19 @@ ul li a i {
 .place-info {
     margin-top: 5px;
     margin-left: 5px;
+}
+
+.delete_img{
+    height: 13px;
+    width: 13px;
+}
+
+.delete_Btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
 }
 
 </style>
