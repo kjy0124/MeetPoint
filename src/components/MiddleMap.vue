@@ -891,7 +891,7 @@ ul li a i {
     color: #5271ff; /* 글자색 */
 }
 
-.category_list{
+/* .category_list{
     width: 45%;
     height: 4%;
     position: absolute;
@@ -907,6 +907,49 @@ ul li a i {
 
 .category_list .list_bubble_filter li {
     display: inline-block;
+} */
+.category_list {
+    position: absolute;
+    right: 2%;
+    top: 8%;
+    border-radius: 5px;
+    white-space: nowrap;
+    z-index: 1;
+    display: flex;
+}
+
+.list_bubble_filter {
+    list-style-type: none;
+    padding: 0;
+}
+
+.list_bubble_filter li {
+    display: inline-block;
+    margin-right: 10px; /* 각 버튼 사이의 간격 조절 */
+}
+
+.epehmC {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 20px; /* 둥근 모서리 */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* 호버 효과를 위한 전이 효과 */
+}
+
+.epehmC:hover {
+    background-color: #f0f0f0;
+    border-color: #aaaaaa;
+}
+
+.clicked {
+    background-color: #7788ff; /* 선택된 버튼의 배경색 */
+    color: #ffffff; /* 선택된 버튼의 텍스트 색상 */
+}
+
+.clicked:hover {
+    background-color: #9ea9ff; /* 선택된 버튼에 호버 시 배경색 변경 */
 }
 
 .pl {
