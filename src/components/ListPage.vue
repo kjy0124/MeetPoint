@@ -624,7 +624,7 @@ export default {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     width: 90%;
-    height: 10%;
+    height: 80px;
     padding: 1em;
     margin-left: 5%;
 }
