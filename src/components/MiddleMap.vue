@@ -61,15 +61,16 @@
                         <!-- check_space 배열에서 리스트 가져오기 -->
                         <div class="pl">
                                 <!-- 리스트 안 삭제버튼 클릭시 리스트에서 삭제-->
-                            <button class="delete_Btn" @click="checkboxClear(space)" checked>
-                                <img class="delete_img" src="@/assets/삭제버튼.png" alt="삭제">
-                            </button>
+                            
                             <div class="place-info">
                                 <!-- 마커의 추가하기 버튼 클릭시 리스트에 추가 -->
                                 <div class="place-name">{{ space.name }}</div>
                                 <div class="place-location">{{ space.location }}</div>
                                 <div class="place-phone">{{ space.phone }}</div>
                             </div>
+                            <button class="delete_Btn" @click="checkboxClear(space)" checked>
+                                <img class="delete_img" src="@/assets/삭제버튼.png" alt="삭제">
+                            </button>
                         </div>
                     </li>
                 </ul>               
@@ -250,9 +251,9 @@ export default {
             
             // 쿠키에서 추출한 값을 통해 사용자들 위치 마커 생성
             for(i = 0; i < vm.userData.length; i++) {
-
-                var imageSrc = require('@/assets/location.png'), // 마커이미지의 주소입니다    
-                    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+                const rand0_5 = Math.floor(Math.random()* 6)
+                var imageSrc = require('@/assets/human'+rand0_5+'.png'), // 마커이미지의 주소입니다    
+                    imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기입니다
                     imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
                 var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -863,22 +864,20 @@ ul li a i {
 .modal-ctnt {
     background-color: #fefefe;
     border-radius: 10px;
-    width: 30%;
-    height: 50%;
+    width: 90%;
+    max-width: 600px;
+    height: auto;
     padding: 1.5em;
     box-shadow: 0px 0px 20px rgb(0, 0, 0, .2);
+    margin: 5% auto;
 }
 
 .modal-top-title {
-    color: #a1a1a1a1;
-    font-size: 2.5em;
+    color: #a1a1a1;
+    font-size: 1.5em;
     margin-top: 1em;
     margin-bottom: 0.4em;
-}
-
-.modal-top-title {
-    font-size: 2em;
-    color: #a1a1a1a1;
+    text-align: center;
 }
 
 .top-button-text {
@@ -886,36 +885,53 @@ ul li a i {
     font-size: 1.5em;
 }
 
-.modal-top {
-    margin-bottom: 4em;
-    height: 20%;
+.modal-top .modal-mid {
+    margin-bottom: 2em;
+    text-align: center;
 }
 
-.modal-mid {
-    margin-bottom: 4em;
-    height: 10%;
-}
 
 .modal-btm {
-    margin-top: 4em;
-    height: 20%;
+    margin-top: 2em;
     text-align: right; /* 선택 버튼을 오른쪽 정렬 */
+    display: flex;
+    justify-content: center;
 }
 
 .select-bttn {
-    height: 60px;
-    width: 100px;
+    height: 2em;
+    width: 5em;
     cursor: pointer;
     border-radius: 10px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     text-align: center;
-    font-size: 2em;
+    font-size: 2.3em;
     color: #5271ff;
 }
 
 .select-bttn:hover {
     background-color: rgb(82, 113, 255, .1);
+}
+
+@media (max-width: 600px) {
+    .modal-ctnt {
+        width: 95%;
+    }
+
+    .modal-top-title {
+        font-size: 1.2em;
+    }
+
+    .top-button-text {
+        font-size: 0.9em;
+    }
+
+    .select-bttn {
+        height: 2.5em;
+        width: 6em;
+        font-size: 0.9em;
+    }
 }
 
 /* Ghost 버튼 스타일 */
@@ -1017,6 +1033,7 @@ ul li a i {
 .pl {
     margin: 3%;
     display: flex;
+    justify-content: flex-start;
     text-align: center;
     align-items: center;
     border-radius: 10px;
@@ -1045,14 +1062,13 @@ ul li a i {
 }
 
 .delete_img{
-    height: 13px;
-    width: 13px;
+    height: 20px;
+    width: 20px;
 }
 
 .delete_Btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
+    /* display: flex; */
+    margin-left: auto;
     background: none;
     border: none;
 }
