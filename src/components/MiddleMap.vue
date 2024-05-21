@@ -29,7 +29,7 @@
                     <span class="top-button-text"><button class="btn btn-primary btn-ghost btn8" @click="selectOption('해수욕장',8)">해수욕장</button></span>
                     <span class="top-button-text"><button class="btn btn-primary btn-ghost btn9" @click="selectOption('관광안내소/매표소',9)">관광안내소/매표소</button></span>
                     <div class="modal-btm">
-                        <button class="select-bttn" @click="modalReSearchClick()">재탐색</button>
+                        <button class="select-bttn" @click="modalReSearchClick()">{{ modal_btn_name }}</button>
                     </div>
                 </div>
                 
@@ -98,11 +98,13 @@ export default {
     name: "MiddleMap",
     data() {
         return {
+            modal_btn_name: "닫기", // 재탐색 모달창 생성시 나타나는 버튼명
             modalOpen: false, // 모달 창 해제
             markers: [], // 사용자 위치 마커들 저장
             userData: [], // 사용자들 이름, 주소 데이터
             mpLatitude: "", // 중간좌표 위도
             mpLongitude: "", // 중간좌표 경도
+            mpName: "", // 재탐색을 통해 주소 이름 저장
             address_name: { // 중간 지점 주소 저장 변수 
                 depth1_name: "", // ex : 경상남도
                 depth2_name: "", // ex : 경산시
@@ -132,6 +134,8 @@ export default {
                 { id: "SW8", name: "지하철역"},
             ],
             check_space: [], //체크된 장소
+            addrName: "", // ListPage로 전달할 주소명
+            addrBuildingName : "", // ListPage로 전달할 건물명
         };
     },
     methods: {
@@ -178,11 +182,22 @@ export default {
                     const roadAddress = result[0].road_address;
                     let name = "";
                     if (roadAddress) {
-                        name = roadAddress.building_name || ""; // road_address가 존재하면 building_name을 할당, 아니면 빈 문자열 할당
+                        name = roadAddress.building_name; // road_address가 존재하면 building_name을 할당, 아니면 빈 문자열 할당
+                        // this.addrName = name; // 주소명이 정확하게 있을 경우
+                        if(name) { // 건물명이 있을 경우
+                            this.addrBuildingName = name; // ListPage에 넘길 건물명 이름
+                        } else {
+                            this.addrName = roadAddress.address_name; // ListPage에 넘길 도로주소명
+                        }
                     } else {
                         name = ""; //건물 없을 시 공백처리
+                        this.addrName = address; // 주소명이 정확하게 없을 경우 도로주소를 저장
                     }
 
+                    if (this.mpName){
+                        name = this.mpName;
+                        this.addrBuildingName = name; // 지명
+                    }
 
                     console.log(result[0]);
                     // 마커 클릭 시 인포윈도우에 주소 정보 표시
@@ -190,7 +205,7 @@ export default {
                         <div style="padding:5px;font-size:12px;">
                             <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>중간 지점</strong></div>
                             <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${name}</div>
-                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">(지번: ${address})</div>
+                            <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">지번: ${address})</div>
                         </div>`;
                     const infowindow = new window.kakao.maps.InfoWindow({
                         content: infowindowContent,
@@ -209,10 +224,40 @@ export default {
             });
             //마커 지도에 띄우기
             marker.setMap(this.map);
+            // 여러 마커들을 한눈에 보기 쉽도록 지도 레벨 설정
+            this.allViewMarkers(marker);
+        },
+
+        // 여러 마커들을 한 눈에 보기 위해 지도 범위 재설정
+        allViewMarkers(mpMarker){
+            // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성
+            var bounds = new kakao.maps.LatLngBounds();
+            this.markers.forEach(marker => {
+                // LatLngBounds 객체에 사용자 위치 좌표를 추가
+                bounds.extend(marker.getPosition());
+            })
+            // LatLngBounds 객체에 중간 좌표를 추가
+            bounds.extend(mpMarker.getPosition());
+            // LatLngBounds 객체에 추가된 좌표들을 기준으로 지도의 범위를 재설정
+            // 이때 지도의 중심좌표와 레벨이 변경될 수 있습니다
+            this.map.setBounds(bounds);
         },
 
         moveListPage() {
-            this.$router.push({ name: "ListPage", params: {} });
+            // const vm = this;
+            const mpLatLng = {
+                lat: this.mpLatitude,
+                lon: this.mpLongitude,
+            }
+            sessionStorage.setItem("meetPoint", this.addrName);
+            sessionStorage.setItem("buildingName", this.addrBuildingName);
+            sessionStorage.setItem("mpLatLng", JSON.stringify(mpLatLng));
+            sessionStorage.setItem("selectInfo", JSON.stringify(this.check_space));
+            
+            this.$router.push({ 
+                    path: "/ListPage.page", 
+                    query: {"mpLat" : this.mpLatitude, "mpLon" : this.mpLongitude },
+                });
         },
 
         moveBack() {
@@ -245,7 +290,6 @@ export default {
                 cookie = cookie.split("=");
                 if(cookie[0].includes('USER')) {
                     vm.decode(cookie[1]);
-
                 }
             }
             
@@ -311,6 +355,7 @@ export default {
                 btn.style.backgroundColor = "#5271ff"; // 배경색 변경
                 btn.style.color = '#fff'; // 글자색 변경
             }
+            this.modal_btn_name = (this.address_options == "" && this.options == "") ? '닫기' : '재탐색';
         },
 
         // 모달창의 지역선택에 옵션들을 클릭했을 경우
@@ -326,14 +371,23 @@ export default {
                 btn.style.backgroundColor = "#5271ff"; // 배경색 변경
                 btn.style.color = '#fff'; // 글자색 변경
             }
-
+            // 지역을 선택하지 않으면 버튼이름을 닫기로 설정
+            this.modal_btn_name = (this.address_options == "" && this.options == "") ? '닫기' : '재탐색';
         },
 
         // 모달창의 재탐색 버튼
         modalReSearchClick(){
-            if(this.options == "" && this.address_options == "" ){
+            if(this.modal_btn_name == "닫기" ){
                 this.modalOpen = false;
                 return false;
+            }
+            if(this.address_options == "") {
+                alert("지역을 선택하여 주시기 바랍니다.");
+                return ;
+            }
+            if(this.options == "") {
+                alert("옵션을 한개이상 선택해주시기 바랍니다.");
+                return ;
             }
             const region = ["경기도", "경상남도", "경상북도", "광주광역시", "대구광역시", "대전광역시", "부산광역시", "서울특별시", "울산광역시", "인천광역시", "전라남도", "전라북도", "충청남도", "충청북도"];
             let reSearch_data = { // 재탐색에 필요한 데이터를 보낼 데이터 저장
@@ -373,6 +427,7 @@ export default {
                         console.log("mpLatitude", this.mpLatitude);
                         this.mpLatitude = response.data.latitude; // 새로운 위도
                         this.mpLongitude = response.data.longitude; // 새로운 경도
+                        this.mpName = response.data.name; // 새로운 주소 이름
                         this.initMap(); // 새로운 중간 장소 생성
                         this.options = []; // 재탐색 옵션 선택한 것 초기화
                         this.address_options = []; // 재탐색 옵션에 지역선택한 것 초기화
@@ -529,7 +584,8 @@ export default {
                                         <button type="button" class="placeCheckbox" 
                                             data-name="${place.place_name}"
                                             data-location="${place.address_name}"
-                                            data-phone="${place.phone}">
+                                            data-phone="${place.phone}"
+                                            data-url="${place.place_url}">
                                             추가하기
                                     </label>
                                 </div>
@@ -575,6 +631,7 @@ export default {
             const placeName = event.target.dataset.name;
             const placeLocation = event.target.dataset.location;
             const placePhone = event.target.dataset.phone;
+            const placeUrl = event.target.dataset.url;
 
             //이미 선택된 장소인지 확인(중복 장소 검사)
             const isAlreadyAdded = this.check_space.some(space => { //밑의 조건과 같이 check_space에 데이터 값들의 중복 검사하는 변수
@@ -585,7 +642,7 @@ export default {
             //중복 장소가 아니면 추가
             if (!isAlreadyAdded) {
                 //새로운 장소를 check_space 배열에 추가
-                this.check_space.push({ name: placeName, location: placeLocation, phone: placePhone });
+                this.check_space.push({ name: placeName, location: placeLocation, phone: placePhone, placeUrl: placeUrl });
             }
         },
         checkboxClear(space) {

@@ -86,3 +86,58 @@ ORIGIN_NM		출처명
 FILE_NM			파일명
 BASE_DE			기준일자
 --------------------------------------------------------------
+
+----- 중간지점 좌표와 건물명 또는 주소명을 ListPage에 보여줄 데이터 -----
+CREATE TABLE user_choice.schedule_locations (
+	ID	BIGSERIAL	NOT NULL PRIMARY KEY,
+	MP_NM	VARCHAR(100),
+	MP_LAT	NUMERIC(20,15),
+	MP_LON	NUMERIC(20,15),
+	MP_BUILDING_NM VARCHAR(100),
+	TOTAL_HOUR INT DEFAULT 0,
+	TOTAL_MINUTE INT DEFAULT 0,
+);
+
+-----------------------설명----------------------------------- 
+컬럼영문명	 		 컬럼한글명
+MP_NM				중간지점 주소
+MP_LAT				중간지점 위도
+MP_LON				중간지점 경도
+MP_BUILDING_NM		중간지점 건물명
+TOTAL_HOUR 			총 머무는 시간
+TOTAL_MINUTE 		총 머무는 분
+--------------------------------------------------------------
+
+----- 선택한 장소들을 저장하여 ListPage에 보여줄 데이터 -----
+CREATE TABLE user_choice.selected_place (
+	ID BIGSERIAL NOT NULL PRIMARY KEY,
+	PLACE_LOCATION	VARCHAR(200),
+	PLACE_NM	VARCHAR(100),
+	PLACE_PHONE_NUM VARCHAR(50),
+	PLACE_URL	VARCHAR(1000),
+	MP_ID INT NOT NULL REFERENCES user_choice.schedule_locations (id) ON DELETE CASCADE
+);
+
+-----------------------설명----------------------------------- 
+컬럼영문명	 		컬럼한글명
+PLACE_LOCATION		장소 위치
+PLACE_NM			장소 이름
+PLACE_PHONE_NUM 	장소 전화번호
+PLACE_URL			장소 url
+MP_ID 				schedule_locations 외래키	
+--------------------------------------------------------------
+
+----- 방문할 장소에 머무는 시간 -----
+CREATE TABLE user_choice.stay_time_places_to_visit (
+	ID BIGSERIAL NOT NULL PRIMARY KEY,
+	PV_HOUR SMALLINT DEFAULT 2,
+	PV_MINUTE SMALLINT DEFAULT 0,
+	SP_ID INT NOT NULL REFERENCES user_choice.selected_place (id) ON DELETE CASCADE
+);
+
+-----------------------설명----------------------------------- 
+컬럼영문명	 		 컬럼한글명
+PV_HOUR				머무는 시간
+PV_MINUTE			머무는 분
+SP_ID 				selected_place 외래키	
+--------------------------------------------------------------
