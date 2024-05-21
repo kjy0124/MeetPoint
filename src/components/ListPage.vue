@@ -38,8 +38,8 @@
                         <h2 class="meetPoint">{{ meetPoint }}</h2>
                         <p v-if="!selectedEndDate || !selectedStartDate">일정을 입력해주세요!</p>
                         <p v-if="selectedStartDate && selectedEndDate">{{ selectedStartDate + '(' +
-                            this.selectedStartDay +
-                            ')' }}
+            this.selectedStartDay +
+            ')' }}
                             ~ {{ selectedEndDate + '(' + this.selectedEndDay + ')' }}</p>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
             <!-- <div v-for="(DiffDate, i) in selectedDiffDate+1" :key="i" :class="[`side-right${i+1}`]" ></div> -->
             <div class="side-rightMain">
                 <h2 class="total-time">{{ selectedStayTime.hour + '시간 ' + selectedStayTime.minute + '분 / ' +
-                    selectedDiffHour + '시간 0분' }}</h2>
+            selectedDiffHour + '시간 0분' }}</h2>
                 <div class="scrollArea2">
                     <div v-for="(info, i) in addCheckInfoList" :key="i" class="addCheckInfoList">
                         <div class="infoList-left">
@@ -70,7 +70,7 @@
                             </div>
                             <div class="lL">
                                 <button @click="timeSet(i)" :class="'timeSet' + i">{{
-                                    time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
+            time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
                             </div>
                             <p :class="'timeSetClose' + i" style="display: none;">머무는 시간 설정</p>
                             <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;"
@@ -83,13 +83,31 @@
                         </div>
                     </div>
                 </div>
+                <div class="share-button">
+                    <button id="share_button" @click="openShareModal()">
+                        <img class="share_img" src="@/assets/공유버튼.png" alt="공유">
+                    </button>
+                </div>>
             </div>
         </div>
         <div class="map-wrap">
             <div id="map"></div>
         </div>
     </div>
-
+    <!--공유하기 버튼 클릭할 때 나오는 모달 창 -->
+    <div class="share_modal" v-if="modalOpen2">
+        <div class="share_modal_content">
+            <div class="share_modal_content_top">
+                <img class="closeShareModal" src="@/assets/삭제버튼.png" alt="뒤로가기" @click="closeShareModal2()">
+            </div>
+            <button id="kakao-share-button" @click="sharekakao()">
+                <img class="kakao_img" src="@/assets/카카오톡로고.png" alt="카카오톡공유">
+            </button>
+            <button id="kakao-link-button">
+                <img class="link_img" src="@/assets/링크.png" alt="링크공유">
+            </button>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -99,6 +117,7 @@ export default {
     data() {
         return {
             modalOpen: false, //모달의 상태 여부
+            modalOpen2: false,
             selectedStartDate: null, //일정 시작 날짜
             selectedStartDay: null, //일정 시작 날짜 요일
             selectedEndDate: null, //일정 종료 날짜
@@ -369,6 +388,75 @@ export default {
                 this.selectedStayTime.minute -= this.time_store[index].minute;
             }
             this.time_store.splice(index, 1);
+        },
+        loadKakaoScript() {
+            if (!window.Kakao || !window.Kakao.isInitialized()) {//window.Kakao 객체가 초기화 되지 않았다면
+                const script = document.createElement('script');
+                script.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js';//카카오톡 공유를 위한 카카오 sdk 호출
+                script.integrity = 'sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01';//스크립트 무결성 검증을 위한 해시 설정(없어도 됨)
+                script.crossOrigin = 'anonymous';// 스크립트 보안 강화 기능(없어도 됨)
+                script.onload = this.initKakaoShare;//스크립트 로드 시 initKakaoShare 함수 콜백
+                document.head.appendChild(script);
+            } else {
+                //Kakao 객체가 초기화된 경우 initKakaoShare 함수 호출
+                this.initKakaoShare();
+            }
+        },
+        initKakaoShare() {
+            //Kakao 객체 상태 확인
+            if (window.Kakao && !window.Kakao.isInitialized()) {
+                //Kakao 초기화
+                window.Kakao.init('bf8710c35ec333b84272056c6f3d32e8');
+            }
+        },
+        sharekakao() {
+            //Kakao 객체가 존재하고 초기화된 경우
+            if (window.Kakao && window.Kakao.isInitialized()) {
+                // 카카오 공유를 위한 content 객체 생성
+                const content = {
+                    title: '일정과 시간을 공유합니다.',
+                    description: this.generateDescription(), //설명 생성 함수 호출
+                    link: {
+                        mobileWebUrl: 'http://localhost:1024/ListPage.page',
+                        webUrl: 'http://localhost:1024/ListPage.page',
+                    }
+                }
+                window.Kakao.Share.createDefaultButton({
+                    container: '#kakao-share-button', // 컨테이너 지정
+                    objectType: 'feed',
+                    content: content,
+                    buttons: [
+                        {
+                            title: '웹으로 보기',
+                            link: {
+                                mobileWebUrl: 'http://localhost:1024/ListPage.page',
+                                webUrl: 'http://localhost:1024/ListPage.page',
+                            },
+                        },
+                    ],
+                });
+            }
+        },
+
+        //description 부분에 들어가는 내용 추가
+        generateDescription() {
+            let description = '';
+            //각 체크인 정보를 반복하면서 설명 문자열 생성
+            this.addCheckInfoList.forEach((info, index) => {
+                description += `${index + 1}. 장소: ${info.placeName}\n`;
+                description += `   주소: ${info.placeAddress}\n`;
+                description += `   전화번호: ${info.placeCallNum}\n`;
+                description += `   머무는 시간: ${this.time_store[index].hour}시간 ${this.time_store[index].minute}분\n\n`;
+            });
+            //머무는 시간 추가
+            description += `총 머무는 시간: ${this.selectedStayTime.hour}시간 ${this.selectedStayTime.minute}분\n`;
+            return description; // 생성된 설명 반환
+        },
+        openShareModal() {
+            this.modalOpen2 = true;
+        },
+        closeShareModal2() {
+            this.modalOpen2 = false;
         }
     },
 
@@ -381,12 +469,17 @@ export default {
         } else {
             const script = document.createElement("script");
             /* global kakao */
-            script.onload = () => window.kakao.maps.load(this.initMap);
+            script.onload = () => {
+                kakao.maps.load(() => {
+                    this.initMap();
+                });
+            };
             script.src =
                 "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services";
             document.head.appendChild(script);
             console.log("kakao mounted");
         }
+        this.loadKakaoScript();
     },
 
 }
@@ -654,13 +747,16 @@ a {
     display: flex;
     width: 90%;
 }
-.rR{
+
+.rR {
     width: 50%;
 }
-.lL{
+
+.lL {
     width: 50%;
 }
-.lL > button{
+
+.lL>button {
     white-space: nowrap;
     font-size: 1em;
     font-weight: 700;
@@ -734,4 +830,72 @@ input[type="checkbox"] {
     left: 6px;
     top: 2px;
 } */
+/* 공유하기 */
+.share_modal {
+    /* 모달의 크기 조절 */
+    width: 400px;
+    height: 300px;
+    /* 기타 스타일링 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+.share-button {
+    position: absolute;
+    bottom: 10px;
+    /* 조정 가능한 값 */
+    right: 10px;
+    /* 조정 가능한 값 */
+}
+
+.share-button button {
+    width: 30px;
+    /* 조정 가능한 값 */
+    height: 30px;
+    /* 조정 가능한 값 */
+}
+
+.share_img {
+    width: 100%;
+    /* 이미지 크기를 버튼에 맞춤 */
+}
+
+.share_modal_content {
+    display: flex;
+    justify-content: space-around;
+    /* 아이콘을 가로로 배치합니다. */
+    align-items: center;
+}
+
+.share_modal_content button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.kakao_img,
+.link_img {
+    width: 40px;
+    /* 아이콘의 크기를 조정합니다. */
+    height: 40px;
+}
+
+.share_modal_content_top {
+    /* 삭제 버튼 스타일링 */
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.closeShareModal {
+    width: 15px;
+    height: 15px;
+}
 </style>
