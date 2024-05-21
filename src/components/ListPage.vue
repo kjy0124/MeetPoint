@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="share-button">
-                    <button id="kakao-share-button" @click="sharekakao()">
+                    <button id="share_button" @click="openShareModal()">
                         <img class="share_img" src="@/assets/공유버튼.png" alt="공유">
                     </button>
                 </div>>
@@ -94,7 +94,20 @@
             <div id="map"></div>
         </div>
     </div>
-
+    <!--공유하기 버튼 클릭할 때 나오는 모달 창 -->
+    <div class="share_modal" v-if="modalOpen2">
+        <div class="share_modal_content">
+            <div class="share_modal_content_top">
+                <img class="closeShareModal" src="@/assets/삭제버튼.png" alt="뒤로가기" @click="closeShareModal2()">
+            </div>
+            <button id="kakao-share-button" @click="sharekakao()">
+                <img class="kakao_img" src="@/assets/카카오톡로고.png" alt="카카오톡공유">
+            </button>
+            <button id="kakao-link-button">
+                <img class="link_img" src="@/assets/링크.png" alt="링크공유">
+            </button>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -104,6 +117,7 @@ export default {
     data() {
         return {
             modalOpen: false, //모달의 상태 여부
+            modalOpen2: false,
             selectedStartDate: null, //일정 시작 날짜
             selectedStartDay: null, //일정 시작 날짜 요일
             selectedEndDate: null, //일정 종료 날짜
@@ -438,6 +452,12 @@ export default {
             description += `총 머무는 시간: ${this.selectedStayTime.hour}시간 ${this.selectedStayTime.minute}분\n`;
             return description; // 생성된 설명 반환
         },
+        openShareModal() {
+            this.modalOpen2 = true;
+        },
+        closeShareModal2() {
+            this.modalOpen2 = false;
+        }
     },
 
     created() {
@@ -811,6 +831,20 @@ input[type="checkbox"] {
     top: 2px;
 } */
 /* 공유하기 */
+.share_modal {
+    /* 모달의 크기 조절 */
+    width: 400px;
+    height: 300px;
+    /* 기타 스타일링 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
 .share-button {
     position: absolute;
     bottom: 10px;
@@ -829,5 +863,39 @@ input[type="checkbox"] {
 .share_img {
     width: 100%;
     /* 이미지 크기를 버튼에 맞춤 */
+}
+
+.share_modal_content {
+    display: flex;
+    justify-content: space-around;
+    /* 아이콘을 가로로 배치합니다. */
+    align-items: center;
+}
+
+.share_modal_content button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.kakao_img,
+.link_img {
+    width: 40px;
+    /* 아이콘의 크기를 조정합니다. */
+    height: 40px;
+}
+
+.share_modal_content_top {
+    /* 삭제 버튼 스타일링 */
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.closeShareModal {
+    width: 15px;
+    height: 15px;
 }
 </style>
