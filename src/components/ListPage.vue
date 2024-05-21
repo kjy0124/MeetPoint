@@ -47,10 +47,10 @@
                     <div class="selectInfo" v-for="(info, i) in selectInfo" :key="i">
                         <input class="checkBox" type="checkbox" @change="addCheckInfo(i)">
                         <div class="infoWarper">
-                            <h2>{{ info.placeName }}</h2>
-                            <h3>{{ info.placeAddress }}</h3>
-                            <h3>{{ info.placeCallNum }}</h3>
-                            <a href="">상세보기</a>
+                            <h2>{{ info.name }}</h2>
+                            <h3>{{ info.location }}</h3>
+                            <h3>{{ info.phone }}</h3>
+                            <a :href=info.placeUrl target="_blank">상세보기</a>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         </div>
                         <div class="infoList-right">
                             <div class="rR">
-                                <h3 :class="'timeSet' + i">{{ info.placeName }}</h3>
+                                <h3 :class="'timeSet' + i">{{ info.name }}</h3>
                             </div>
                             <div class="lL">
                                 <button @click="timeSet(i)" :class="'timeSet' + i">{{
@@ -85,7 +85,7 @@
                 </div>
                 <div class="share-button">
                     <button id="share_button" @click="openShareModal()">
-                        <img class="share_img" src="@/assets/공유버튼.png" alt="공유">
+                        <img class="share_img" src="@/assets/공유버튼.png" alt="공유" >
                     </button>
                 </div>>
             </div>
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 export default {
     name: "ListPage",
     data() {
@@ -124,58 +124,59 @@ export default {
             selectedEndDay: null, //일정 종료 날짜 요일
             selectedDiffDate: null, //일정 일수 차이 값
             selectedDiffHour: null, //총 일정 수의 시간 값
-            meetPoint: '동성로', //이전 페이지의 중간지점 주소
+            meetPoint: '', //이전 페이지의 중간지점 주소
+            mpBuildingName: '', // 이전 페이지의 건물명
             selectInfo: [ //이전 페이지에서 체크박스 선택한 장소들의 오브젝트
-                {
-                    placeName: '서문시장',
-                    placeAddress: '대구 중구 큰장로26길 45',
-                    placeCallNum: '053-356-6944'
-                },
-                {
-                    placeName: '스파크 랜드',
-                    placeAddress: '대구 중구 동성로6길 61',
-                    placeCallNum: '053-230-2010'
-                },
-                {
-                    placeName: 'CGV 대구한일',
-                    placeAddress: '대구 중구 동성로 39 씨네시티한일 7층',
-                    placeCallNum: '1544-1122'
-                },
-                {
-                    placeName: '전원돈까스',
-                    placeAddress: '대구 중구 동성로6길 2-23',
-                    placeCallNum: '053-424-8220'
-                },
-                {
-                    placeName: '엘디스리젠트호텔',
-                    placeAddress: '대구 중구 달구벌대로 2033',
-                    placeCallNum: '053-235-7711'
-                },
-                {
-                    placeName: '서문시장',
-                    placeAddress: '대구 중구 큰장로26길 45',
-                    placeCallNum: '053-356-6944'
-                },
-                {
-                    placeName: '스파크 랜드',
-                    placeAddress: '대구 중구 동성로6길 61',
-                    placeCallNum: '053-230-2010'
-                },
-                {
-                    placeName: 'CGV 대구한일',
-                    placeAddress: '대구 중구 동성로 39 씨네시티한일 7층',
-                    placeCallNum: '1544-1122'
-                },
-                {
-                    placeName: '전원돈까스',
-                    placeAddress: '대구 중구 동성로6길 2-23',
-                    placeCallNum: '053-424-8220'
-                },
-                {
-                    placeName: '엘디스리젠트호텔',
-                    placeAddress: '대구 중구 달구벌대로 2033',
-                    placeCallNum: '053-235-7711'
-                },
+                // {
+                //     placeName: '서문시장',
+                //     placeAddress: '대구 중구 큰장로26길 45',
+                //     placeCallNum: '053-356-6944'
+                // },
+                // {
+                //     placeName: '스파크 랜드',
+                //     placeAddress: '대구 중구 동성로6길 61',
+                //     placeCallNum: '053-230-2010'
+                // },
+                // {
+                //     placeName: 'CGV 대구한일',
+                //     placeAddress: '대구 중구 동성로 39 씨네시티한일 7층',
+                //     placeCallNum: '1544-1122'
+                // },
+                // {
+                //     placeName: '전원돈까스',
+                //     placeAddress: '대구 중구 동성로6길 2-23',
+                //     placeCallNum: '053-424-8220'
+                // },
+                // {
+                //     placeName: '엘디스리젠트호텔',
+                //     placeAddress: '대구 중구 달구벌대로 2033',
+                //     placeCallNum: '053-235-7711'
+                // },
+                // {
+                //     placeName: '서문시장',
+                //     placeAddress: '대구 중구 큰장로26길 45',
+                //     placeCallNum: '053-356-6944'
+                // },
+                // {
+                //     placeName: '스파크 랜드',
+                //     placeAddress: '대구 중구 동성로6길 61',
+                //     placeCallNum: '053-230-2010'
+                // },
+                // {
+                //     placeName: 'CGV 대구한일',
+                //     placeAddress: '대구 중구 동성로 39 씨네시티한일 7층',
+                //     placeCallNum: '1544-1122'
+                // },
+                // {
+                //     placeName: '전원돈까스',
+                //     placeAddress: '대구 중구 동성로6길 2-23',
+                //     placeCallNum: '053-424-8220'
+                // },
+                // {
+                //     placeName: '엘디스리젠트호텔',
+                //     placeAddress: '대구 중구 달구벌대로 2033',
+                //     placeCallNum: '053-235-7711'
+                // },
             ],
             addCheckInfoList: [], // 체크한 장소 정보를 담을 배열 추가
             markers: [],
@@ -191,9 +192,62 @@ export default {
             // 중복방지를 위해 이전 시간 저장
             beforeTime: [],
 
+            // 중간지점 마커 위도 경도
+            mpLatLng : {
+                lat: 0,
+                lng: 0,
+            },
+
+            // 중간지점 마커 클릭 여부
+            infowindowOpened : false,
+
         }
     },
     methods: {
+        // 공유버튼
+        // shareClick() {
+        //     this.storePlace();
+        // },
+        // 공유하기위해 데이터를 DB에 저장
+        storePlace() {
+            // 체크박스로 선택한 장소들에 머무는 시간까지 같이 저장하도록 하기 위해 선언
+            let newAddCheckInfoList = this.addCheckInfoList;
+            newAddCheckInfoList.forEach((place, index) => {
+                place.hour = this.time_store[index].hour;
+                place.minute = this.time_store[index].minute;
+            })
+            const data = {
+                meetPoint: this.meetPoint,
+                buildingName : this.mpBuildingName,
+                mpLat : this.mpLatLng.lat,
+                mpLon : this.mpLatLng.lng,
+                selectInfo : this.selectInfo, // middleMap에서 선택한 장소들
+                addCheckInfoList : newAddCheckInfoList, // 머무는 시간을 설정한 장소들
+                stayTimeHour : this.selectedStayTime.hour,
+                stayTimeMinute : this.selectedStayTime.minute,
+                // time_store : this.time_store, // 각 장소별로 머무는 시간을 
+            }
+            console.log("data", data);
+            axios({
+                method: 'post',
+                header: { 'Content-Type': 'application/json; charset=UTF-8' },
+                url: "/choice/storePlace",
+                data: data,
+            })
+                .then((response) => {
+                    console.log("moveListPage - response", response.data);
+                    if(response.data.index > 0){
+                        alert("성공적으로 저장하였습니다.^^")
+                    } else {
+                        alert("실패하였습니다.")
+                    }
+                })
+                .catch(function(error) {
+                    console.log("error", error);
+                    alert("데이터를 저장하는데 오류가 발생하였습니다.");
+                })
+        },
+
         // 머무는 시간 설정
         timeSet(index) {
             var classNames = document.querySelectorAll(".timeSet" + index);
@@ -212,7 +266,7 @@ export default {
                 this.beforeTime[index].minute = this.time_store[index].minute;
             } else {
                 const time = {
-                    hour: 0,
+                    hour: 2,
                     minute: 0
                 };
                 this.beforeTime.push(time);
@@ -284,13 +338,50 @@ export default {
         initMap() {
             const container = document.getElementById("map");
             const options = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                center: new kakao.maps.LatLng(this.mpLatLng.lat, this.mpLatLng.lng),
                 level: 5,
             };
 
             //지도 객체를 등록합니다.
             //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
             this.map = new kakao.maps.Map(container, options);
+
+            // 중간지점 마커생성
+            this.middlePoint();
+        },
+
+        // 중간지점 마커 생성
+        middlePoint(){
+            const imageSrc = require('@/assets/중간지점.png');
+            const imageSize = new window.kakao.maps.Size(50, 50);
+            const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+
+            const coords = new window.kakao.maps.LatLng(this.mpLatLng.lat, this.mpLatLng.lng);
+            const marker = new window.kakao.maps.Marker({
+                position: coords,
+                image: markerImage,
+            });
+
+            const infowindowContent = `
+                <div style="padding:5px;font-size:12px;">
+                    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>중간 지점</strong></div>
+                    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${this.mpBuildingName}</div>
+                    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${this.meetPoint}</div>
+                </div>`;
+            const infowindow = new window.kakao.maps.InfoWindow({
+                content: infowindowContent,
+            });
+
+            kakao.maps.event.addListener(marker, 'click', () => {
+                if (this.infowindowOpened) { // 인포윈도우가 열려있다면
+                    infowindow.close(); // 인포윈도우 닫기
+                    this.infowindowOpened = false; // 열림 여부 변수 업데이트
+                } else {
+                    infowindow.open(this.map, marker);
+                    this.infowindowOpened = true; // 열림 여부 변수 업데이트
+                }
+            });
+            marker.setMap(this.map);
         },
 
         addCheckInfo(index) {
@@ -314,7 +405,7 @@ export default {
 
         addMarker(index) {
             // 장소의 주소를 가져옴
-            const address = this.selectInfo[index].placeAddress;
+            const address = this.selectInfo[index].location;
 
             // 카카오맵의 Geocoder 서비스를 이용하여 주소를 좌표로 변환
             const geocoder = new window.kakao.maps.services.Geocoder();
@@ -331,7 +422,7 @@ export default {
 
                     // 인포윈도우로 장소에 대한 설명을 표시합니다.
                     const infowindow = new kakao.maps.InfoWindow({
-                        content: `<div style="width:150px;text-align:center;padding:6px 0;">${this.selectInfo[index].placeName}</div>`
+                        content: `<div style="width:150px;text-align:center;padding:6px 0;">${this.selectInfo[index].name}</div>`
                     });
                     infowindow.open(this.map, marker);
 
@@ -351,10 +442,13 @@ export default {
         addTime() {
             // 머무는 시간을 설정할 시 분 초기값
             const time = {
-                hour: 0,
+                hour: 2,
                 minute: 0,
             }
             this.time_store.push(time);
+            this.time_store.push(time);
+            this.selectedStayTime.hour += time.hour;
+            this.selectedStayTime.minute += time.minute;
         },
 
         removeMarker(index) {
@@ -410,6 +504,7 @@ export default {
             }
         },
         sharekakao() {
+            this.storePlace();
             //Kakao 객체가 존재하고 초기화된 경우
             if (window.Kakao && window.Kakao.isInitialized()) {
                 // 카카오 공유를 위한 content 객체 생성
@@ -417,8 +512,8 @@ export default {
                     title: '일정과 시간을 공유합니다.',
                     description: this.generateDescription(), //설명 생성 함수 호출
                     link: {
-                        mobileWebUrl: 'http://localhost:1024/ListPage.page',
-                        webUrl: 'http://localhost:1024/ListPage.page',
+                        mobileWebUrl: 'http://localhost/ListPage.page?where=3',
+                        webUrl: 'http://localhost/ListPage.page?where=3',
                     }
                 }
                 window.Kakao.Share.createDefaultButton({
@@ -429,8 +524,8 @@ export default {
                         {
                             title: '웹으로 보기',
                             link: {
-                                mobileWebUrl: 'http://localhost:1024/ListPage.page',
-                                webUrl: 'http://localhost:1024/ListPage.page',
+                                mobileWebUrl: 'http://localhost/ListPage.page?where=3',
+                                webUrl: 'http://localhost/ListPage.page?where=3',
                             },
                         },
                     ],
@@ -457,13 +552,65 @@ export default {
         },
         closeShareModal2() {
             this.modalOpen2 = false;
-        }
+        },
+
+        // 세션스토리지에 저장된 데이터를 가져와서 초기값 설정
+        getSessionStorageData() {
+            this.meetPoint = sessionStorage.getItem("meetPoint"); 
+            this.mpBuildingName = sessionStorage.getItem("buildingName");
+            const mp = JSON.parse(sessionStorage.getItem("mpLatLng"));
+            this.mpLatLng.lat = mp.lat;
+            this.mpLatLng.lng = mp.lon;
+            this.selectInfo = JSON.parse(sessionStorage.getItem("selectInfo"));
+        },
+
+        // DB에 조회할 인덱스 값을 통해 저장된 데이터 가져온 후 초기값 설정
+        fetchPlaceData(index){
+            
+            axios({
+                method: 'post',
+                header: { 'Content-Type': 'application/json; charset=UTF-8' },
+                url: "/choice/selectPlace",
+                data: { "index" : index },
+            })
+                .then((response) => {
+                    console.log("response.data",response.data);
+                    if(response.data){
+                        this.meetPoint = response.data.meetpoint; 
+                        this.mpBuildingName = response.data.mpbuildingname;
+                        this.mpLatLng.lat = response.data.lat;
+                        this.mpLatLng.lng = response.data.lon;
+                        this.selectInfo = response.data.selectInfo;
+                        this.addCheckInfoList = response.data.addCheckInfoList;
+                        this.addCheckInfoList.forEach((place) =>{
+                            const time = {
+                                hour: place.hour,
+                                minute: place.minute
+                            }
+                            this.time_store.push(time);
+                        })
+                        this.selectedStayTime.hour = response.data.staytimehour;
+                        this.selectedStayTime.minute = response.data.staytimeminute;
+                    }
+                })
+                .catch(function(error){
+                    console.log("Error", error);
+                    alert("error 확인 필요");
+                })
+        },
     },
 
     created() {
 
     },
     mounted() {
+        // 세션스토리지에 데이터가 있는지 확인
+        if(sessionStorage.getItem("mpLatLng")){
+            this.getSessionStorageData();
+        } else {
+            const idx = this.$route.query.where;
+            this.fetchPlaceData(idx);
+        }
         if (window.kakao && window.kakao.maps) {
             this.initMap();
         } else {
