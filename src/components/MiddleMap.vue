@@ -158,8 +158,8 @@ export default {
 
             const imageSrc = require('@/assets/중간지점.png');
             const imageSize = new kakao.maps.Size(50, 50);
-            const imageOption =  { offset: new kakao.maps.Point(27, 69) };
-            const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+            // const imageOption =  { offset: new kakao.maps.Point(27, 69) }
+            const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
             //중간 지점 마커 생성
             const markerPosition = new window.kakao.maps.LatLng(this.mpLatitude, this.mpLongitude);
@@ -297,10 +297,10 @@ export default {
             for(i = 0; i < vm.userData.length; i++) {
                 const rand0_5 = Math.floor(Math.random()* 6)
                 var imageSrc = require('@/assets/human'+rand0_5+'.png'), // 마커이미지의 주소입니다    
-                    imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기입니다
-                    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                    imageSize = new kakao.maps.Size(50, 50) // 마커이미지의 크기입니다
+                    // imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-                var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+                var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
 
                 // 마커를 생성합니다
                 var marker = new window.kakao.maps.Marker({
