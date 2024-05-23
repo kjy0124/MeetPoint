@@ -54,7 +54,7 @@
             </div>
             <div class="modal-content-btm">
                 <div class="input-wrapper">
-                    <input class="input-location" @input="handLeInput" placeholder="어디에서 출발하나요?" type="text"
+                    <input class="input-location" @input="handLeInput" @keyup.enter="searchLocations" placeholder= "어디에서 출발하나요?" type="text"
                         id="location" v-model="location" maxlength="36" />
                     <!-- 장소 검색-->
                     <button @click="searchLocations">

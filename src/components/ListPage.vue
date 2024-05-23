@@ -84,28 +84,14 @@
                     </div>
                 </div>
                 <div class="share-button">
-                    <button id="share_button" @click="openShareModal()">
-                        <img class="share_img" src="@/assets/공유버튼.png" alt="공유" >
+                    <button id="share_button" @click="sharekakao()">
+                        <img class="share_img" src="@/assets/카카오톡로고.png" alt="공유">
                     </button>
                 </div>>
             </div>
         </div>
         <div class="map-wrap">
             <div id="map"></div>
-        </div>
-    </div>
-    <!--공유하기 버튼 클릭할 때 나오는 모달 창 -->
-    <div class="share_modal" v-if="modalOpen2">
-        <div class="share_modal_content">
-            <div class="share_modal_content_top">
-                <img class="closeShareModal" src="@/assets/삭제버튼.png" alt="뒤로가기" @click="closeShareModal2()">
-            </div>
-            <button id="kakao-share-button" @click="sharekakao()">
-                <img class="kakao_img" src="@/assets/카카오톡로고.png" alt="카카오톡공유">
-            </button>
-            <button id="kakao-link-button">
-                <img class="link_img" src="@/assets/링크.png" alt="링크공유">
-            </button>
         </div>
     </div>
 </template>
@@ -127,56 +113,6 @@ export default {
             meetPoint: '', //이전 페이지의 중간지점 주소
             mpBuildingName: '', // 이전 페이지의 건물명
             selectInfo: [ //이전 페이지에서 체크박스 선택한 장소들의 오브젝트
-                // {
-                //     placeName: '서문시장',
-                //     placeAddress: '대구 중구 큰장로26길 45',
-                //     placeCallNum: '053-356-6944'
-                // },
-                // {
-                //     placeName: '스파크 랜드',
-                //     placeAddress: '대구 중구 동성로6길 61',
-                //     placeCallNum: '053-230-2010'
-                // },
-                // {
-                //     placeName: 'CGV 대구한일',
-                //     placeAddress: '대구 중구 동성로 39 씨네시티한일 7층',
-                //     placeCallNum: '1544-1122'
-                // },
-                // {
-                //     placeName: '전원돈까스',
-                //     placeAddress: '대구 중구 동성로6길 2-23',
-                //     placeCallNum: '053-424-8220'
-                // },
-                // {
-                //     placeName: '엘디스리젠트호텔',
-                //     placeAddress: '대구 중구 달구벌대로 2033',
-                //     placeCallNum: '053-235-7711'
-                // },
-                // {
-                //     placeName: '서문시장',
-                //     placeAddress: '대구 중구 큰장로26길 45',
-                //     placeCallNum: '053-356-6944'
-                // },
-                // {
-                //     placeName: '스파크 랜드',
-                //     placeAddress: '대구 중구 동성로6길 61',
-                //     placeCallNum: '053-230-2010'
-                // },
-                // {
-                //     placeName: 'CGV 대구한일',
-                //     placeAddress: '대구 중구 동성로 39 씨네시티한일 7층',
-                //     placeCallNum: '1544-1122'
-                // },
-                // {
-                //     placeName: '전원돈까스',
-                //     placeAddress: '대구 중구 동성로6길 2-23',
-                //     placeCallNum: '053-424-8220'
-                // },
-                // {
-                //     placeName: '엘디스리젠트호텔',
-                //     placeAddress: '대구 중구 달구벌대로 2033',
-                //     placeCallNum: '053-235-7711'
-                // },
             ],
             addCheckInfoList: [], // 체크한 장소 정보를 담을 배열 추가
             markers: [],
@@ -193,13 +129,13 @@ export default {
             beforeTime: [],
 
             // 중간지점 마커 위도 경도
-            mpLatLng : {
+            mpLatLng: {
                 lat: 0,
                 lng: 0,
             },
 
             // 중간지점 마커 클릭 여부
-            infowindowOpened : false,
+            infowindowOpened: false,
 
         }
     },
@@ -218,13 +154,13 @@ export default {
             })
             const data = {
                 meetPoint: this.meetPoint,
-                buildingName : this.mpBuildingName,
-                mpLat : this.mpLatLng.lat,
-                mpLon : this.mpLatLng.lng,
-                selectInfo : this.selectInfo, // middleMap에서 선택한 장소들
-                addCheckInfoList : newAddCheckInfoList, // 머무는 시간을 설정한 장소들
-                stayTimeHour : this.selectedStayTime.hour,
-                stayTimeMinute : this.selectedStayTime.minute,
+                buildingName: this.mpBuildingName,
+                mpLat: this.mpLatLng.lat,
+                mpLon: this.mpLatLng.lng,
+                selectInfo: this.selectInfo, // middleMap에서 선택한 장소들
+                addCheckInfoList: newAddCheckInfoList, // 머무는 시간을 설정한 장소들
+                stayTimeHour: this.selectedStayTime.hour,
+                stayTimeMinute: this.selectedStayTime.minute,
                 // time_store : this.time_store, // 각 장소별로 머무는 시간을 
             }
             console.log("data", data);
@@ -236,13 +172,13 @@ export default {
             })
                 .then((response) => {
                     console.log("moveListPage - response", response.data);
-                    if(response.data.index > 0){
-                        alert("성공적으로 저장하였습니다.^^")
+                    if (response.data.index > 0) {
+                        // alert("성공적으로 저장하였습니다.^^")
                     } else {
                         alert("실패하였습니다.")
                     }
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log("error", error);
                     alert("데이터를 저장하는데 오류가 발생하였습니다.");
                 })
@@ -351,7 +287,7 @@ export default {
         },
 
         // 중간지점 마커 생성
-        middlePoint(){
+        middlePoint() {
             const imageSrc = require('@/assets/중간지점.png');
             const imageSize = new window.kakao.maps.Size(50, 50);
             const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
@@ -384,6 +320,29 @@ export default {
             marker.setMap(this.map);
         },
 
+        updateMapBounds() {
+            if (this.addCheckInfoList.length === 0) return; //선택된 장소가 없을 시 종료
+            const bounds = new kakao.maps.LatLngBounds(); //LatLngBounds 객체 생성
+            //중간지점 마커를 포함한 모든 마커들을 boudns에 추가
+            bounds.extend(new kakao.maps.LatLng(this.mpLatLng.lat, this.mpLatLng.lng));
+
+            this.addCheckInfoList.forEach(info => { //addCheckList에 있는 각 주소에 대한 반복
+                const address = info.location; //현재 주소 가져오기
+                const geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 서비스 생성
+                
+                geocoder.addressSearch(address, (result, status) => { //주소로부터 좌표 검색
+                    if (status === kakao.maps.services.Status.OK) {
+                        // 검색된 좌표를 LatLng 객체로 변환
+                        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                        //검색된 좌표를 bounds에 추가
+                        bounds.extend(coords); 
+                        //지도를 좌표에 맞게 업데이트
+                        this.map.setBounds(bounds);
+                    }
+                });
+            });
+        },
+
         addCheckInfo(index) {
             if (this.addCheckInfoList.includes(this.selectInfo[index])) {
                 //이미 선택된 정보인 경우 배열에서 제거
@@ -401,6 +360,8 @@ export default {
 
             }
             console.log("마커배열", this.markers);
+
+            this.updateMapBounds(); //체크박스 클릭 시 지도 업데이트
         },
 
         addMarker(index) {
@@ -453,20 +414,12 @@ export default {
 
         removeMarker(index) {
             // 선택 해제된 장소의 마커 제거
-            // if (this.markers.length > index && this.markers[index]) {
-            //     this.markers[index].setMap(null);
-            //     this.markers.splice(index, 1);
-            // }
             this.markers[index].setMap(null);
             this.markers.splice(index, 1);
 
         },
         removeInfowindow(index) {
             // 선택 해제된 장소의 마커 제거
-            // if (this.infowindows.length > index && this.infowindows[index]) {
-            //     this.infowindows[index].setMap(null);
-            //     this.infowindows.splice(index, 1);
-            // }
             this.infowindows[index].close();
             this.infowindows.splice(index, 1);
         },
@@ -517,7 +470,7 @@ export default {
                     }
                 }
                 window.Kakao.Share.createDefaultButton({
-                    container: '#kakao-share-button', // 컨테이너 지정
+                    container: '#share_button', // 컨테이너 지정
                     objectType: 'feed',
                     content: content,
                     buttons: [
@@ -547,16 +500,10 @@ export default {
             description += `총 머무는 시간: ${this.selectedStayTime.hour}시간 ${this.selectedStayTime.minute}분\n`;
             return description; // 생성된 설명 반환
         },
-        openShareModal() {
-            this.modalOpen2 = true;
-        },
-        closeShareModal2() {
-            this.modalOpen2 = false;
-        },
 
         // 세션스토리지에 저장된 데이터를 가져와서 초기값 설정
         getSessionStorageData() {
-            this.meetPoint = sessionStorage.getItem("meetPoint"); 
+            this.meetPoint = sessionStorage.getItem("meetPoint");
             this.mpBuildingName = sessionStorage.getItem("buildingName");
             const mp = JSON.parse(sessionStorage.getItem("mpLatLng"));
             this.mpLatLng.lat = mp.lat;
@@ -565,24 +512,24 @@ export default {
         },
 
         // DB에 조회할 인덱스 값을 통해 저장된 데이터 가져온 후 초기값 설정
-        fetchPlaceData(index){
-            
+        fetchPlaceData(index) {
+
             axios({
                 method: 'post',
                 header: { 'Content-Type': 'application/json; charset=UTF-8' },
                 url: "/choice/selectPlace",
-                data: { "index" : index },
+                data: { "index": index },
             })
                 .then((response) => {
-                    console.log("response.data",response.data);
-                    if(response.data){
-                        this.meetPoint = response.data.meetpoint; 
+                    console.log("response.data", response.data);
+                    if (response.data) {
+                        this.meetPoint = response.data.meetpoint;
                         this.mpBuildingName = response.data.mpbuildingname;
                         this.mpLatLng.lat = response.data.lat;
                         this.mpLatLng.lng = response.data.lon;
                         this.selectInfo = response.data.selectInfo;
                         this.addCheckInfoList = response.data.addCheckInfoList;
-                        this.addCheckInfoList.forEach((place) =>{
+                        this.addCheckInfoList.forEach((place) => {
                             const time = {
                                 hour: place.hour,
                                 minute: place.minute
@@ -593,9 +540,8 @@ export default {
                         this.selectedStayTime.minute = response.data.staytimeminute;
                     }
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     console.log("Error", error);
-                    alert("error 확인 필요");
                 })
         },
     },
@@ -605,7 +551,7 @@ export default {
     },
     mounted() {
         // 세션스토리지에 데이터가 있는지 확인
-        if(sessionStorage.getItem("mpLatLng")){
+        if (sessionStorage.getItem("mpLatLng")) {
             this.getSessionStorageData();
         } else {
             const idx = this.$route.query.where;
@@ -627,6 +573,8 @@ export default {
             console.log("kakao mounted");
         }
         this.loadKakaoScript();
+        //초기화 후 지도 업데이트
+        this.updateMapBounds();
     },
 
 }
@@ -992,6 +940,7 @@ input[type="checkbox"] {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1;
 }
+
 .share-button {
     position: absolute;
     bottom: 10px;
@@ -1010,39 +959,5 @@ input[type="checkbox"] {
 .share_img {
     width: 100%;
     /* 이미지 크기를 버튼에 맞춤 */
-}
-
-.share_modal_content {
-    display: flex;
-    justify-content: space-around;
-    /* 아이콘을 가로로 배치합니다. */
-    align-items: center;
-}
-
-.share_modal_content button {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.kakao_img,
-.link_img {
-    width: 40px;
-    /* 아이콘의 크기를 조정합니다. */
-    height: 40px;
-}
-
-.share_modal_content_top {
-    /* 삭제 버튼 스타일링 */
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-}
-.closeShareModal {
-    width: 15px;
-    height: 15px;
 }
 </style>
