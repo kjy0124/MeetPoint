@@ -32,7 +32,7 @@
                         <select v-model="calMode">
                             <option :value="0">선택</option>
                             <option :value="2">무게중심</option>
-                            <option :value="1">직선거리순</option>
+                            <option :value="1" v-show="friendList.length < 3">직선거리순</option>
                             <option :value="3">교통점수순</option>
                         </select>
                         <input class="submit-button" type="button" value="중간지점 찾기" @click="moveListPage()">
@@ -128,16 +128,16 @@ export default {
                             if (status === window.kakao.maps.services.Status.OK) {
                                 this.location = result[0].address.address_name;
                             } else {
-                                console.error("Failed to get current location:", status);
+                                alert("Failed to get current location:", status);
                             }
                         });
                     },
                     (error) => {
-                        console.error("Error getting current position:", error);
+                        alert("Error getting current position:", error);
                     }
                 );
             } else {
-                console.error("Geolocation is not supported by this browser.");
+                alert("Geolocation is not supported by this browser.");
             }
         },
         searchLocations() {
@@ -149,10 +149,10 @@ export default {
                         //검색된 장소 주변 건물 가져옴 
                         this.getNearbyPlaces(result[0].x, result[0].y);
                     } else {
-                        console.error("No places found for the given query.");
+                        alert("No places found for the given query.");
                     }
                 } else {
-                    console.error("Failed to search places:", status);
+                    alert("Failed to search places:", status);
                     this.places = [];
                 }
             });
@@ -161,6 +161,10 @@ export default {
             const name = this.name.trim() !== '' ? this.name : "친구" + (this.friendList.length + 1);
             this.friendList.push({ name: name, address: place.place_name, position: place });
             this.closeModal();
+            // 만약 3명에서 2명이하로 줄어들 경우 중간지점 방식이 1로 선택되어있으면 0(선택)으로 변경
+            if (this.friendList.length > 2 && this.calMode == 1) {
+                this.calMode = 0;
+            }
         },
 
         //모달 창에서 위치 선택 후 모달 닫기 및 위치 정보 저장
@@ -175,7 +179,7 @@ export default {
                 if (status === window.kakao.maps.services.Status.OK) {
                     this.nearbyPlaces = result;
                 } else {
-                    console.error("Failed to search nearby places:", status);
+                    alert("Failed to search nearby places:", status);
                 }
             }, { x, y });
         },
@@ -192,7 +196,6 @@ export default {
                 return;
             }
             const dt = [vm.calMode, vm.friendList];
-            console.log("dt ", dt);
             axios({
                 method: 'post',
                 header: { 'Content-Type': 'application/json; charset=UTF-8' },
@@ -200,12 +203,10 @@ export default {
                 data: dt,
             })
                 .then(function(response){
-                    console.log('response-inputPage',response.data);
                     // alert("중심 좌표 \n\n" + '위도 :' + response.data.latitude + '\n\n경도 : ' + response.data.longitude);
                     vm.$router.push({path: '/MiddleMap.page', query:{"mpLatitude": response.data.latitude, "mpLongitude": response.data.longitude }},)
                 })
-                .catch(function(error){
-                    console.log('error',error);
+                .catch(function(){
                     alert("좌표를 불러오는데 실패하였습니다.");
                 });
         },
@@ -217,7 +218,6 @@ export default {
             "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing";
         script.onload = () => {
             window.kakao.maps.load(() => {
-                console.log("Kakao Maps SDK loaded");
             });
         };
         window.onload = function () { document.head.appendChild(script); }

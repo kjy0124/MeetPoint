@@ -45,7 +45,7 @@
                 </div>
                 <div class="scrollArea">
                     <div class="selectInfo" v-for="(info, i) in selectInfo" :key="i">
-                        <input class="checkBox" type="checkbox" @change="addCheckInfo(i)">
+                        <input class="checkBox" :id="'checkedBox' + i" type="checkbox" @change="addCheckInfo(i)">
                         <div class="infoWarper">
                             <h2>{{ info.name }}</h2>
                             <h3>{{ info.location }}</h3>
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="share-button">
-                    <button id="share_button" @click="sharekakao()">
+                    <button id="share_button" @click="storePlace()">
                         <img class="share_img" src="@/assets/카카오톡로고.png" alt="공유">
                     </button>
                 </div>>
@@ -136,14 +136,9 @@ export default {
 
             // 중간지점 마커 클릭 여부
             infowindowOpened: false,
-
         }
     },
     methods: {
-        // 공유버튼
-        // shareClick() {
-        //     this.storePlace();
-        // },
         // 공유하기위해 데이터를 DB에 저장
         storePlace() {
             // 체크박스로 선택한 장소들에 머무는 시간까지 같이 저장하도록 하기 위해 선언
@@ -161,9 +156,7 @@ export default {
                 addCheckInfoList: newAddCheckInfoList, // 머무는 시간을 설정한 장소들
                 stayTimeHour: this.selectedStayTime.hour,
                 stayTimeMinute: this.selectedStayTime.minute,
-                // time_store : this.time_store, // 각 장소별로 머무는 시간을 
             }
-            console.log("data", data);
             axios({
                 method: 'post',
                 header: { 'Content-Type': 'application/json; charset=UTF-8' },
@@ -171,15 +164,9 @@ export default {
                 data: data,
             })
                 .then((response) => {
-                    console.log("moveListPage - response", response.data);
-                    if (response.data.index > 0) {
-                        // alert("성공적으로 저장하였습니다.^^")
-                    } else {
-                        alert("실패하였습니다.")
-                    }
+                    this.sharekakao(response.data.index);
                 })
-                .catch(function (error) {
-                    console.log("error", error);
+                .catch(function () {
                     alert("데이터를 저장하는데 오류가 발생하였습니다.");
                 })
         },
@@ -359,8 +346,6 @@ export default {
                 this.addTime(); // 머무르는 시간 (0시0분) 생성
 
             }
-            console.log("마커배열", this.markers);
-
             this.updateMapBounds(); //체크박스 클릭 시 지도 업데이트
         },
 
@@ -394,7 +379,6 @@ export default {
                     // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다.
                     this.map.setCenter(coords);
                     // marker.setMap(this.map);
-                    console.log(coords);
                 }
             });
         },
@@ -456,29 +440,33 @@ export default {
                 window.Kakao.init('bf8710c35ec333b84272056c6f3d32e8');
             }
         },
-        sharekakao() {
-            this.storePlace();
-            //Kakao 객체가 존재하고 초기화된 경우
+
+        sharekakao(id) {
+            const url = "http://localhost/ListPage.page?where=" + id + // DB에 저장된 ID값
+                        "&startDate="+ this.selectedStartDate +  // 시작 날짜
+                        "&startDay=" + encodeURI(this.selectedStartDay) +  // 시작 요일
+                        "&endDate=" + this.selectedEndDate +  // 마지막 날짜
+                        "&endDay=" + encodeURI(this.selectedEndDay);     // 마지막 요일
+            // Kakao 객체가 존재하고 초기화된 경우
             if (window.Kakao && window.Kakao.isInitialized()) {
                 // 카카오 공유를 위한 content 객체 생성
                 const content = {
                     title: '일정과 시간을 공유합니다.',
                     description: this.generateDescription(), //설명 생성 함수 호출
                     link: {
-                        mobileWebUrl: 'http://localhost/ListPage.page?where=3',
-                        webUrl: 'http://localhost/ListPage.page?where=3',
+                        mobileWebUrl: url,
+                        webUrl: url,
                     }
                 }
-                window.Kakao.Share.createDefaultButton({
-                    container: '#share_button', // 컨테이너 지정
+                window.Kakao.Share.sendDefault({
                     objectType: 'feed',
                     content: content,
                     buttons: [
                         {
                             title: '웹으로 보기',
                             link: {
-                                mobileWebUrl: 'http://localhost/ListPage.page?where=3',
-                                webUrl: 'http://localhost/ListPage.page?where=3',
+                                mobileWebUrl: url,
+                                webUrl: url,
                             },
                         },
                     ],
@@ -509,6 +497,10 @@ export default {
             this.mpLatLng.lat = mp.lat;
             this.mpLatLng.lng = mp.lon;
             this.selectInfo = JSON.parse(sessionStorage.getItem("selectInfo"));
+            // Wait until Vue updates the DOM
+            this.$nextTick(() => {
+                this.middlePoint();
+            });
         },
 
         // DB에 조회할 인덱스 값을 통해 저장된 데이터 가져온 후 초기값 설정
@@ -521,28 +513,63 @@ export default {
                 data: { "index": index },
             })
                 .then((response) => {
-                    console.log("response.data", response.data);
                     if (response.data) {
                         this.meetPoint = response.data.meetpoint;
                         this.mpBuildingName = response.data.mpbuildingname;
                         this.mpLatLng.lat = response.data.lat;
                         this.mpLatLng.lng = response.data.lon;
                         this.selectInfo = response.data.selectInfo;
-                        this.addCheckInfoList = response.data.addCheckInfoList;
-                        this.addCheckInfoList.forEach((place) => {
-                            const time = {
-                                hour: place.hour,
-                                minute: place.minute
-                            }
-                            this.time_store.push(time);
-                        })
-                        this.selectedStayTime.hour = response.data.staytimehour;
-                        this.selectedStayTime.minute = response.data.staytimeminute;
+                        // Wait until Vue updates the DOM
+                        this.$nextTick(() => {
+                            this.middlePoint();
+                            this.selectShowMaker(response.data.addCheckInfoList);
+                            this.selectedStayTime.hour = response.data.staytimehour;
+                            this.selectedStayTime.minute = response.data.staytimeminute;
+                        });
                     }
                 })
-                .catch(function (error) {
-                    console.log("Error", error);
+                .catch(function () {
+                    alert("데이터를 조회하는데 오류가 발생하였습니다.")
                 })
+        },
+
+        // DB에 저장되어 있는 머무는 시간까지 선택한 장소를 지도에 마커로 표시
+        selectShowMaker(places) {
+            places.forEach((place) => {
+                const time = {
+                    hour: place.hour,
+                    minute: place.minute
+                }
+                this.time_store.push(time);
+                this.selectInfo.some((infoPlace, index) => {
+                    if(place.name == infoPlace.name) {
+                        let checked_box = document.getElementById('checkedBox' + index);
+                        if(checked_box.checked == false){
+                            checked_box.checked = true; 
+                            this.addCheckInfo(index);
+                        }
+                    }
+                });
+            });
+        },
+
+        // 데이터 초기값 설정
+        initializeData() {
+            // 세션스토리지에 데이터 여부 확인
+            if(sessionStorage.getItem("mpLatLng")){
+                this.getSessionStorageData();
+            } else {
+                this.modalOpen = false;
+                const idx = this.$route.query.where;
+                this.selectedStartDate = this.$route.query.startDate;
+                this.selectedStartDay = decodeURIComponent(this.$route.query.startDay);
+                this.selectedEndDate = this.$route.query.endDate;
+                this.selectedEndDay = decodeURIComponent(this.$route.query.endDay);
+                const timeDiff = new Date(this.selectedEndDate).getTime() - new Date(this.selectedStartDate).getTime();
+                const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                this.selectedDiffHour = (diffDays + 1) * 24 
+                this.fetchPlaceData(idx);
+            }
         },
     },
 
@@ -550,27 +577,21 @@ export default {
 
     },
     mounted() {
-        // 세션스토리지에 데이터가 있는지 확인
-        if (sessionStorage.getItem("mpLatLng")) {
-            this.getSessionStorageData();
-        } else {
-            const idx = this.$route.query.where;
-            this.fetchPlaceData(idx);
-        }
         if (window.kakao && window.kakao.maps) {
+            this.initializeData();
             this.initMap();
         } else {
             const script = document.createElement("script");
             /* global kakao */
             script.onload = () => {
                 kakao.maps.load(() => {
+                    this.initializeData();
                     this.initMap();
                 });
             };
             script.src =
                 "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services";
             document.head.appendChild(script);
-            console.log("kakao mounted");
         }
         this.loadKakaoScript();
         //초기화 후 지도 업데이트

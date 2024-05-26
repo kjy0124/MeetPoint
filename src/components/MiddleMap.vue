@@ -24,7 +24,7 @@
                     <span class="top-button-text"><button class="btn btn-primary btn-ghost btn3" @click="selectOption('유명관광지',3)">유명관광지</button></span>
                     <span class="top-button-text"><button class="btn btn-primary btn-ghost btn4" @click="selectOption('일반관광지',4)">일반관광지</button></span>
                     <span class="top-button-text"><button class="btn btn-primary btn-ghost btn5" @click="selectOption('캠핑',5)">캠핑</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn6" @click="selectOption('테마/놀이공원',6)">테마/놀이공원</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn6" @click="selectOption('테마공원/대형놀이공원',6)">테마공원/대형놀이공원</button></span>
                     <span class="top-button-text"><button class="btn btn-primary btn-ghost btn7" @click="selectOption('폭포/계곡',7)">폭포/계곡</button></span>
                     <span class="top-button-text"><button class="btn btn-primary btn-ghost btn8" @click="selectOption('해수욕장',8)">해수욕장</button></span>
                     <span class="top-button-text"><button class="btn btn-primary btn-ghost btn9" @click="selectOption('관광안내소/매표소',9)">관광안내소/매표소</button></span>
@@ -32,7 +32,6 @@
                         <button class="select-bttn" @click="modalReSearchClick()">{{ modal_btn_name }}</button>
                     </div>
                 </div>
-                
             </div>  
         </div>
     </div>
@@ -199,7 +198,6 @@ export default {
                         this.addrBuildingName = name; // 지명
                     }
 
-                    console.log(result[0]);
                     // 마커 클릭 시 인포윈도우에 주소 정보 표시
                     const infowindowContent = `
                         <div style="padding:5px;font-size:12px;">
@@ -244,7 +242,6 @@ export default {
         },
 
         moveListPage() {
-            // const vm = this;
             const mpLatLng = {
                 lat: this.mpLatitude,
                 lon: this.mpLongitude,
@@ -314,7 +311,7 @@ export default {
                     content: `
                             <div id="infowindow" style="padding:5px;font-size:12px;">
                                 <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>${vm.userData[i].name}</strong></div>
-                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${vm.userData[i].address_name})</div>
+                                <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${vm.userData[i].address_name}</div>
                                 <div style="margin-top: 5px;">${vm.userData[i].address}</div>
                             </div>` // 인포윈도우에 표시할 내용
                 });
@@ -391,7 +388,7 @@ export default {
             }
             const region = ["경기도", "경상남도", "경상북도", "광주광역시", "대구광역시", "대전광역시", "부산광역시", "서울특별시", "울산광역시", "인천광역시", "전라남도", "전라북도", "충청남도", "충청북도"];
             let reSearch_data = { // 재탐색에 필요한 데이터를 보낼 데이터 저장
-                num : 0, // 0이면 시도,시군구 중 하나만 선택하거나, 둘 다 선택한 경우. 1이면 시군구만 선택한 경우
+                num : 0, // 0이면 시도만 선택하거나, 둘 다 선택한 경우. 1이면 시군구만 선택한 경우
                 region_1depth_name : "", // 시도
                 region_2depth_name : "", // 시군구
                 option : this.options,
@@ -419,12 +416,7 @@ export default {
                 data: reSearch_data,
             })
                 .then((response) => {
-                    
-                    if(response.data != null){
-                        console.log("response data ", response.data);
-                        console.log("latitude", response.data.latitude);
-                        console.log("longitude", response.data.longitude);
-                        console.log("mpLatitude", this.mpLatitude);
+                    if(response.data != ""){
                         this.mpLatitude = response.data.latitude; // 새로운 위도
                         this.mpLongitude = response.data.longitude; // 새로운 경도
                         this.mpName = response.data.name; // 새로운 주소 이름
@@ -434,15 +426,13 @@ export default {
                         this.modalOpen = false; // 모달창 닫기
                     }
                     else {
-                        alert("죄송합니다. 현재 데이터가 부족하여 수집하고 있으니 다른 옵션을 선택하여 주세요.");
+                        alert("해당 지역에 선택하신 옵션의 장소가 없습니다. \n다른 옵션을 선택하여 주세요.");
                     }
                 })
-                .catch((error) => {
+                .catch(() => {
                     alert("재탐색에 필요한 데이터를 불러오는데 실패하였습니다.");
-                    console.log(error);
                 });
         },
-
 
         // 중간지점 지번주소 반환 후 데이터 저장
         // 좌표를 가지고 주소로 변환 후 시도, 시군구를 추출
@@ -450,7 +440,6 @@ export default {
             const geocoder = new window.kakao.maps.services.Geocoder();
             geocoder.coord2Address(this.mpLongitude, this.mpLatitude, (result, status) => {
                 if(status === window.kakao.maps.services.Status.OK) {
-                    // console.log("result" + JSON.stringify(result))
                     let address = result[0].address.region_1depth_name;
                     if(address === "경기") address = "경기도";
                     if(address === "경남") address = "경상남도";
@@ -473,11 +462,6 @@ export default {
         },
 
         btnClick(category) {
-            // //기존에 떠있는 마커들 모두 제거
-            // this.markers.forEach(marker => marker.setMap(null));
-            // //저장된 마커 제거
-            // this.markers.splice(0, this.markers.length);
-
             //클릭한 카테고리 버튼만 활성화
             for (let key in this.category_click) {
                 this.category_click[key] = false;
@@ -507,7 +491,7 @@ export default {
                             this.saveMarkersByCategory(result, target_category);
                             this.showCircle(locPosition, 5000);//반경을 원으로 표시
                         } else {
-                            console.error('장소 검색에 실패했습니다:', status);
+                            alert('장소 검색에 실패했습니다:', status);
                         }
                     }.bind(this);
 
@@ -518,10 +502,10 @@ export default {
                         useMapCenter: false
                     });
                 } else {
-                    console.error('Places 서비스를 찾을 수 없습니다.');
+                    alert('Places 서비스를 찾을 수 없습니다.');
                 }
             } else {
-                console.error('kakao.maps 또는 kakao.maps.services를 찾을 수 없습니다.');
+                alert('kakao.maps 또는 kakao.maps.services를 찾을 수 없습니다.');
             }
         },
 
@@ -651,7 +635,6 @@ export default {
             if (index !== -1) {
                 this.check_space.splice(index, 1);
             }
-            // this.check_space.pop(space);
         }
     },
 
@@ -673,7 +656,6 @@ export default {
             script.src =
             "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing";
             document.head.appendChild(script);
-            console.log("kakao mounted");
         }
     },
 
