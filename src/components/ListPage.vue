@@ -63,8 +63,6 @@
                     <div v-for="(info, i) in addCheckInfoList" :key="i" class="addCheckInfoList">
                         <div class="infoList-left">
                             <p :class="'timeSet' + i">{{ i + 1 }}</p>
-                        </div>
-                        <div class="infoList-right">
                             <div class="rR">
                                 <h3 :class="'timeSet' + i">{{ info.name }}</h3>
                             </div>
@@ -72,6 +70,9 @@
                                 <button @click="timeSet(i)" :class="'timeSet' + i">{{
             time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
                             </div>
+                        </div>
+                        <div class="infoList-right">
+                            
                             <p :class="'timeSetClose' + i" style="display: none;">머무는 시간 설정</p>
                             <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;"
                                 type="number" min='0' max='24' v-model="time_store[i].hour">
@@ -180,7 +181,7 @@ export default {
 
             classNames = document.querySelectorAll(".timeSetClose" + index);
             classNames.forEach(function (className) {
-                className.style.display = "inline";
+                className.style.display = "flex";
             })
 
             // 중복방지를 위해 머무르는 시간에 변경전 해당 장소에 머무르는 시간을 저장
@@ -750,12 +751,6 @@ export default {
     padding-top: 2%;
 }
 
-.scrollArea2 {
-    overflow: auto;
-    width: 100%;
-    height: 100%;
-}
-
 .side-rightMain {
     height: 100%;
     width: 45%;
@@ -853,15 +848,39 @@ a {
     color: #666666;
 }
 
-.infoList-left {
-    width: 10%;
-    text-align: center;
-    font-weight: 1000;
+.scrollArea2 {
+    overflow: auto;
+    width: 100%;
+    flex-grow: 1;
 }
 
-.infoList-right {
+.addCheckInfoList {
     display: flex;
+    /* text-align: center; */
+    align-items: center;
+    font-size: 1.5em;
+    justify-content: space-between;
     width: 90%;
+    height: 8%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin-top: 5%;
+    margin-left: 5%;
+    overflow: auto;
+    text-align: left;
+}
+
+.infoList-left, .infoList-right {
+    display: flex;
+    align-items: center;
+}
+
+.infoList-left {
+    flex-grow: 1;
+}
+.infoList-right {
+    flex-grow: 1;
+    /* flex-direction: column; */
 }
 
 .rR {
@@ -884,21 +903,6 @@ a {
     margin: 1em;
 }
 
-.addCheckInfoList {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    font-size: 1.5em;
-    justify-content: center;
-    width: 90%;
-    height: 8%;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    margin-top: 5%;
-    margin-left: 5%;
-    overflow: auto;
-    text-align: left;
-}
 
 input[type="checkbox"] {
     cursor: pointer;
