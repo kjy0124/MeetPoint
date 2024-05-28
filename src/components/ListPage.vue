@@ -884,11 +884,11 @@ a {
 }
 
 .rR {
-    width: 50%;
+    width: 70%;
 }
 
 .lL {
-    width: 50%;
+    width: 30%;
 }
 
 .lL>button {

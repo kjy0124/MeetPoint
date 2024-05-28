@@ -302,10 +302,6 @@ export default {
     margin-top: 1em;
     font-size: 2em;
     color: #a1a1a1a1;
-
-    @media screen and (max-width: 1000px) {
-        display: none;
-    }
 }
 
 .warper-mid-top {
@@ -390,7 +386,6 @@ export default {
 
 .submit-button:hover {
     background-color: rgb(82, 113, 255, .1);
-    ;
 }
 
 .modal-warper {
@@ -522,5 +517,151 @@ export default {
     z-index: 50;
     display: flex;
     align-items: center;
+}
+/* 미디어 쿼리 */
+@media screen and (max-width: 1200px) {
+    .warper {
+        width: 80%;
+        height: 85%;
+        left: 10%;
+    }
+
+    .warper-top h1 {
+        font-size: 3em;
+    }
+
+    .warper-top h3 {
+        font-size: 1.5em;
+    }
+
+    .add-button,
+    .submit-button {
+        font-size: 1.5em;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .warper {
+        width: 90%;
+        height: 90%;
+        left: 5%;
+    }
+
+    .warper-top h1 {
+        font-size: 2.5em;
+    }
+
+    .warper-top h3 {
+        font-size: 1.2em;
+    }
+
+    .warper-mid-top {
+        font-size: 1.5rem;
+    }
+
+    .add-button,
+    .submit-button {
+        font-size: 1.2em;
+    }
+
+    .element-left,
+    .element-mid,
+    .element-right {
+        font-size: 0.8em;
+    }
+
+    .element-left {
+        margin-right: 5%;
+    }
+
+    .element-right {
+        margin-left: 2em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .warper {
+        width: 100%;
+        height: 95%;
+        left: 0;
+    }
+
+    .warper-top h1 {
+        font-size: 2em;
+    }
+
+    .warper-top h3 {
+        font-size: 1em;
+    }
+
+    .warper-mid-top {
+        font-size: 1.2rem;
+    }
+
+    .add-button,
+    .submit-button {
+        font-size: 1em;
+    }
+
+    .element-left,
+    .element-mid,
+    .element-right {
+        font-size: 0.6em;
+    }
+
+    .element-left {
+        margin-right: 2%;
+    }
+
+    .element-right {
+        margin-left: 1em;
+    }
+
+    .modal-content {
+        width: 90%;
+        height: 80%;
+        padding: 1em;
+    }
+
+    .input-name,
+    .input-location {
+        font-size: 1.2em !important;
+    }
+
+    .search-img {
+        width: 1.5em;
+        height: 1.5em;
+    }
+}
+    
+@media screen and (max-width: 480px) {
+    .modal-content {
+        width: 90%;
+        height: 80%;
+        padding: 1em;
+    }
+
+    .input-name,
+    .input-location {
+        font-size: 1.2em !important;
+    }
+
+    .search-img {
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    .modal-content-btm-iner {
+        padding-left: 1em;
+        font-size: 1rem;
+    }
+
+    .location-name {
+        font-size: 1em;
+    }
+
+    .location-detail-address {
+        font-size: 0.9em;
+    }
 }
 </style>
