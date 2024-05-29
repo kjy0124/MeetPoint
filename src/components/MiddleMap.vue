@@ -313,6 +313,8 @@ export default {
                     const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
                     const hoverMarkerImage = new window.kakao.maps.MarkerImage(imageSrc, hoverImageSize);
 
+                    sessionStorage.setItem('markerImageName'+i, 'human'+rand0_5);
+
                     // 마커를 생성합니다
                     const marker = new window.kakao.maps.Marker({
                         map: vm.map, // 마커를 표시할 지도
@@ -676,6 +678,7 @@ export default {
         this.mpLongitude = this.$route.query.mpLongitude; // 첫 번째 페이지에서 라우터로 전달해준 경도값
         if (window.kakao && window.kakao.maps) {
             this.initMap();
+            
         } else {
             const script = document.createElement("script");
             /* global kakao */
