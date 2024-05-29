@@ -447,7 +447,7 @@ export default {
         },
 
         sharekakao(id) {
-            const url = "http://localhost/ListPage.page?where=" + id + // DB에 저장된 ID값
+            const url = "http://localhost/ListPage.page?where=" + encodeURI(id) + // DB에 저장된 ID값
                 "&startDate=" + this.selectedStartDate +  // 시작 날짜
                 "&startDay=" + encodeURI(this.selectedStartDay) +  // 시작 요일
                 "&endDate=" + this.selectedEndDate +  // 마지막 날짜
@@ -565,7 +565,7 @@ export default {
                 this.getSessionStorageData();
             } else {
                 this.modalOpen = false;
-                const idx = this.$route.query.where;
+                const idx = decodeURIComponent(this.$route.query.where);
                 this.selectedStartDate = this.$route.query.startDate;
                 this.selectedStartDay = decodeURIComponent(this.$route.query.startDay);
                 this.selectedEndDate = this.$route.query.endDate;

@@ -306,7 +306,14 @@ export default {
             // 쿠키에서 추출한 값을 통해 사용자들 위치 마커 생성
             for (let i = 0; i < vm.userData.length; i++) {
                 (function (i) {
-                    const rand0_5 = Math.floor(Math.random() * 6);
+                    let rand0_5 = 0
+                    if(vm.userexist.length == vm.userData.length){
+                        rand0_5 = vm.userexist[i];
+                    }
+                    else{
+                        rand0_5 = Math.floor(Math.random() * 6);
+                        vm.userexist.push(rand0_5);   
+                    }
                     const imageSrc = require('@/assets/human' + rand0_5 + '.png'); // 마커 이미지의 주소입니다    
                     const imageSize = new kakao.maps.Size(50, 50); // 마커 이미지의 크기입니다
                     const hoverImageSize = new kakao.maps.Size(40, 40); // 호버했을 때 마커 이미지의 크기입니다
@@ -673,6 +680,9 @@ export default {
         }
     },
     mounted() {
+        if (JSON.parse(sessionStorage.getItem('markerImageName')) != null || JSON.parse(sessionStorage.getItem('markerImageName')) != undefined){
+            this.userexist = JSON.parse(sessionStorage.getItem('markerImageName'));
+        }
         this.mpLatitude = this.$route.query.mpLatitude; // 첫 번째페이지에서 라우터로 전달해준 위도값
         this.mpLongitude = this.$route.query.mpLongitude; // 첫 번째 페이지에서 라우터로 전달해준 경도값
         if (window.kakao && window.kakao.maps) {
