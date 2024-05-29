@@ -112,7 +112,8 @@ export default {
         return {
             modal_btn_name: "닫기", // 재탐색 모달창 생성시 나타나는 버튼명
             modalOpen: false, // 모달 창 해제
-            markers: [], // 사용자 위치 마커들 저장
+            userMarkers : [], // 사용자 위치 마커들 저장
+            markers: [], // 카테고리 마커들 저장
             userData: [], // 사용자들 이름, 주소 데이터
             userexist: [], // 사용자 세션에 들어갈 데이터
             mpLatitude: "", // 중간좌표 위도
@@ -243,7 +244,7 @@ export default {
         allViewMarkers(mpMarker) {
             // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성
             var bounds = new kakao.maps.LatLngBounds();
-            this.markers.forEach(marker => {
+            this.userMarkers.forEach(marker => {
                 // LatLngBounds 객체에 사용자 위치 좌표를 추가
                 bounds.extend(marker.getPosition());
             })
@@ -347,7 +348,7 @@ export default {
                                 <div style="margin-top: 5px;">${vm.userData[i].address}</div>
                             </div>` // 인포윈도우에 표시할 내용
                     });
-                    vm.markers.push(marker);
+                    vm.userMarkers.push(marker);
                     // 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
                     // 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
                     (function (marker, infowindow) {
@@ -364,7 +365,7 @@ export default {
                 })(i);
             }
             sessionStorage.setItem('markerImageName', JSON.stringify(vm.userexist));
-            vm.markers.forEach(marker => marker.setMap(vm.map));
+            vm.userMarkers.forEach(marker => marker.setMap(vm.map));
         },
 
         // 재탐색 버튼 클릭시 모달창 보이기
@@ -561,7 +562,7 @@ export default {
             this.clearMarkers();
 
             //사용자 위치 마커 유지
-            this.showUsersPosition();
+            // this.showUsersPosition();
 
             //마커 정보 추출
             result.forEach(place => {
