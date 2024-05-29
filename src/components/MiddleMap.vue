@@ -616,6 +616,8 @@ export default {
             const placeLocation = event.target.dataset.location;
             const placePhone = event.target.dataset.phone;
             const placeUrl = event.target.dataset.url;
+            var checkbox = document.getElementById('eachforid')
+            checkbox.checked = true;
 
             //이미 선택된 장소인지 확인(중복 장소 검사)
             const isAlreadyAdded = this.check_space.some(space => { //밑의 조건과 같이 check_space에 데이터 값들의 중복 검사하는 변수
