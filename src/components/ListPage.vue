@@ -35,7 +35,7 @@
             <div class="side-middle">
                 <div class="notScrollArea">
                     <div @click="modalOpen = true" class="selectDate">
-                        <h2 class="meetPoint">{{ meetPoint }}</h2>
+                        <h2 class="meetPoint">{{ meetPoint != "" ? meetPoint : mpBuildingName }}</h2>
                         <p v-if="!selectedEndDate || !selectedStartDate">일정을 입력해주세요!</p>
                         <p v-if="selectedStartDate && selectedEndDate">{{ selectedStartDate + '(' +
             this.selectedStartDay +
@@ -55,7 +55,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div v-for="(DiffDate, i) in selectedDiffDate+1" :key="i" :class="[`side-right${i+1}`]" ></div> -->
             <div class="side-rightMain">
                 <h2 class="total-time">{{ selectedStayTime.hour + '시간 ' + selectedStayTime.minute + '분 / ' +
             selectedDiffHour + '시간 0분' }}</h2>
@@ -67,12 +66,10 @@
                                 <h3 :class="'timeSet' + i">{{ info.name }}</h3>
                             </div>
                             <div class="lL">
-                                <button @click="timeSet(i)" :class="'timeSet' + i">{{
-            time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
+                                <button @click="timeSet(i)" :class="'timeSet' + i">{{ time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
                             </div>
                         </div>
                         <div class="infoList-right">
-                            
                             <p :class="'timeSetClose' + i" style="display: none;">머무는 시간 설정</p>
                             <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;"
                                 type="number" min='0' max='24' v-model="time_store[i].hour">
@@ -392,7 +389,6 @@ export default {
                 minute: 0,
             }
             this.time_store.push(time);
-            this.time_store.push(time);
             this.selectedStayTime.hour += time.hour;
             this.selectedStayTime.minute += time.minute;
         },
@@ -480,9 +476,9 @@ export default {
             let description = '';
             //각 체크인 정보를 반복하면서 설명 문자열 생성
             this.addCheckInfoList.forEach((info, index) => {
-                description += `${index + 1}. 장소: ${info.placeName}\n`;
-                description += `   주소: ${info.placeAddress}\n`;
-                description += `   전화번호: ${info.placeCallNum}\n`;
+                description += `${index + 1}. 장소: ${info.name}\n`;
+                description += `   주소: ${info.location}\n`;
+                description += `   전화번호: ${info.phone}\n`;
                 description += `   머무는 시간: ${this.time_store[index].hour}시간 ${this.time_store[index].minute}분\n\n`;
             });
             //머무는 시간 추가
