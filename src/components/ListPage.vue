@@ -35,7 +35,7 @@
             <div class="side-middle">
                 <div class="notScrollArea">
                     <div @click="modalOpen = true" class="selectDate">
-                        <h2 class="meetPoint">{{ meetPoint }}</h2>
+                        <h2 class="meetPoint">{{ meetPoint != "" ? meetPoint : mpBuildingName }}</h2>
                         <p v-if="!selectedEndDate || !selectedStartDate">일정을 입력해주세요!</p>
                         <p v-if="selectedStartDate && selectedEndDate">{{ selectedStartDate + '(' +
             this.selectedStartDay +
@@ -67,12 +67,10 @@
                                 <h3 :class="'timeSet' + i">{{ info.name }}</h3>
                             </div>
                             <div class="lL">
-                                <button @click="timeSet(i)" :class="'timeSet' + i">{{
-            time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
+                                <button @click="timeSet(i)" :class="'timeSet' + i">{{ time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
                             </div>
                         </div>
                         <div class="infoList-right">
-                            
                             <p :class="'timeSetClose' + i" style="display: none;">머무는 시간 설정</p>
                             <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;"
                                 type="number" min='0' max='24' v-model="time_store[i].hour">
@@ -391,7 +389,6 @@ export default {
                 hour: 2,
                 minute: 0,
             }
-            this.time_store.push(time);
             this.time_store.push(time);
             this.selectedStayTime.hour += time.hour;
             this.selectedStayTime.minute += time.minute;
