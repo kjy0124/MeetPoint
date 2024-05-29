@@ -5,34 +5,47 @@
             <div class="modal-top">
                 <div class="modal-top-title">지역선택</div>
                 <hr>
-                <div class="modal-mid" >
+                <div class="modal-mid">
                     <span class="top-button-text">
-                        <button class="btn btn-primary btn-ghost btn-address1" @click="selectAddressOption(address_name.depth1_name,1)">{{ address_name.depth1_name }}</button>
+                        <button class="btn btn-primary btn-ghost btn-address1"
+                            @click="selectAddressOption(address_name.depth1_name, 1)">{{ address_name.depth1_name
+                            }}</button>
                     </span>
                     <span class="top-button-text">
-                        <button class="btn btn-primary btn-ghost btn-address2" @click="selectAddressOption(address_name.depth2_name,2)">{{ address_name.depth2_name }}</button>
+                        <button class="btn btn-primary btn-ghost btn-address2"
+                            @click="selectAddressOption(address_name.depth2_name, 2)">{{ address_name.depth2_name
+                            }}</button>
                     </span>
                 </div>
-                
+
             </div>
             <div class="modal-top">
                 <div class="modal-top-title">옵션 선택(중복 선택 가능)</div>
                 <hr>
                 <div class="modal-mid">
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn1" @click="selectOption('먹거리/패션거리',1)">먹거리/패션거리</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn2" @click="selectOption('아쿠아리움/대형수족관',2)">아쿠아리움/대형수족관</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn3" @click="selectOption('유명관광지',3)">유명관광지</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn4" @click="selectOption('일반관광지',4)">일반관광지</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn5" @click="selectOption('캠핑',5)">캠핑</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn6" @click="selectOption('테마공원/대형놀이공원',6)">테마공원/대형놀이공원</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn7" @click="selectOption('폭포/계곡',7)">폭포/계곡</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn8" @click="selectOption('해수욕장',8)">해수욕장</button></span>
-                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn9" @click="selectOption('관광안내소/매표소',9)">관광안내소/매표소</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn1"
+                            @click="selectOption('먹거리/패션거리', 1)">먹거리/패션거리</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn2"
+                            @click="selectOption('아쿠아리움/대형수족관', 2)">아쿠아리움/대형수족관</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn3"
+                            @click="selectOption('유명관광지', 3)">유명관광지</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn4"
+                            @click="selectOption('일반관광지', 4)">일반관광지</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn5"
+                            @click="selectOption('캠핑', 5)">캠핑</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn6"
+                            @click="selectOption('테마공원/대형놀이공원', 6)">테마공원/대형놀이공원</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn7"
+                            @click="selectOption('폭포/계곡', 7)">폭포/계곡</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn8"
+                            @click="selectOption('해수욕장', 8)">해수욕장</button></span>
+                    <span class="top-button-text"><button class="btn btn-primary btn-ghost btn9"
+                            @click="selectOption('관광안내소/매표소', 9)">관광안내소/매표소</button></span>
                     <div class="modal-btm">
                         <button class="select-bttn" @click="modalReSearchClick()">{{ modal_btn_name }}</button>
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
     <header class="header">
@@ -59,8 +72,8 @@
                     <li v-for="(space, index) in check_space" :key="index">
                         <!-- check_space 배열에서 리스트 가져오기 -->
                         <div class="pl">
-                                <!-- 리스트 안 삭제버튼 클릭시 리스트에서 삭제-->
-                            
+                            <!-- 리스트 안 삭제버튼 클릭시 리스트에서 삭제-->
+
                             <div class="place-info">
                                 <!-- 마커의 추가하기 버튼 클릭시 리스트에 추가 -->
                                 <div class="place-name">{{ space.name }}</div>
@@ -72,7 +85,7 @@
                             </button>
                         </div>
                     </li>
-                </ul>               
+                </ul>
             </div>
             <div class="slide-btm">
                 <p class="toggle_btm" @click="moveListPage()">일정만들기</p>
@@ -82,10 +95,10 @@
     <div class="category_list">
         <ul class="list_bubble_filter">
             <li v-for="(category, index) in categories" :key="index">
-            <button @click="btnClick(category)" class="epehmC" :class="{ clicked: category_click[category.id] }">
-                <span :class="`category_click.bg${category.id}`"></span>
-                {{ category.name }}
-            </button>
+                <button @click="btnClick(category)" class="epehmC" :class="{ clicked: category_click[category.id] }">
+                    <span :class="`category_click.bg${category.id}`"></span>
+                    {{ category.name }}
+                </button>
             </li>
         </ul>
     </div>
@@ -112,8 +125,8 @@ export default {
             address_options: [], // 시도, 시군구를 선택했을 경우 저장할 배열
 
             category_click: {
-                food:false,
-                cafe:false,
+                food: false,
+                cafe: false,
                 pension: false,
                 paking: false,
                 coupon: false,
@@ -122,7 +135,7 @@ export default {
             categories: [
                 { id: "CS2", name: "편의점" },
                 { id: "MT1", name: "마트" },
-                { id: "FD6", name: "음식점"},
+                { id: "FD6", name: "음식점" },
                 { id: "CE7", name: "카페" },
                 { id: "BK9", name: "은행" },
                 { id: "AD5", name: "숙박" },
@@ -130,11 +143,11 @@ export default {
                 { id: "AT4", name: "관광명소" },
                 { id: "PK6", name: "주차장" },
                 { id: "OL7", name: "주유소" },
-                { id: "SW8", name: "지하철역"},
+                { id: "SW8", name: "지하철역" },
             ],
             check_space: [], //체크된 장소
             addrName: "", // ListPage로 전달할 주소명
-            addrBuildingName : "", // ListPage로 전달할 건물명
+            addrBuildingName: "", // ListPage로 전달할 건물명
         };
     },
     methods: {
@@ -182,7 +195,7 @@ export default {
                     if (roadAddress) {
                         name = roadAddress.building_name; // road_address가 존재하면 building_name을 할당, 아니면 빈 문자열 할당
                         // this.addrName = name; // 주소명이 정확하게 있을 경우
-                        if(name) { // 건물명이 있을 경우
+                        if (name) { // 건물명이 있을 경우
                             this.addrBuildingName = name; // ListPage에 넘길 건물명 이름
                         } else {
                             this.addrName = roadAddress.address_name; // ListPage에 넘길 도로주소명
@@ -192,7 +205,7 @@ export default {
                         this.addrName = address; // 주소명이 정확하게 없을 경우 도로주소를 저장
                     }
 
-                    if (this.mpName){
+                    if (this.mpName) {
                         name = this.mpName;
                         this.addrBuildingName = name; // 지명
                     }
@@ -226,7 +239,7 @@ export default {
         },
 
         // 여러 마커들을 한 눈에 보기 위해 지도 범위 재설정
-        allViewMarkers(mpMarker){
+        allViewMarkers(mpMarker) {
             // 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성
             var bounds = new kakao.maps.LatLngBounds();
             this.markers.forEach(marker => {
@@ -249,11 +262,11 @@ export default {
             sessionStorage.setItem("buildingName", this.addrBuildingName);
             sessionStorage.setItem("mpLatLng", JSON.stringify(mpLatLng));
             sessionStorage.setItem("selectInfo", JSON.stringify(this.check_space));
-            
-            this.$router.push({ 
-                    path: "/ListPage.page", 
-                    query: {"mpLat" : this.mpLatitude, "mpLon" : this.mpLongitude },
-                });
+
+            this.$router.push({
+                path: "/ListPage.page",
+                query: { "mpLat": this.mpLatitude, "mpLon": this.mpLongitude },
+            });
         },
 
         moveBack() {
@@ -262,13 +275,13 @@ export default {
         },
 
         // URL 디코딩
-        decode(cookieValue){
+        decode(cookieValue) {
             const vm = this;
             var decodedCookieValue = decodeURIComponent(cookieValue);
             // (사용자 이름, 주소명, 주소, 위도, 경도 ) 순서대로 저장
             decodedCookieValue = decodedCookieValue.replaceAll("+", " ").split("=");
             vm.userData.push({
-                name:decodedCookieValue[0],
+                name: decodedCookieValue[0],
                 address_name: decodedCookieValue[1],
                 address: decodedCookieValue[2],
                 latlng: new window.kakao.maps.LatLng(parseFloat(decodedCookieValue[3]), parseFloat(decodedCookieValue[4])),
@@ -281,54 +294,68 @@ export default {
             var cookies = document.cookie.split(";"); // 쿠키를 불러와서 ;(세미콜론)을 기준으로 분할
             // var count = 1; // USER 뒤에 붙는 수
             // 쿠키를 순회하여 USER 쿠키에 저장된 값을 불러옴
-            for( var i = 0; i < cookies.length; i++){ // 쿠키 순회하면서 원하는 쿠키 찾기(USER1 USER2 등)
+            for (var i = 0; i < cookies.length; i++) { // 쿠키 순회하면서 원하는 쿠키 찾기(USER1 USER2 등)
                 var cookie = cookies[i].trim();
                 cookie = cookie.split("=");
-                if(cookie[0].includes('USER')) {
+                if (cookie[0].includes('USER')) {
                     vm.decode(cookie[1]);
                 }
             }
-            
+
             // 쿠키에서 추출한 값을 통해 사용자들 위치 마커 생성
-            for(i = 0; i < vm.userData.length; i++) {
-                const rand0_5 = Math.floor(Math.random()* 6)
-                var imageSrc = require('@/assets/human'+rand0_5+'.png'), // 마커이미지의 주소입니다    
-                    imageSize = new kakao.maps.Size(50, 50) // 마커이미지의 크기입니다
+            for (let i = 0; i < vm.userData.length; i++) {
+                (function (i) {
+                    const rand0_5 = Math.floor(Math.random() * 6);
+                    const imageSrc = require('@/assets/human' + rand0_5 + '.png'); // 마커 이미지의 주소입니다    
+                    const imageSize = new kakao.maps.Size(50, 50); // 마커 이미지의 크기입니다
+                    const hoverImageSize = new kakao.maps.Size(40, 40); // 호버했을 때 마커 이미지의 크기입니다
 
-                var markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+                    const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+                    const hoverMarkerImage = new window.kakao.maps.MarkerImage(imageSrc, hoverImageSize);
 
-                // 마커를 생성합니다
-                var marker = new window.kakao.maps.Marker({
-                    map: vm.map, // 마커를 표시할 지도
-                    position: vm.userData[i].latlng, // 마커의 위치
-                    image: markerImage
-                });
+                    // 마커를 생성합니다
+                    const marker = new window.kakao.maps.Marker({
+                        map: vm.map, // 마커를 표시할 지도
+                        position: vm.userData[i].latlng, // 마커의 위치
+                        image: markerImage
+                    });
 
-                // 마커에 표시할 인포윈도우를 생성합니다 
-                var infowindow = new window.kakao.maps.InfoWindow({
-                    content: `
+                    // 마커에 mouseover 이벤트 리스너를 추가합니다
+                    window.kakao.maps.event.addListener(marker, 'mouseover', function () {
+                        marker.setImage(hoverMarkerImage);
+                    });
+
+                    // 마커에 mouseout 이벤트 리스너를 추가합니다
+                    window.kakao.maps.event.addListener(marker, 'mouseout', function () {
+                        marker.setImage(markerImage);
+                    });
+
+                    // 마커에 표시할 인포윈도우를 생성합니다 
+                    var infowindow = new window.kakao.maps.InfoWindow({
+                        content: `
                             <div id="infowindow" style="padding:5px;font-size:12px;">
                                 <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>${vm.userData[i].name}</strong></div>
                                 <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${vm.userData[i].address_name}</div>
                                 <div style="margin-top: 5px;">${vm.userData[i].address}</div>
                             </div>` // 인포윈도우에 표시할 내용
-                });
-                vm.markers.push(marker);
-                // 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
-                // 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-                (function(marker, infowindow) {
-                    // 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
-                    window.kakao.maps.event.addListener(marker, 'mouseover', function() {
-                        infowindow.open(vm.map, marker);
                     });
+                    vm.markers.push(marker);
+                    // 마커에 이벤트를 등록하는 함수 만들고 즉시 호출하여 클로저를 만듭니다
+                    // 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                    (function (marker, infowindow) {
+                        // 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
+                        window.kakao.maps.event.addListener(marker, 'mouseover', function () {
+                            infowindow.open(vm.map, marker);
+                        });
 
-                    // 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
-                    window.kakao.maps.event.addListener(marker, 'mouseout', function() {
-                        infowindow.close();
-                    });
-                })(marker, infowindow);
+                        // 마커에 mouseout 이벤트를 등록하고 마우스 아웃 시 인포윈도우를 닫습니다
+                        window.kakao.maps.event.addListener(marker, 'mouseout', function () {
+                            infowindow.close();
+                        });
+                    })(marker, infowindow);
+                })(i);
             }
-            
+
             vm.markers.forEach(marker => marker.setMap(vm.map));
         },
 
@@ -336,12 +363,12 @@ export default {
         reSearch() {
             this.modalOpen = true;
         },
-        
+
         // 재탐색에 필요한 옵션 버튼들을 클릭시 실행
         // 처음 클릭시 버튼의 배경색과 글자색을 바꿈. 이미선택한 걸 다시 선택시 처음 상태로 변경
-        selectOption(value, num){
+        selectOption(value, num) {
             const btn = document.querySelector('.btn' + num);
-            if(this.options.includes(value)){ // 배열에 해당 값이 있을시 해당 값을 삭제
+            if (this.options.includes(value)) { // 배열에 해당 값이 있을시 해당 값을 삭제
                 this.options = this.options.filter((result) => result !== value);
                 btn.style.backgroundColor = "#fff"; // 배경색 변경
                 btn.style.color = '#5271ff'; // 글자색 변경
@@ -355,9 +382,9 @@ export default {
 
         // 모달창의 지역선택에 옵션들을 클릭했을 경우
         // 처음 클릭시 버튼의 배경색과 글자색을 바꿈. 이미선택한 걸 다시 선택시 처음 상태로 변경
-        selectAddressOption(value, num){
+        selectAddressOption(value, num) {
             const btn = document.querySelector('.btn-address' + num);
-            if(this.address_options.includes(value)){ // 배열에 해당 값이 있을시 해당 값을 삭제
+            if (this.address_options.includes(value)) { // 배열에 해당 값이 있을시 해당 값을 삭제
                 this.address_options = this.address_options.filter((result) => result !== value);
                 btn.style.backgroundColor = "#fff"; // 배경색 변경
                 btn.style.color = '#5271ff'; // 글자색 변경
@@ -371,38 +398,38 @@ export default {
         },
 
         // 모달창의 재탐색 버튼
-        modalReSearchClick(){
-            if(this.modal_btn_name == "닫기" ){
+        modalReSearchClick() {
+            if (this.modal_btn_name == "닫기") {
                 this.modalOpen = false;
                 return false;
             }
-            if(this.address_options == "") {
+            if (this.address_options == "") {
                 alert("지역을 선택하여 주시기 바랍니다.");
-                return ;
+                return;
             }
-            if(this.options == "") {
+            if (this.options == "") {
                 alert("옵션을 한개이상 선택해주시기 바랍니다.");
-                return ;
+                return;
             }
             const region = ["경기도", "경상남도", "경상북도", "광주광역시", "대구광역시", "대전광역시", "부산광역시", "서울특별시", "울산광역시", "인천광역시", "전라남도", "전라북도", "충청남도", "충청북도"];
             let reSearch_data = { // 재탐색에 필요한 데이터를 보낼 데이터 저장
-                num : 0, // 0이면 시도만 선택하거나, 둘 다 선택한 경우. 1이면 시군구만 선택한 경우
-                region_1depth_name : "", // 시도
-                region_2depth_name : "", // 시군구
-                option : this.options,
+                num: 0, // 0이면 시도만 선택하거나, 둘 다 선택한 경우. 1이면 시군구만 선택한 경우
+                region_1depth_name: "", // 시도
+                region_2depth_name: "", // 시군구
+                option: this.options,
             }
             // 배열에 저장된 것이 시도와 시군구를 구분하지 않고 저장 했으므로 어떤것이 시도인지 구분
             this.address_options.forEach(value => {
-                if(region.indexOf(value) > 0){
+                if (region.indexOf(value) > 0) {
                     reSearch_data.region_1depth_name = value; // 시도
-                } else{
+                } else {
                     reSearch_data.region_2depth_name = value; // 시군구
                 }
             })
 
             // 만약 대구광역시 동구 ... 이런식으로 나왔을 경우에 동구만 선택했을 경우
             // 대구광역시 동구에서만 검색하기 위해서
-            if(reSearch_data.region_1depth_name === "" && reSearch_data.region_2depth_name !== ""){ // 시군구만 선택했을 경우
+            if (reSearch_data.region_1depth_name === "" && reSearch_data.region_2depth_name !== "") { // 시군구만 선택했을 경우
                 reSearch_data.num = 1;
                 reSearch_data.region_1depth_name = this.address_name.depth1_name;
             }
@@ -414,7 +441,7 @@ export default {
                 data: reSearch_data,
             })
                 .then((response) => {
-                    if(response.data != ""){
+                    if (response.data != "") {
                         this.mpLatitude = response.data.latitude; // 새로운 위도
                         this.mpLongitude = response.data.longitude; // 새로운 경도
                         this.mpName = response.data.name; // 새로운 주소 이름
@@ -434,25 +461,25 @@ export default {
 
         // 중간지점 지번주소 반환 후 데이터 저장
         // 좌표를 가지고 주소로 변환 후 시도, 시군구를 추출
-        addressInfo(){
+        addressInfo() {
             const geocoder = new window.kakao.maps.services.Geocoder();
             geocoder.coord2Address(this.mpLongitude, this.mpLatitude, (result, status) => {
-                if(status === window.kakao.maps.services.Status.OK) {
+                if (status === window.kakao.maps.services.Status.OK) {
                     let address = result[0].address.region_1depth_name;
-                    if(address === "경기") address = "경기도";
-                    if(address === "경남") address = "경상남도";
-                    if(address === "경북") address = "경상북도";
-                    if(address === "광주") address = "광주광역시";
-                    if(address === "대구") address = "대구광역시";
-                    if(address === "대전") address = "대전광역시";
-                    if(address === "부산") address = "부산광역시";
-                    if(address === "서울") address = "서울특별시";
-                    if(address === "울산") address = "울산광역시";
-                    if(address === "인천") address = "인천광역시";
-                    if(address === "전남") address = "전라남도";
-                    if(address === "전북") address = "전라북도";
-                    if(address === "충남") address = "충청남도";
-                    if(address === "충북") address = "충청북도";
+                    if (address === "경기") address = "경기도";
+                    if (address === "경남") address = "경상남도";
+                    if (address === "경북") address = "경상북도";
+                    if (address === "광주") address = "광주광역시";
+                    if (address === "대구") address = "대구광역시";
+                    if (address === "대전") address = "대전광역시";
+                    if (address === "부산") address = "부산광역시";
+                    if (address === "서울") address = "서울특별시";
+                    if (address === "울산") address = "울산광역시";
+                    if (address === "인천") address = "인천광역시";
+                    if (address === "전남") address = "전라남도";
+                    if (address === "전북") address = "전라북도";
+                    if (address === "충남") address = "충청남도";
+                    if (address === "충북") address = "충청북도";
                     this.address_name.depth1_name = address; // ex. OO광역시,OOO도, OO특별자치도 등 저장
                     this.address_name.depth2_name = result[0].address.region_2depth_name; // ex. 시군구를 저장
                 }
@@ -482,9 +509,9 @@ export default {
                 // kakao.maps.services.Places()가 존재하는지 확인
                 if (window.kakao.maps.services.Places) {
                     const placesService = new window.kakao.maps.services.Places();
-                    
+
                     // 검색 결과 반환받을 함수
-                    var callback = function(result, status) {
+                    var callback = function (result, status) {
                         if (status === window.kakao.maps.services.Status.OK) {
                             this.saveMarkersByCategory(result, target_category);
                             this.showCircle(locPosition, 5000);//반경을 원으로 표시
@@ -539,7 +566,7 @@ export default {
                 });
 
                 //마커 클릭이벤트 (마커 삭제 추가)
-                window.kakao.maps.event.addListener(marker,'click',() => {
+                window.kakao.maps.event.addListener(marker, 'click', () => {
                     //현재 열려있는 인포윈도우가 있다면 닫기
                     if (marker.infowindow) {
                         //마커의 인포윈도우가 열려 있으면 닫기
@@ -571,15 +598,15 @@ export default {
                                             추가하기
                                     </label>
                                 </div>
-                            </div>`    
+                            </div>`
                         });
-                    marker.infowindow.open(this.map, marker);
+                        marker.infowindow.open(this.map, marker);
 
-                    //button 감지 이벤트
-                    const button = document.querySelector('.placeCheckbox'); //.placeChaeckbox 값 찾아서 반환
+                        //button 감지 이벤트
+                        const button = document.querySelector('.placeCheckbox'); //.placeChaeckbox 값 찾아서 반환
 
-                    if (button) button.addEventListener('click', this.handleCheckboxChange); //버튼 클릭시 HandleCheckboxChange 함수 호출
-                    // handleCheckboxChange 호출하며 동시에 event.target 이벤트 활성화, --> 위의 data-name, data-location, data-phone 데이터 값 참조
+                        if (button) button.addEventListener('click', this.handleCheckboxChange); //버튼 클릭시 HandleCheckboxChange 함수 호출
+                        // handleCheckboxChange 호출하며 동시에 event.target 이벤트 활성화, --> 위의 data-name, data-location, data-phone 데이터 값 참조
                     }
                 });
                 //생성한 마커를 markers 배열에 추가
@@ -622,7 +649,7 @@ export default {
                 //space에 저장된 장소 이름, 상세 주소, 장소 번호 중복 검사
                 return space.name === placeName && space.location === placeLocation && space.phone === placePhone
             });
-            
+
             //중복 장소가 아니면 추가
             if (!isAlreadyAdded) {
                 //새로운 장소를 check_space 배열에 추가
@@ -640,8 +667,8 @@ export default {
 
     created() {
         //category_click 객체 초기화
-        for(let key in this.category_click) {
-                    this.category_click[key] = false;
+        for (let key in this.category_click) {
+            this.category_click[key] = false;
         }
     },
     mounted() {
@@ -654,7 +681,7 @@ export default {
             /* global kakao */
             script.onload = () => kakao.maps.load(this.initMap);
             script.src =
-            "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing";
+                "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=bf8710c35ec333b84272056c6f3d32e8&libraries=services,clusterer,drawing";
             document.head.appendChild(script);
         }
     },
@@ -702,11 +729,14 @@ export default {
     border: 1px solid black;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
 /* 재탐색 버튼 마우스오버시 회전*/
 #reSearch:hover {
-    animation: rotate_image 1.8s linear infinite;transform-origin: 50% 50%;
-}  
-@keyframes rotate_image{
+    animation: rotate_image 1.8s linear infinite;
+    transform-origin: 50% 50%;
+}
+
+@keyframes rotate_image {
     100% {
         transform: rotate(360deg);
     }
@@ -812,22 +842,26 @@ ul li a i {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.slide-top{
+.slide-top {
     height: 10%;
     flex: none;
 }
-.slide-top h1{
+
+.slide-top h1 {
     font-size: 3em;
 }
-.slide-mid{
+
+.slide-mid {
     height: 80%;
     overflow: auto;
 }
-.slide-btm{
+
+.slide-btm {
     height: 10%;
     flex: none;
     margin-top: 1em;
 }
+
 .toggle_btm {
     position: absolute;
     height: 65px;
@@ -932,7 +966,8 @@ ul li a i {
 
 .modal-btm {
     margin-top: 2em;
-    text-align: right; /* 선택 버튼을 오른쪽 정렬 */
+    text-align: right;
+    /* 선택 버튼을 오른쪽 정렬 */
     display: flex;
     justify-content: center;
 }
@@ -975,17 +1010,27 @@ ul li a i {
 
 /* Ghost 버튼 스타일 */
 .btn-primary.btn-ghost {
-    width: auto; /* 가로 크기 자동 조정 */
-    height: auto; /* 세로 크기 자동 조정 */
-    display: inline-block; /* 한 줄에 나타내기 */
-    border-radius: 10px; /* 모서리 둥글게 */
-    border: 1px solid #5271ff; /* 테두리 색 설정 */
-    background-color: transparent; /* 배경색 투명하게 */
-    color: #5271ff; /* 글자색 */
-    padding: 10px 20px; /* 내부 여백 */
+    width: auto;
+    /* 가로 크기 자동 조정 */
+    height: auto;
+    /* 세로 크기 자동 조정 */
+    display: inline-block;
+    /* 한 줄에 나타내기 */
+    border-radius: 10px;
+    /* 모서리 둥글게 */
+    border: 1px solid #5271ff;
+    /* 테두리 색 설정 */
+    background-color: transparent;
+    /* 배경색 투명하게 */
+    color: #5271ff;
+    /* 글자색 */
+    padding: 10px 20px;
+    /* 내부 여백 */
     cursor: pointer;
-    font-size: 1em; /* 글자 크기 */
-    margin-right: 10px; /* 오른쪽 마진 추가 */
+    font-size: 1em;
+    /* 글자 크기 */
+    margin-right: 10px;
+    /* 오른쪽 마진 추가 */
 }
 
 .btn-primary.btn-ghost:hover {
@@ -994,18 +1039,23 @@ ul li a i {
 
 /* HelloWorld 버튼 스타일 */
 .modal-mid span {
-    display: inline-block; /* 한 줄에 나타내기 */
-    margin-right: 10px; /* 오른쪽 마진 추가 */
+    display: inline-block;
+    /* 한 줄에 나타내기 */
+    margin-right: 10px;
+    /* 오른쪽 마진 추가 */
 }
 
-.btn-primary.btn-ghost + .btn-primary.btn-ghost {
-    margin-left: 10px; /* Ghost 버튼과 간격 추가 */
+.btn-primary.btn-ghost+.btn-primary.btn-ghost {
+    margin-left: 10px;
+    /* Ghost 버튼과 간격 추가 */
 }
 
 /* 버튼 클릭시 버튼배경색 채우기 */
 .btn1 .btn2 .btn3 .btn4 .btn5 .btn6 .btn7 .btn8 .btn9 .btn-address1 .btn-address2 {
-    background-color: transparent; /* 배경색 투명하게 */
-    color: #5271ff; /* 글자색 */
+    background-color: transparent;
+    /* 배경색 투명하게 */
+    color: #5271ff;
+    /* 글자색 */
 }
 
 /* .category_list{
@@ -1042,17 +1092,20 @@ ul li a i {
 
 .list_bubble_filter li {
     display: inline-block;
-    margin-right: 10px; /* 각 버튼 사이의 간격 조절 */
+    margin-right: 10px;
+    /* 각 버튼 사이의 간격 조절 */
 }
 
 .epehmC {
     background-color: #ffffff;
     border: 1px solid #cccccc;
-    border-radius: 20px; /* 둥근 모서리 */
+    border-radius: 20px;
+    /* 둥근 모서리 */
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* 호버 효과를 위한 전이 효과 */
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    /* 호버 효과를 위한 전이 효과 */
 }
 
 .epehmC:hover {
@@ -1061,12 +1114,15 @@ ul li a i {
 }
 
 .clicked {
-    background-color: #7788ff; /* 선택된 버튼의 배경색 */
-    color: #ffffff; /* 선택된 버튼의 텍스트 색상 */
+    background-color: #7788ff;
+    /* 선택된 버튼의 배경색 */
+    color: #ffffff;
+    /* 선택된 버튼의 텍스트 색상 */
 }
 
 .clicked:hover {
-    background-color: #9ea9ff; /* 선택된 버튼에 호버 시 배경색 변경 */
+    background-color: #9ea9ff;
+    /* 선택된 버튼에 호버 시 배경색 변경 */
 }
 
 .pl {
@@ -1088,9 +1144,11 @@ ul li a i {
     font-size: 13px;
     text-align: left;
 }
-.place-location{
+
+.place-location {
     text-align: left;
 }
+
 .place-phone {
     color: #5271ff;
     text-align: left;
@@ -1100,7 +1158,7 @@ ul li a i {
     padding-left: 1em;
 }
 
-.delete_img{
+.delete_img {
     height: 20px;
     width: 20px;
 }
@@ -1111,5 +1169,4 @@ ul li a i {
     background: none;
     border: none;
 }
-
 </style>

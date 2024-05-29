@@ -50,7 +50,7 @@
                             <h2>{{ info.name }}</h2>
                             <h3>{{ info.location }}</h3>
                             <h3>{{ info.phone }}</h3>
-                            <a :href=info.placeUrl target="_blank">상세보기</a>
+                            <a :href=info.placeurl target="_blank" style="cursor: pointer">상세보기</a>
                         </div>
                     </div>
                 </div>

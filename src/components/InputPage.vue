@@ -187,6 +187,7 @@ export default {
         // ListPage로 이동
         moveListPage() {
             const vm = this;
+
             if(vm.friendList.length == 0) {
                 alert("친구 추가하기를 통해 위치를 등록 해주세요.");
                 return;
