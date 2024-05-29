@@ -38,8 +38,8 @@
                         <h2 class="meetPoint">{{ meetPoint != "" ? meetPoint : mpBuildingName }}</h2>
                         <p v-if="!selectedEndDate || !selectedStartDate">일정을 입력해주세요!</p>
                         <p v-if="selectedStartDate && selectedEndDate">{{ selectedStartDate + '(' +
-            this.selectedStartDay +
-            ')' }}
+                            this.selectedStartDay +
+                            ')' }}
                             ~ {{ selectedEndDate + '(' + this.selectedEndDay + ')' }}</p>
                     </div>
                 </div>
@@ -57,28 +57,33 @@
             </div>
             <div class="side-rightMain">
                 <h2 class="total-time">{{ selectedStayTime.hour + '시간 ' + selectedStayTime.minute + '분 / ' +
-            selectedDiffHour + '시간 0분' }}</h2>
+                    selectedDiffHour + '시간 0분' }}</h2>
                 <div class="scrollArea2">
-                    <div v-for="(info, i) in addCheckInfoList" :key="i" class="addCheckInfoList">
-                        <div class="infoList-left">
-                            <p :class="'timeSet' + i">{{ i + 1 }}</p>
-                            <div class="rR">
-                                <h3 :class="'timeSet' + i">{{ info.name }}</h3>
+                    <div v-for="(info, i) in addCheckInfoList" :key="i" class="acilWarp">
+                        <div class="addCheckInfoList">
+                            <div class="infoList-left">
+                                <p :class="'timeSet' + i">{{ i + 1 }}</p>
+                                <div class="rR">
+                                    <h3 :class="'timeSet' + i">{{ info.name }}</h3>
+                                </div>
+                                <div class="lL">
+                                    <button @click="timeSet(i)" :class="'timeSet' + i">{{ time_store[i].hour }}시간 {{
+                                        time_store[i].minute }}분</button>
+                                </div>
                             </div>
-                            <div class="lL">
-                                <button @click="timeSet(i)" :class="'timeSet' + i">{{ time_store[i].hour }}시간 {{ time_store[i].minute }}분</button>
+                            <div class="infoList-right">
+                                <p :class="'timeSetClose' + i" style="display: none;">머무는 시간 설정</p>
+                                <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;"
+                                    type="number" min='0' max='24' v-model="time_store[i].hour">
+                                <p :class="'timeSetClose' + i" style="display: none;">시간</p>
+                                <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;"
+                                    type="number" min='0' max='59' v-model="time_store[i].minute">
+                                <p :class="'timeSetClose' + i" style="display: none;">분</p>
+                                <button :class="'timeSetClose' + i" style="display: none;"
+                                    @click="timeClose(i)">완료</button>
                             </div>
                         </div>
-                        <div class="infoList-right">
-                            <p :class="'timeSetClose' + i" style="display: none;">머무는 시간 설정</p>
-                            <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;"
-                                type="number" min='0' max='24' v-model="time_store[i].hour">
-                            <p :class="'timeSetClose' + i" style="display: none;">시간</p>
-                            <input :class="'timeSetClose' + i" style="width: 100px; height: 27px; display: none;"
-                                type="number" min='0' max='59' v-model="time_store[i].minute">
-                            <p :class="'timeSetClose' + i" style="display: none;">분</p>
-                            <button :class="'timeSetClose' + i" style="display: none;" @click="timeClose(i)">완료</button>
-                        </div>
+                        <div v-if="i<addCheckInfoList.length -1" class="durationTime">{{ durationTime[i] }}</div>
                     </div>
                 </div>
                 <div class="share-button">
@@ -134,6 +139,9 @@ export default {
 
             // 중간지점 마커 클릭 여부
             infowindowOpened: false,
+
+            //duration 자차 이동시간
+            durationTime: ['2시간','3시간','1시간','2시간30분','2시간2분','2시간','34분','23시간'],
         }
     },
     methods: {
@@ -314,13 +322,13 @@ export default {
             this.addCheckInfoList.forEach(info => { //addCheckList에 있는 각 주소에 대한 반복
                 const address = info.location; //현재 주소 가져오기
                 const geocoder = new window.kakao.maps.services.Geocoder(); // Geocoder 서비스 생성
-                
+
                 geocoder.addressSearch(address, (result, status) => { //주소로부터 좌표 검색
                     if (status === kakao.maps.services.Status.OK) {
                         // 검색된 좌표를 LatLng 객체로 변환
                         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
                         //검색된 좌표를 bounds에 추가
-                        bounds.extend(coords); 
+                        bounds.extend(coords);
                         //지도를 좌표에 맞게 업데이트
                         this.map.setBounds(bounds);
                     }
@@ -440,10 +448,10 @@ export default {
 
         sharekakao(id) {
             const url = "http://localhost/ListPage.page?where=" + id + // DB에 저장된 ID값
-                        "&startDate="+ this.selectedStartDate +  // 시작 날짜
-                        "&startDay=" + encodeURI(this.selectedStartDay) +  // 시작 요일
-                        "&endDate=" + this.selectedEndDate +  // 마지막 날짜
-                        "&endDay=" + encodeURI(this.selectedEndDay);     // 마지막 요일
+                "&startDate=" + this.selectedStartDate +  // 시작 날짜
+                "&startDay=" + encodeURI(this.selectedStartDay) +  // 시작 요일
+                "&endDate=" + this.selectedEndDate +  // 마지막 날짜
+                "&endDay=" + encodeURI(this.selectedEndDay);     // 마지막 요일
             // Kakao 객체가 존재하고 초기화된 경우
             if (window.Kakao && window.Kakao.isInitialized()) {
                 // 카카오 공유를 위한 content 객체 생성
@@ -539,10 +547,10 @@ export default {
                 }
                 this.time_store.push(time);
                 this.selectInfo.some((infoPlace, index) => {
-                    if(place.name == infoPlace.name) {
+                    if (place.name == infoPlace.name) {
                         let checked_box = document.getElementById('checkedBox' + index);
-                        if(checked_box.checked == false){
-                            checked_box.checked = true; 
+                        if (checked_box.checked == false) {
+                            checked_box.checked = true;
                             this.addCheckInfo(index);
                         }
                     }
@@ -553,7 +561,7 @@ export default {
         // 데이터 초기값 설정
         initializeData() {
             // 세션스토리지에 데이터 여부 확인
-            if(sessionStorage.getItem("mpLatLng")){
+            if (sessionStorage.getItem("mpLatLng")) {
                 this.getSessionStorageData();
             } else {
                 this.modalOpen = false;
@@ -564,7 +572,7 @@ export default {
                 this.selectedEndDay = decodeURIComponent(this.$route.query.endDay);
                 const timeDiff = new Date(this.selectedEndDate).getTime() - new Date(this.selectedStartDate).getTime();
                 const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                this.selectedDiffHour = (diffDays + 1) * 24 
+                this.selectedDiffHour = (diffDays + 1) * 24
                 this.fetchPlaceData(idx);
             }
         },
@@ -849,7 +857,10 @@ a {
     width: 100%;
     flex-grow: 1;
 }
-
+.acilWarp{
+    height: 10%;
+    width: 100%;
+}
 .addCheckInfoList {
     display: flex;
     /* text-align: center; */
@@ -857,7 +868,7 @@ a {
     font-size: 1.5em;
     justify-content: space-between;
     width: 90%;
-    height: 8%;
+    height: 70%;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-top: 5%;
@@ -866,7 +877,8 @@ a {
     text-align: left;
 }
 
-.infoList-left, .infoList-right {
+.infoList-left,
+.infoList-right {
     display: flex;
     align-items: center;
 }
@@ -874,6 +886,7 @@ a {
 .infoList-left {
     flex-grow: 1;
 }
+
 .infoList-right {
     flex-grow: 1;
     /* flex-direction: column; */
@@ -910,6 +923,11 @@ input[type="checkbox"] {
 
 .total-time {
     margin-top: 5%;
+    font-size: 1.5em;
+}
+
+.durationTime{
+    margin-top: 1em;
     font-size: 1.5em;
 }
 
