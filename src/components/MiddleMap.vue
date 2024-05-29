@@ -653,7 +653,7 @@ export default {
             //중복 장소가 아니면 추가
             if (!isAlreadyAdded) {
                 //새로운 장소를 check_space 배열에 추가
-                this.check_space.push({ name: placeName, location: placeLocation, phone: placePhone, placeUrl: placeUrl });
+                this.check_space.push({ name: placeName, location: placeLocation, phone: placePhone, placeurl: placeUrl });
             }
         },
         checkboxClear(space) {
