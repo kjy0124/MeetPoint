@@ -363,7 +363,7 @@ export default {
                     })(marker, infowindow);
                 })(i);
             }
-
+            sessionStorage.setItem('markerImageName', JSON.stringify(vm.userexist));
             vm.markers.forEach(marker => marker.setMap(vm.map));
         },
 
