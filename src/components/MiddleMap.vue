@@ -313,7 +313,7 @@ export default {
                     }
                     else{
                         rand0_5 = Math.floor(Math.random() * 6);
-                        vm.userexist.push(rand0_5);   
+                        vm.userexist[i] = rand0_5;   
                     }
                     const imageSrc = require('@/assets/human' + rand0_5 + '.png'); // 마커 이미지의 주소입니다    
                     const imageSize = new kakao.maps.Size(50, 50); // 마커 이미지의 크기입니다
@@ -454,6 +454,8 @@ export default {
                         this.mpLatitude = response.data.latitude; // 새로운 위도
                         this.mpLongitude = response.data.longitude; // 새로운 경도
                         this.mpName = response.data.name; // 새로운 주소 이름
+                        this.userMarkers = []; // 사용자 위치 마커들 초기화
+                        this.userData = []; // 사용자들 이름, 주소 데이터 초기화
                         this.initMap(); // 새로운 중간 장소 생성
                         this.options = []; // 재탐색 옵션 선택한 것 초기화
                         this.address_options = []; // 재탐색 옵션에 지역선택한 것 초기화
