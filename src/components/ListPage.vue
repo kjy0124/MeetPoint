@@ -55,7 +55,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div v-for="(DiffDate, i) in selectedDiffDate+1" :key="i" :class="[`side-right${i+1}`]" ></div> -->
             <div class="side-rightMain">
                 <h2 class="total-time">{{ selectedStayTime.hour + '시간 ' + selectedStayTime.minute + '분 / ' +
             selectedDiffHour + '시간 0분' }}</h2>
@@ -477,9 +476,9 @@ export default {
             let description = '';
             //각 체크인 정보를 반복하면서 설명 문자열 생성
             this.addCheckInfoList.forEach((info, index) => {
-                description += `${index + 1}. 장소: ${info.placeName}\n`;
-                description += `   주소: ${info.placeAddress}\n`;
-                description += `   전화번호: ${info.placeCallNum}\n`;
+                description += `${index + 1}. 장소: ${info.name}\n`;
+                description += `   주소: ${info.location}\n`;
+                description += `   전화번호: ${info.phone}\n`;
                 description += `   머무는 시간: ${this.time_store[index].hour}시간 ${this.time_store[index].minute}분\n\n`;
             });
             //머무는 시간 추가
