@@ -114,6 +114,7 @@ export default {
             modalOpen: false, // 모달 창 해제
             markers: [], // 사용자 위치 마커들 저장
             userData: [], // 사용자들 이름, 주소 데이터
+            userexist: [], // 사용자 세션에 들어갈 데이터
             mpLatitude: "", // 중간좌표 위도
             mpLongitude: "", // 중간좌표 경도
             mpName: "", // 재탐색을 통해 주소 이름 저장
@@ -305,22 +306,19 @@ export default {
             // 쿠키에서 추출한 값을 통해 사용자들 위치 마커 생성
             for (let i = 0; i < vm.userData.length; i++) {
                 (function (i) {
-                    const rand0_5 = Math.floor(Math.random() * 6);
+                    let rand0_5 = 0;
+                    if(vm.userexist != ""){
+                        rand0_5 = Math.floor(Math.random() * 6);
+                        vm.userexist[i] = rand0_5;   
+                    }
+                    else{rand0_5 = vm.userexist[i];}
+
                     const imageSrc = require('@/assets/human' + rand0_5 + '.png'); // 마커 이미지의 주소입니다    
                     const imageSize = new kakao.maps.Size(50, 50); // 마커 이미지의 크기입니다
                     const hoverImageSize = new kakao.maps.Size(40, 40); // 호버했을 때 마커 이미지의 크기입니다
 
                     const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
-                    const hoverMarkerImage = new window.kakao.maps.MarkerImage(imageSrc, hoverImageSize);
-
-                    sessionStorage.setItem('markerImageName'+i, 'human'+rand0_5);
-
-                    // 마커를 생성합니다
-                    const marker = new window.kakao.maps.Marker({
-                        map: vm.map, // 마커를 표시할 지도
-                        position: vm.userData[i].latlng, // 마커의 위치
-                        image: markerImage
-                    });
+                    const hoverMarkerImage = new window.kakao.maps.MarkerImage(imageSrc, hoverImageSize);                   
 
                     // 마커에 mouseover 이벤트 리스너를 추가합니다
                     window.kakao.maps.event.addListener(marker, 'mouseover', function () {
@@ -332,6 +330,12 @@ export default {
                         marker.setImage(markerImage);
                     });
 
+                    // 마커를 생성합니다
+                    const marker = new window.kakao.maps.Marker({
+                            map: vm.map, // 마커를 표시할 지도
+                            position: vm.userData[i].latlng, // 마커의 위치
+                            image: markerImage
+                        });
                     // 마커에 표시할 인포윈도우를 생성합니다 
                     var infowindow = new window.kakao.maps.InfoWindow({
                         content: `
@@ -357,6 +361,8 @@ export default {
                     })(marker, infowindow);
                 })(i);
             }
+
+            sessionStorage.setItem('markerImageName', JSON.stringify(vm.userexist)); 
 
             vm.markers.forEach(marker => marker.setMap(vm.map));
         },
@@ -664,6 +670,14 @@ export default {
             if (index !== -1) {
                 this.check_space.splice(index, 1);
             }
+        },
+
+        getSessionStorageData() {
+            const vm = this
+            let i = 0;
+            for (i; i < vm.userData.length; i++) {
+                vm.userexist[i] = sessionStorage.getItem('markerImageName' + i);
+            }
         }
     },
 
@@ -674,11 +688,12 @@ export default {
         }
     },
     mounted() {
+        this.userexist = JSON.parse(sessionStorage.getItem('markerImageName'));
         this.mpLatitude = this.$route.query.mpLatitude; // 첫 번째페이지에서 라우터로 전달해준 위도값
         this.mpLongitude = this.$route.query.mpLongitude; // 첫 번째 페이지에서 라우터로 전달해준 경도값
         if (window.kakao && window.kakao.maps) {
             this.initMap();
-            
+
         } else {
             const script = document.createElement("script");
             /* global kakao */
