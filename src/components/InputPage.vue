@@ -239,7 +239,6 @@ export default {
     display: flex;
     text-align: center;
     align-items: center;
-
 }
 
 .background {
@@ -519,50 +518,38 @@ export default {
     display: flex;
     align-items: center;
 }
+
 /* 미디어 쿼리 */
-@media screen and (max-width: 1200px) {
-    .warper {
-        width: 80%;
-        height: 85%;
-        left: 10%;
-    }
+@media screen and (max-width: 768px) {
 
     .warper-top h1 {
         font-size: 3em;
     }
 
     .warper-top h3 {
-        font-size: 1.5em;
+        display: none;
     }
-
-    .add-button,
-    .submit-button {
-        font-size: 1.5em;
+    .warper-mid{
+        width: 100%;
     }
-}
-
-@media screen and (max-width: 768px) {
-    .warper {
-        width: 90%;
-        height: 90%;
-        left: 5%;
-    }
-
-    .warper-top h1 {
-        font-size: 2.5em;
-    }
-
-    .warper-top h3 {
-        font-size: 1.2em;
-    }
-
     .warper-mid-top {
-        font-size: 1.5rem;
+        font-size: 2rem;
+        height: 100%;
+        width: 95%;
+        padding: 0 0 0 0;
+    }
+
+    .warper-mid-btm h3{
+        display: none;
     }
 
     .add-button,
     .submit-button {
-        font-size: 1.2em;
+        width: 80%;
+    }
+    .submit-button{
+        margin-left: 0;
+        margin-bottom: 15px;
     }
 
     .element-left,
@@ -576,93 +563,15 @@ export default {
     }
 
     .element-right {
+        width: 10%;
         margin-left: 2em;
     }
-}
 
-@media screen and (max-width: 480px) {
-    .warper {
-        width: 100%;
-        height: 95%;
-        left: 0;
+    .modal-content{
+        width: 80%;
     }
-
-    .warper-top h1 {
-        font-size: 2em;
-    }
-
-    .warper-top h3 {
-        font-size: 1em;
-    }
-
-    .warper-mid-top {
-        font-size: 1.2rem;
-    }
-
-    .add-button,
-    .submit-button {
-        font-size: 1em;
-    }
-
-    .element-left,
-    .element-mid,
-    .element-right {
-        font-size: 0.6em;
-    }
-
-    .element-left {
-        margin-right: 2%;
-    }
-
-    .element-right {
-        margin-left: 1em;
-    }
-
-    .modal-content {
-        width: 90%;
-        height: 80%;
-        padding: 1em;
-    }
-
-    .input-name,
-    .input-location {
-        font-size: 1.2em !important;
-    }
-
-    .search-img {
-        width: 1.5em;
-        height: 1.5em;
-    }
-}
-    
-@media screen and (max-width: 480px) {
-    .modal-content {
-        width: 90%;
-        height: 80%;
-        padding: 1em;
-    }
-
-    .input-name,
-    .input-location {
-        font-size: 1.2em !important;
-    }
-
-    .search-img {
-        width: 1.5em;
-        height: 1.5em;
-    }
-
-    .modal-content-btm-iner {
-        padding-left: 1em;
-        font-size: 1rem;
-    }
-
-    .location-name {
-        font-size: 1em;
-    }
-
-    .location-detail-address {
-        font-size: 0.9em;
+    .modal-content-btm-iner{
+        padding: 0;
     }
 }
 </style>
