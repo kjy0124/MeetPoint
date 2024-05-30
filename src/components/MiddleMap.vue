@@ -557,6 +557,17 @@ export default {
 
             // 원을 지도에 표시합니다
             circle.setMap(this.map);
+
+            var bounds = circle.getBounds();
+            
+            // 원을 지도에 표시합니다
+            circle.setMap(this.map);
+            this.map.panTo(bounds, {
+                animate : {
+                    duration: 2000,
+                }
+            });
+            
         },
 
         saveMarkersByCategory(result, target_category) {
