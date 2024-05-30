@@ -1183,4 +1183,55 @@ ul li a i {
     background: none;
     border: none;
 }
+
+/* 미디어 쿼리 */
+@media screen and (max-width: 1300px) {
+    .category_list {
+        display: flex;
+        flex-wrap: wrap;
+        width: 10%;
+    }
+
+    .list_bubble_filter {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        width: 100%;
+    }
+
+    .list_bubble_filter li {
+        flex: 0 0 50%; /* 한 줄에 몇 개의 아이템을 넣을지 조정 가능 */
+        box-sizing: border-box;
+        padding: 5px;
+        width: 100%;
+    }
+
+    .list_bubble_filter li button {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 1000px) {
+    .category_list{
+        display: none;
+    }
+    .slide{
+        width: 30%;
+        padding: 0 0 0 0;
+    }
+    .toggle_btm {
+        width: 60%;
+        left: 20%;
+        font-size: 1.7em;
+    }
+}
+@media screen and (max-width: 900px) {
+    .slide-top h1{
+        display: none;
+    }
+}
+@media screen and (max-width: 600px) {
+    .top-button-text, .modal-top-title, .select-bttn{font-size: 1.5em;}
+}
 </style>
