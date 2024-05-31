@@ -616,7 +616,6 @@ export default {
                                             data-name="${place.place_name}"
                                             data-location="${place.address_name}"
                                             data-phone="${place.phone}"
-                                            data-url="${place.place_url}">
                                             data-url="${place.place_url}"
                                             data-x="${place.x}"
                                             data-y="${place.y}">
