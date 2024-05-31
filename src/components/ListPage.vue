@@ -616,14 +616,16 @@ export default {
                 url: url
             })
                 .then((response) => {
+                    //경로 탐색 응답이 있고, 하나 이상의 경로가 존재할 경우
                     if (response.data.routes && response.data.routes.length > 0) {
-                        const route = response.data.routes[0];
-                        if (route.result_code == "0") {
-                            const durationInSeconds = route.summary.duration;
-                            const hours = Math.floor(durationInSeconds / 3600);
+                        const route = response.data.routes[0]; //첫 번째 경로 선택
+                        if (route.result_code == "0") { // 경로 탐색 성공했을 시
+                            const durationInSeconds = route.summary.duration; //총 소요 시간을 초 단위로 저장
+                            const hours = Math.floor(durationInSeconds / 3600); 
                             const minutes = Math.floor((durationInSeconds % 3600) / 60);
                             const seconds = durationInSeconds % 60;
 
+                            //durationTime 배열에 계산된 시간을 저장
                             this.durationTime[index] = `${hours} 시간 ${minutes} 분 ${seconds} 초`;
                         } else {
                             console.log(route.result_msg);
