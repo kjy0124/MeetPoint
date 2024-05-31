@@ -101,6 +101,8 @@
 
 <script>
 import axios from 'axios';
+import { reactive } from 'vue';
+
 export default {
     name: "ListPage",
     data() {
@@ -141,7 +143,7 @@ export default {
             infowindowOpened: false,
 
             //duration 자차 이동시간
-            durationTime: ['2시간','3시간','1시간','2시간30분','2시간2분','2시간','34분','23시간'],
+            durationTime: [(reactive)],
         }
     },
     methods: {
@@ -344,15 +346,23 @@ export default {
                 this.removeMarker(addCheckIndex); // 마커 제거
                 this.removeInfowindow(addCheckIndex); // 인포윈도우 제거
                 this.removeTime(addCheckIndex); // 머무르는 시간 제거
+                this.updateDurations(); // 경과 시간 업데이트
 
             } else {
                 //선택되지 않은 정보인 경우 배열에 추가
                 this.addCheckInfoList.push(this.selectInfo[index]);
                 this.addMarker(index);
                 this.addTime(); // 머무르는 시간 (0시0분) 생성
-
+                this.updateDurations();
             }
             this.updateMapBounds(); //체크박스 클릭 시 지도 업데이트
+        },
+
+        updateDurations() {
+            //선택된 리스트가 2개 이상일 때만 경과 시간 계산
+            for (let i = 0; i < this.addCheckInfoList.length -1; i++) {
+                this.carTime(i); //경과 시간을 불러오기 위한 carTime함수 호출
+            }
         },
 
         addMarker(index) {
@@ -576,6 +586,55 @@ export default {
                 this.fetchPlaceData(idx);
             }
         },
+        carTime(index) {
+            // Axios 요청 헤더 설정
+            const axiosHeader = {
+                'Authorization': 'KakaoAK 6bdf977aa54a27298dc04ae23f5b66ae',
+                'Content-Type': 'application/json'
+            }
+
+            if (this.addCheckInfoList.length < 2 || index >= this.addCheckInfoList.length - 1) {
+                alert("Invalid index or addCheckInfoList is undefined");
+                return;
+            }
+            //선택한 장소 정보 가져옴
+            const selectedPlace = this.addCheckInfoList[index];
+            const selectedPlace2 = this.addCheckInfoList[index + 1];
+
+            const origin = `${selectedPlace.placeX},${selectedPlace.placeY}`; // 출발지
+            const destination = `${selectedPlace2.placeX},${selectedPlace2.placeY}`; //도착지
+            // console.log(destination);
+            const priority = "RECOMMEND"; // 경로 탐색 방법 (default : 추천경로 - RECOMMEND)
+
+            const url = 'https://apis-navi.kakaomobility.com/v1/directions?origin=' + origin + '&destination=' + destination + '&priority=' + priority;
+            // console.log('url : ' + url)
+
+            // Axios 사용해서 get 요청 전송
+            axios({
+                method: 'get',
+                headers: axiosHeader,
+                url: url
+            })
+                .then((response) => {
+                    if (response.data.routes && response.data.routes.length > 0) {
+                        const route = response.data.routes[0];
+                        if (route.result_code == "0") {
+                            const durationInSeconds = route.summary.duration;
+                            const hours = Math.floor(durationInSeconds / 3600);
+                            const minutes = Math.floor((durationInSeconds % 3600) / 60);
+                            const seconds = durationInSeconds % 60;
+
+                            this.durationTime[index] = `${hours} 시간 ${minutes} 분 ${seconds} 초`;
+                        } else {
+                            console.log(route.result_msg);
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+
     },
 
     created() {
