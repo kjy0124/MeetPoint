@@ -172,7 +172,11 @@ export default {
                 data: data,
             })
                 .then((response) => {
-                    this.sharekakao(response.data.index);
+                    if(response.data.index == -1 ){
+                        alert("데이터를 저장하는데 오류가 발생하였습니다.");
+                    } else {
+                        this.sharekakao(response.data.index);
+                    }
                 })
                 .catch(function () {
                     alert("데이터를 저장하는데 오류가 발생하였습니다.");
@@ -600,9 +604,8 @@ export default {
             //선택한 장소 정보 가져옴
             const selectedPlace = this.addCheckInfoList[index];
             const selectedPlace2 = this.addCheckInfoList[index + 1];
-
-            const origin = `${selectedPlace.placeX},${selectedPlace.placeY}`; // 출발지
-            const destination = `${selectedPlace2.placeX},${selectedPlace2.placeY}`; //도착지
+            const origin = `${selectedPlace.placex},${selectedPlace.placey}`; // 출발지
+            const destination = `${selectedPlace2.placex},${selectedPlace2.placey}`; //도착지
             const priority = "RECOMMEND"; // 경로 탐색 방법 (default : 추천경로 - RECOMMEND)
 
             const url = 'https://apis-navi.kakaomobility.com/v1/directions?origin=' + origin + '&destination=' + destination + '&priority=' + priority;

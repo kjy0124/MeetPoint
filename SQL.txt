@@ -115,6 +115,8 @@ CREATE TABLE user_choice.selected_place (
 	PLACE_NM	VARCHAR(100),
 	PLACE_PHONE_NUM VARCHAR(50),
 	PLACE_URL	VARCHAR(1000),
+	PLACE_LAT	VARCHAR(25),
+	PLACE_LON	VARCHAR(25),
 	MP_ID INT NOT NULL REFERENCES user_choice.schedule_locations (id) ON DELETE CASCADE
 );
 
@@ -124,6 +126,8 @@ PLACE_LOCATION		장소 위치
 PLACE_NM			장소 이름
 PLACE_PHONE_NUM 	장소 전화번호
 PLACE_URL			장소 url
+PLACE_LAT			장소 위도
+PLACE_LON			장소 경도
 MP_ID 				schedule_locations 외래키	
 --------------------------------------------------------------
 
