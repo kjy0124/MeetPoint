@@ -62,7 +62,7 @@
                     <div v-for="(info, i) in addCheckInfoList" :key="i" class="acilWarp">
                         <div class="addCheckInfoList">
                             <div class="infoList-left">
-                                <p :class="'timeSet' + i">{{ i + 1 }}</p>
+                                <p :class="'timeSet' + i" class="timeSett">{{ i + 1 }}</p>
                                 <div class="rR">
                                     <h3 :class="'timeSet' + i">{{ info.name }}</h3>
                                 </div>
@@ -83,7 +83,7 @@
                                     @click="timeClose(i)">완료</button>
                             </div>
                         </div>
-                        <div v-if="i<addCheckInfoList.length -1" class="durationTime">예상 소요시간 : {{ durationTime[i] }}</div>
+                        <div v-if="i<addCheckInfoList.length -1" class="durationTime">▼ 예상 소요시간 : {{ durationTime[i] }}</div>
                     </div>
                 </div>
                 <div class="share-button">
@@ -915,9 +915,11 @@ export default {
 }
 
 .infoWarper>h2,
-h3,
-a {
+h3{
     margin-left: 1em;
+    text-align: left;
+}
+.infoWarper > a {
     text-align: left;
 }
 
@@ -948,6 +950,7 @@ a {
     margin-left: 5%;
     overflow: auto;
     text-align: left;
+    margin-bottom: 13px;
 }
 
 .infoList-left,
@@ -959,7 +962,9 @@ a {
 .infoList-left {
     flex-grow: 1;
 }
-
+.timeSett{
+    margin-left: 1em;
+}
 .infoList-right {
     flex-grow: 1;
     /* flex-direction: column; */
@@ -1000,8 +1005,15 @@ input[type="checkbox"] {
 }
 
 .durationTime{
-    margin-top: 1em;
+    width: 50%;
+    height: 30%;
     font-size: 1.5em;
+    font-weight: 800;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    color: #5271ff;
+    margin: auto;
 }
 
 /* 공유하기 */
@@ -1074,6 +1086,7 @@ input[type="checkbox"] {
     .side-middle{ display: none;}
     .map-wrap{ width: 76%;}
     .sidebar{ font-size: 1vw;}
+    .side-rightMain{ width: 60%;}
 }
 
 
