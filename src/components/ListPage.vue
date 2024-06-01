@@ -144,6 +144,10 @@ export default {
 
             //duration 자차 이동시간
             durationTime: [(reactive)],
+
+            //자차이동 총시간 저장
+            durationHour: 0,
+            durationMinute : 0,
         }
     },
     methods: {
@@ -364,6 +368,17 @@ export default {
         },
 
         updateDurations() {
+            // 선택된 리스트가 2개 이상일 경우 이전에 저장한 자차이동시간을 빼준다. 자차이동시간을 0으로 초기화 시킨다.
+            if(this.addCheckInfoList.length > 1){
+                if(this.selectedStayTime.minute - this.durationMinute < 0){
+                    this.selectedStayTime.hour -= 1;
+                    this.selectedStayTime.minute += 60; 
+                }
+                this.selectedStayTime.hour -= this.durationHour;
+                this.selectedStayTime.minute -= this.durationMinute;
+                this.durationhour = 0;
+                this.durationMinute = 0;
+            }
             //선택된 리스트가 2개 이상일 때만 경과 시간 계산
             for (let i = 0; i < this.addCheckInfoList.length -1; i++) {
                 this.carTime(i); //경과 시간을 불러오기 위한 carTime함수 호출
@@ -627,12 +642,24 @@ export default {
 
                             const hours = Math.floor(durationInMinutes / 60); 
                             const minutes = durationInMinutes % 60;
-
+                            // 선택된 리스트에서 항목을 지울경우 자차이동시간 분(minute)을 빼기 위해 값을 저장
+                            this.durationMinute += minutes
+                            // 자차이동 분(minute)을 총 머무는 분(minute)에 저장
+                            this.selectedStayTime.minute += minutes;
                             //durationTime 배열에 계산된 시간을 저장
                             if (hours > 0) { //시간 0일 때
                                 this.durationTime[index] = `${hours} 시간 ${minutes} 분`;
+                                // 선택된 리스트에서 항목을 지울경우 자차이동시간 시간(hour)을 빼기 위해 값을 저장
+                                this.durationHour += hours;
+                                // 자차이동 시간(hour)을 총 머무는 시간(hour)에 저장
+                                this.selectedStayTime.hour += hours;
                             } else { //시간이 0이면 시간 생략
                                 this.durationTime[index] = `${minutes} 분`;
+                            }
+                            // 만약 총 머무는 분(minute)가 59분 이상일 경우
+                            if(this.selectedStayTime.minute > 59){
+                                this.selectedStayTime.hour += (this.selectedStayTime.minute / 60);
+                                this.selectedStayTime.minute %= 60; 
                             }
                         } else {
                             console.log(route.result_msg);
