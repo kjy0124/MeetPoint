@@ -1185,7 +1185,7 @@ ul li a i {
 }
 
 /* 미디어 쿼리 */
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1530px) {
     .category_list {
         display: flex;
         flex-wrap: wrap;
