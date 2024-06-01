@@ -679,6 +679,7 @@ export default {
 <style scoped>
 .container {
     display: flex;
+    /* position: relative; */
     text-align: center;
     align-items: center;
     width: 100%;
@@ -764,9 +765,11 @@ export default {
 
 .map-wrap {
     display: flex;
+    position: absolute;
     width: 40%;
     height: 100%;
-    margin-left: auto;
+    right: 0;
+    z-index: 0;
 }
 
 #map {
@@ -778,12 +781,11 @@ export default {
 
 .sidebar {
     display: flex;
+    position: absolute;
     height: 100%;
     width: 60%;
     background-color: transparent;
-
-    /* text-align: center;
-    align-items: center; */
+    z-index: 1;
 }
 
 .side-left {
@@ -1001,39 +1003,6 @@ input[type="checkbox"] {
     font-size: 1.5em;
 }
 
-/* .on {
-    width: 20px;
-    height: 20px;
-    background: #ddd;
-    position: absolute;
-}
-
-.checkBox:checked+.on {
-    background: #7788ff;
-}
-
-.on:after {
-    content: "";
-    position: absolute;
-    display: none;
-}
-
-.checkBox:checked+.on:after {
-    display: block;
-}
-
-.on:after {
-    width: 6px;
-    height: 10px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    position: absolute;
-    left: 6px;
-    top: 2px;
-} */
 /* 공유하기 */
 .share_modal {
     /* 모달의 크기 조절 */
@@ -1069,4 +1038,42 @@ input[type="checkbox"] {
     width: 100%;
     /* 이미지 크기를 버튼에 맞춤 */
 }
+
+/* 미디어 쿼리 */
+@media screen and (max-width: 1300px) {
+    .modal-ctnt{
+        width: 35%;
+        height: 40%;
+    }
+}
+@media screen and (max-width: 1050px) {
+    .modal-ctnt{
+        width: 90%;
+        height: 50%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .side-left{ 
+        font-size: 0;
+        width: 3%;
+    }
+    .map-wrap{
+        width: 44%;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .sidebar{ width: 50%;}
+    .map-wrap{ width: 54%;}
+}
+
+@media screen and (max-width: 1000px) {
+    .sidebar{ width: 50%;}
+    .side-middle{ display: none;}
+    .map-wrap{ width: 76%;}
+    .sidebar{ font-size: 1vw;}
+}
+
+
 </style>
