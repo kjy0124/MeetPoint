@@ -557,6 +557,17 @@ export default {
 
             // 원을 지도에 표시합니다
             circle.setMap(this.map);
+
+            var bounds = circle.getBounds();
+            
+            // 원을 지도에 표시합니다
+            circle.setMap(this.map);
+            this.map.panTo(bounds, {
+                animate : {
+                    duration: 2000,
+                }
+            });
+            
         },
 
         saveMarkersByCategory(result, target_category) {
@@ -605,7 +616,10 @@ export default {
                                             data-name="${place.place_name}"
                                             data-location="${place.address_name}"
                                             data-phone="${place.phone}"
-                                            data-url="${place.place_url}">
+                                            data-url="${place.place_url}"
+                                            data-x="${place.x}"
+                                            data-y="${place.y}">
+
                                             추가하기
                                     </label>
                                 </div>
@@ -652,6 +666,8 @@ export default {
             const placeLocation = event.target.dataset.location;
             const placePhone = event.target.dataset.phone;
             const placeUrl = event.target.dataset.url;
+            const placeX = event.target.dataset.x;
+            const placeY = event.target.dataset.y;
             var checkbox = document.getElementById('eachforid')
             checkbox.checked = true;
 
@@ -664,7 +680,7 @@ export default {
             //중복 장소가 아니면 추가
             if (!isAlreadyAdded) {
                 //새로운 장소를 check_space 배열에 추가
-                this.check_space.push({ name: placeName, location: placeLocation, phone: placePhone, placeurl: placeUrl });
+                this.check_space.push({ name: placeName, location: placeLocation, phone: placePhone, placeurl: placeUrl, placex: placeX, placey: placeY });
             }
         },
         checkboxClear(space) {

@@ -83,7 +83,7 @@
                                     @click="timeClose(i)">완료</button>
                             </div>
                         </div>
-                        <div v-if="i<addCheckInfoList.length -1" class="durationTime">{{ durationTime[i] }}</div>
+                        <div v-if="i<addCheckInfoList.length -1" class="durationTime">예상 소요시간 : {{ durationTime[i] }}</div>
                     </div>
                 </div>
                 <div class="share-button">
@@ -101,6 +101,8 @@
 
 <script>
 import axios from 'axios';
+import { reactive } from 'vue';
+
 export default {
     name: "ListPage",
     data() {
@@ -141,7 +143,7 @@ export default {
             infowindowOpened: false,
 
             //duration 자차 이동시간
-            durationTime: ['2시간','3시간','1시간','2시간30분','2시간2분','2시간','34분','23시간'],
+            durationTime: [(reactive)],
         }
     },
     methods: {
@@ -170,7 +172,11 @@ export default {
                 data: data,
             })
                 .then((response) => {
-                    this.sharekakao(response.data.index);
+                    if(response.data.index == -1 ){
+                        alert("데이터를 저장하는데 오류가 발생하였습니다.");
+                    } else {
+                        this.sharekakao(response.data.index);
+                    }
                 })
                 .catch(function () {
                     alert("데이터를 저장하는데 오류가 발생하였습니다.");
@@ -344,15 +350,23 @@ export default {
                 this.removeMarker(addCheckIndex); // 마커 제거
                 this.removeInfowindow(addCheckIndex); // 인포윈도우 제거
                 this.removeTime(addCheckIndex); // 머무르는 시간 제거
+                this.updateDurations(); // 경과 시간 업데이트
 
             } else {
                 //선택되지 않은 정보인 경우 배열에 추가
                 this.addCheckInfoList.push(this.selectInfo[index]);
                 this.addMarker(index);
                 this.addTime(); // 머무르는 시간 (0시0분) 생성
-
+                this.updateDurations();
             }
             this.updateMapBounds(); //체크박스 클릭 시 지도 업데이트
+        },
+
+        updateDurations() {
+            //선택된 리스트가 2개 이상일 때만 경과 시간 계산
+            for (let i = 0; i < this.addCheckInfoList.length -1; i++) {
+                this.carTime(i); //경과 시간을 불러오기 위한 carTime함수 호출
+            }
         },
 
         addMarker(index) {
@@ -575,6 +589,62 @@ export default {
                 this.selectedDiffHour = (diffDays + 1) * 24
                 this.fetchPlaceData(idx);
             }
+        },
+        carTime(index) {
+            // Axios 요청 헤더 설정
+            const axiosHeader = {
+                'Authorization': 'KakaoAK 6bdf977aa54a27298dc04ae23f5b66ae',
+                'Content-Type': 'application/json'
+            }
+
+            if (this.addCheckInfoList.length < 2 || index >= this.addCheckInfoList.length - 1) {
+                alert("Invalid index or addCheckInfoList is undefined");
+                return;
+            }
+            //선택한 장소 정보 가져옴
+            const selectedPlace = this.addCheckInfoList[index];
+            const selectedPlace2 = this.addCheckInfoList[index + 1];
+            const origin = `${selectedPlace.placex},${selectedPlace.placey}`; // 출발지
+            const destination = `${selectedPlace2.placex},${selectedPlace2.placey}`; //도착지
+            const priority = "RECOMMEND"; // 경로 탐색 방법 (default : 추천경로 - RECOMMEND)
+
+            const url = 'https://apis-navi.kakaomobility.com/v1/directions?origin=' + origin + '&destination=' + destination + '&priority=' + priority;
+
+            // Axios 사용해서 get 요청 전송
+            axios({
+                method: 'get',
+                headers: axiosHeader,
+                url: url
+            })
+                .then((response) => {
+                    //경로 탐색 응답이 있고, 하나 이상의 경로가 존재할 경우
+                    if (response.data.routes && response.data.routes.length > 0) {
+                        const route = response.data.routes[0]; //첫 번째 경로 선택
+                        if (route.result_code == "0") { // 경로 탐색 성공했을 시
+                            const durationInSeconds = route.summary.duration; //총 소요 시간을 초 단위로 저장
+                            const durationInMinutes = Math.round(durationInSeconds / 60);
+
+                            const hours = Math.floor(durationInMinutes / 60); 
+                            const minutes = durationInMinutes % 60;
+
+                            //durationTime 배열에 계산된 시간을 저장
+                            if (hours > 0) { //시간 0일 때
+                                this.durationTime[index] = `${hours} 시간 ${minutes} 분`;
+                            } else { //시간이 0이면 시간 생략
+                                this.durationTime[index] = `${minutes} 분`;
+                            }
+                        } else {
+                            console.log(route.result_msg);
+                            this.durationTime[index] = "도로탐색불가";
+                        }
+                    } else {
+                        this.durationTime[index] = "도로탐색불가";
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    this.durationTime[index] = "도로탐색불가";
+                });
         },
     },
 
