@@ -603,11 +603,9 @@ export default {
 
             const origin = `${selectedPlace.placeX},${selectedPlace.placeY}`; // 출발지
             const destination = `${selectedPlace2.placeX},${selectedPlace2.placeY}`; //도착지
-            // console.log(destination);
             const priority = "RECOMMEND"; // 경로 탐색 방법 (default : 추천경로 - RECOMMEND)
 
             const url = 'https://apis-navi.kakaomobility.com/v1/directions?origin=' + origin + '&destination=' + destination + '&priority=' + priority;
-            // console.log('url : ' + url)
 
             // Axios 사용해서 get 요청 전송
             axios({
@@ -627,7 +625,11 @@ export default {
                             const minutes = durationInMinutes % 60;
 
                             //durationTime 배열에 계산된 시간을 저장
-                            this.durationTime[index] = `${hours} 시간 ${minutes} 분`;
+                            if (hours > 0) { //시간 0일 때
+                                this.durationTime[index] = `${hours} 시간 ${minutes} 분`;
+                            } else { //시간이 0이면 시간 생략
+                                this.durationTime[index] = `${minutes} 분`;
+                            }
                         } else {
                             console.log(route.result_msg);
                         }
@@ -637,7 +639,6 @@ export default {
                     console.error(error);
                 });
         },
-
     },
 
     created() {
