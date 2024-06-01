@@ -632,11 +632,15 @@ export default {
                             }
                         } else {
                             console.log(route.result_msg);
+                            this.durationTime[index] = "도로탐색불가";
                         }
+                    } else {
+                        this.durationTime[index] = "도로탐색불가";
                     }
                 })
                 .catch((error) => {
                     console.error(error);
+                    this.durationTime[index] = "도로탐색불가";
                 });
         },
     },
