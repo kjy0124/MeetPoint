@@ -83,7 +83,7 @@
                                     @click="timeClose(i)">완료</button>
                             </div>
                         </div>
-                        <div v-if="i<addCheckInfoList.length -1" class="durationTime">{{ durationTime[i] }}</div>
+                        <div v-if="i<addCheckInfoList.length -1" class="durationTime">예상 소요시간 : {{ durationTime[i] }}</div>
                     </div>
                 </div>
                 <div class="share-button">
@@ -621,12 +621,13 @@ export default {
                         const route = response.data.routes[0]; //첫 번째 경로 선택
                         if (route.result_code == "0") { // 경로 탐색 성공했을 시
                             const durationInSeconds = route.summary.duration; //총 소요 시간을 초 단위로 저장
-                            const hours = Math.floor(durationInSeconds / 3600); 
-                            const minutes = Math.floor((durationInSeconds % 3600) / 60);
-                            const seconds = durationInSeconds % 60;
+                            const durationInMinutes = Math.round(durationInSeconds / 60);
+
+                            const hours = Math.floor(durationInMinutes / 60); 
+                            const minutes = durationInMinutes % 60;
 
                             //durationTime 배열에 계산된 시간을 저장
-                            this.durationTime[index] = `${hours} 시간 ${minutes} 분 ${seconds} 초`;
+                            this.durationTime[index] = `${hours} 시간 ${minutes} 분`;
                         } else {
                             console.log(route.result_msg);
                         }
