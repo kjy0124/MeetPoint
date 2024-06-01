@@ -204,7 +204,7 @@ export default {
                     hour: 2,
                     minute: 0
                 };
-                this.beforeTime.push(time);
+                this.beforeTime[index] = time;
             }
         },
         // 머무는 시간 설정 닫기
@@ -218,6 +218,7 @@ export default {
                 className.style.display = "inline";
             })
 
+            // 이전에 선택해 놓은 장소의 시간이 존재할 경우
             if (this.beforeTime[index]) {
                 if (this.selectedStayTime.minute - this.beforeTime[index].minute < 0) {
                     this.selectedStayTime.hour = (this.selectedStayTime.hour - 1) - this.beforeTime[index].hour;
