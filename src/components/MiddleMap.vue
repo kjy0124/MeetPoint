@@ -155,7 +155,6 @@ export default {
     methods: {
         initMap() {
             const container = document.getElementById("map");
-            // const containerr = document.getElementById("reSearch");
             const options = {
                 center: new kakao.maps.LatLng(this.mpLatitude, this.mpLongitude), //33.450701, 126.570667
                 level: 5,
@@ -777,7 +776,6 @@ export default {
     background-color: #7788ff;
     height: 5%;
     display: flex;
-    /* justify-content: flex-start; */
     align-items: center;
     width: 100vw;
 }
@@ -855,7 +853,6 @@ ul li a i {
     /* 원하는 위치로 조정 */
     /* display: flex; */
     visibility: hidden;
-    /* -webkit-appearance: none; */
     z-index: 20;
 }
 
@@ -1088,23 +1085,6 @@ ul li a i {
     /* 글자색 */
 }
 
-/* .category_list{
-    width: 45%;
-    height: 4%;
-    position: absolute;
-    left: 30%;
-    top: 10%;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    white-space: nowrap;
-    z-index: 1;
-    display: flex;
-}
-
-.category_list .list_bubble_filter li {
-    display: inline-block;
-} */
 .category_list {
     position: absolute;
     right: 2%;
@@ -1194,7 +1174,6 @@ ul li a i {
 }
 
 .delete_Btn {
-    /* display: flex; */
     margin-left: auto;
     background: none;
     border: none;

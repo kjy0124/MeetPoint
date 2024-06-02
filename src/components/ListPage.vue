@@ -662,15 +662,13 @@ export default {
                                 this.selectedStayTime.minute %= 60; 
                             }
                         } else {
-                            console.log(route.result_msg);
                             this.durationTime[index] = "도로탐색불가";
                         }
                     } else {
                         this.durationTime[index] = "도로탐색불가";
                     }
                 })
-                .catch((error) => {
-                    console.error(error);
+                .catch(() => {
                     this.durationTime[index] = "도로탐색불가";
                 });
         },
@@ -707,7 +705,6 @@ export default {
 <style scoped>
 .container {
     display: flex;
-    /* position: relative; */
     text-align: center;
     align-items: center;
     width: 100%;
@@ -842,7 +839,6 @@ export default {
 .selectDate>p {
     color: #35353575;
     font-size: 1em;
-    /* position: fixed; */
 }
 
 .notScrollArea {
@@ -965,7 +961,6 @@ h3{
 }
 .addCheckInfoList {
     display: flex;
-    /* text-align: center; */
     align-items: center;
     font-size: 1.5em;
     justify-content: space-between;
@@ -994,7 +989,6 @@ h3{
 }
 .infoList-right {
     flex-grow: 1;
-    /* flex-direction: column; */
 }
 
 .rR {
@@ -1021,8 +1015,6 @@ h3{
 input[type="checkbox"] {
     cursor: pointer;
     z-index: 10;
-    /* appearance: none;
-    -webkit-appearance: none; */
     background-color: #666666;
 }
 

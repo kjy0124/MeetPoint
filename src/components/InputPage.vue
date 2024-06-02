@@ -74,7 +74,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="modal-content-btm"></div> -->
         </div>
     </div>
 </template>
@@ -309,11 +308,8 @@ export default {
     height: 80%;
     font-size: 2rem;
     overflow-y: auto;
-    /* border: rgba(82, 113, 255, 0.4) 2px solid; */
     border-radius: 1em;
     padding: 1em;
-    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); */
-
 }
 
 .with-border {
@@ -440,8 +436,6 @@ export default {
 }
 
 .modal-content-btm {
-    /* margin-left: 4em; */
-    /* width: 90%; */
     height: 90%;
     position: relative;
 }
@@ -452,16 +446,11 @@ export default {
     font-size: 1.7rem;
     overflow-y: auto;
     height: calc(100% - 40px);
-    /* 입력 필드와 버튼 높이만큼 빼기 */
-    /* border: 1px solid blue; */
 }
-
-/* ===================240407 css 추가======================= */
 
 .location-name {
     margin-left: 1em;
     margin-bottom: 0.3em;
-    /* border-bottom: 1px solid #1c1c1c; */
     cursor: pointer;
     font-weight: bold;
     overflow: hidden;
