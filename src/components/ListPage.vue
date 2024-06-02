@@ -107,8 +107,7 @@ export default {
     name: "ListPage",
     data() {
         return {
-            modalOpen: false, //모달의 상태 여부
-            modalOpen2: false,
+            modalOpen: true, //모달의 상태 여부
             selectedStartDate: null, //일정 시작 날짜
             selectedStartDay: null, //일정 시작 날짜 요일
             selectedEndDate: null, //일정 종료 날짜
