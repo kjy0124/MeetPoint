@@ -368,7 +368,7 @@ export default {
 
         updateDurations() {
             // 선택된 리스트가 2개 이상일 경우 이전에 저장한 자차이동시간을 빼준다. 자차이동시간을 0으로 초기화 시킨다.
-            if(this.addCheckInfoList.length > 1){
+            if(this.addCheckInfoList.length >= 1){
                 if(this.selectedStayTime.minute - this.durationMinute < 0){
                     this.selectedStayTime.hour -= 1;
                     this.selectedStayTime.minute += 60; 
@@ -657,7 +657,7 @@ export default {
                             }
                             // 만약 총 머무는 분(minute)가 59분 이상일 경우
                             if(this.selectedStayTime.minute > 59){
-                                this.selectedStayTime.hour += (this.selectedStayTime.minute / 60);
+                                this.selectedStayTime.hour += parseInt(this.selectedStayTime.minute / 60);
                                 this.selectedStayTime.minute %= 60; 
                             }
                         } else {
