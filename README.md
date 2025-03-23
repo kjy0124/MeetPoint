@@ -31,7 +31,7 @@ MeetPoint는 여러 사용자의 위치 데이터를 기반으로 가장 적절�
 ### 필수 환경 (Prerequisites)
 MeetPoint를 실행하기 위해 아래 환경이 필요합니다.
 
-**Java 17**
+**Java 17** <br/>
 **Vue 3.2.13**
 
 ### 1. 프론트엔드 (Vue.js)
